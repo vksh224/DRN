@@ -1,5 +1,6 @@
 import csv
 import networkx as nx
+import re
 from math import radians, cos, sin, asin, sqrt, inf
 from degree import *
 
@@ -8,7 +9,6 @@ def funHaversine(lon1, lat1, lon2, lat2):
     Calculate the great circle distance between two points
     on the earth (specified in decimal degrees)
     """
-    #print("lon1: " + str(lon1) + " lat1: " + str(lat1) + " lon2: " + str(lon2) + " lat2: " + str(lat2) )
 
     # convert decimal degrees to radians
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
@@ -23,19 +23,16 @@ def funHaversine(lon1, lat1, lon2, lat2):
     return m
 
 
+def readDatasets(shelterpoint_file, poi_file):
+    site_ids = []
+    site_coors = []
+    site_zones = []
 
-def create_static_network(filename):
-    wifi_range = 25000
-
-    with open(filename, 'r') as csvfile:
-        rows = csv.reader(csvfile, delimiter=',')
-
-        site_ids = []
-        site_coors = []
-        site_zones = []
+    with open(shelterpoint_file, 'r') as csvfile:
+        SP_rows = csv.reader(csvfile, delimiter=',')
 
         line_count = 0
-        for row in rows:
+        for row in SP_rows:
             # Ignore first two rows
             if line_count < 2:
                 line_count += 1
@@ -45,6 +42,36 @@ def create_static_network(filename):
                 if row[9] == "Bagmati" or 1 == 1:
                     site_ids.append(row[0])
                     site_coors.append((row[13], row[14]))
+
+    with open(poi_file, 'r') as csvfile:
+        poi_rows = csv.reader(csvfile, delimiter=',')
+
+        count_notSchools = 0
+        for row in poi_rows:
+            if row[2] != "school" and row[2]!= "college":
+                patternMatch = re.match(r'^Polygon \(\((.*)\)\)', row[0], re.M | re.I)
+                if patternMatch:
+                    #print ("Pattern 1: ", patternMatch.group(1))
+                    selected_coordinate = patternMatch.group(1).split(",")[0]
+                    #print ("Coor: ", selected_coordinate)
+                    x_coor = selected_coordinate.split(" ")[0]
+                    y_coor = selected_coordinate.split(" ")[1]
+                    #print("X Y", x_coor, y_coor)
+                    site_ids.append(row[1])
+                    site_coors.append((x_coor, y_coor))
+
+                count_notSchools += 1
+
+        print("Not schools: ", count_notSchools)
+
+    return site_ids, site_coors, site_zones
+
+
+
+def create_static_network(shelterpoint_file, poi_file):
+    wifi_range = 5000
+
+    site_ids, site_coors, site_zones = readDatasets(shelterpoint_file, poi_file)
 
     # Initialize graph
     G = nx.Graph()
@@ -75,7 +102,8 @@ def create_static_network(filename):
 
     return G
 
-G = create_static_network('NepalEarthquakeR4.csv')
+G = create_static_network('NepalEarthquakeR4.csv', "KTM_POIs.csv")
+nx.write_gml(G, "inputDRN.gml")
 deg(G)
 
 
