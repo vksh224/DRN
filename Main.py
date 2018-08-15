@@ -3,13 +3,13 @@ import collections
 import pickle
 import os
 
-from bioDRN.Centrality import *
-from bioDRN.find_tiers import *
+from Centrality import *
+from find_tiers import *
 from munkres import Munkres
-from bioDRN.blondel import *
-from bioDRN.find_tiers import *
+from blondel import *
+from find_tiers import *
 #from bioDRN.generateDRN import *
-from bioDRN.dist import *
+from dist import *
 
 def supplement(GBD,G2,t1_G2):
 
@@ -156,14 +156,14 @@ for ii in range(4,5):
     #G2,t1_G2, t2_G2, t3_G2 = generate(X,Y,VN,R)
     curr = os.getcwd()
 
-    os.chdir('graphs')
+    #os.chdir('graphs')
     ss = (ii + 2) * 50
     VN = ss
 
-    G2 = nx.read_gml('O' + str(ss) + '.gml')
-    t1_G2 = pickle.load(open( "H" + str(ii) + ".p", "rb" ))
-    t2_G2 = pickle.load(open( "S" + str(ii) + ".p", "rb" ))
-    t3_G2 = pickle.load(open( "N" + str(ii) + ".p", "rb" ))
+    G2 = nx.read_gml('labeled_DRN.gml')
+    t1_G2 = pickle.load(open( "HO.p", "rb" ))
+    t2_G2 = pickle.load(open( "SO.p", "rb" ))
+    t3_G2 = pickle.load(open( "NO.p", "rb" ))
 
     print (len(G2.edges()))
     os.chdir(curr)
