@@ -20,33 +20,32 @@ def read(G):
 
 
     for u in G.nodes():
-
         #If node id is less than 1000, it is an amenity (a)
         if int(u) > 1000:
-            mapping[u] = 'a' + str(a)
+            mapping[u] = str(a)
             a = a + 1
 
+    for u in G.nodes():
         # If node id is greater than 1000, it is a shelter-point(s)
-        else:
-            mapping[u] = 's' + str(s)
-            s = s + 1
+        mapping[u] = str(a)
+        a = a + 1
 
-    H = nx.relabel_nodes(G,mapping)
+    H = nx.relabel_nodes(G, mapping)
 
     return H
 
 #Ratio of t1 and t2 nodes in DRN
-t1_ratio = 0.01
-t2_ratio = 0.1
+t1_ratio = 0.02
+t2_ratio = 0.08
 
 G = nx.read_gml('inputDRN.gml')
 G = read(G)
 G = makedirected(G)
 
-hubs = [u for u in G.nodes() if 's' in u]
+allNodes = [u for u in G.nodes()]
 
-t1 = hubs[:int(t1_ratio * len(G))]
-t2 = hubs[int(t1_ratio * len(G)):int(t1_ratio * len(G)) + int(t2_ratio * len(G))]
+t1 = allNodes[:int(t1_ratio * len(G))]
+t2 = allNodes[int(t1_ratio * len(G)):int(t1_ratio * len(G)) + int(t2_ratio * len(G))]
 t3 = [u for u in G.nodes() if u not in t1 and u not in t2]
 
 print (len(t1),len(t2),len(t3))
