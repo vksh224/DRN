@@ -1,6 +1,17 @@
 import networkx as nx
 import pickle
 
+def makedirected(G):
+
+    H = nx.DiGraph()
+    H.add_nodes_from(G.nodes())
+
+    for e in G.edges():
+        H.add_edge(e[0],e[1])
+        H.add_edge(e[1],e[0])
+
+    return H
+
 def read(G):
 
     mapping = {}
@@ -30,6 +41,7 @@ t2_ratio = 0.1
 
 G = nx.read_gml('inputDRN.gml')
 G = read(G)
+G = makedirected(G)
 
 hubs = [u for u in G.nodes() if 's' in u]
 
