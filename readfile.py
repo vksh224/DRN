@@ -102,7 +102,7 @@ def create_static_network(shelterpoint_file, poi_file):
 
     return G
 
-G = create_static_network('NepalEarthquakeR4.csv', "KTM_POIs.csv")
+G = create_static_network('kathmandu/NepalEarthquakeR4.csv', "kathmandu/KTM_POIs.csv")
 nx.write_gml(G, "inputDRN.gml")
 deg(G)
 
