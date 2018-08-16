@@ -1,0 +1,53 @@
+This data was collected by Caleb Phillips and Russell Senior to determine the
+coverage and performance of a 802.11x municipal wireless mesh network in Portland, Oregon
+in 2007. It contains three pieces of data:
+
+1) aps.txt: Locations and MAC addresses of APs
+
+2) stumble_filtered.txt: Received signal strength indicator (RSSI) 
+   observations of the APs from an exhaustive war-driving campaign
+   in the network's service area. To turn RSSI into something like
+   Received Signal Strength (RSS) in dBm, simply subtract 95.
+
+3) random.csv: Performance results at a random sample of points
+   within the coverage area. The fields should be fairly 
+   straight-forward.
+
+Quickly, this dataset was collected with a linux-based sniffer using
+a Kismet instance configured to channel hop on all 11 channels. The wireless
+interface was an atheros chipset using the madwifi driver. The 72 functional APs were located
+using triangulation and then fine-tuned with a hand-held GPS device. All measurements
+are passive, with no special access to the network. This network is now defunct
+(the operator subsequently went bankrupt) and all the APs have been dismantled. Hence,
+we have performed no anonymization as there is no conceivable privacy/anonymity risk
+to anyone or anything.
+
+For more information on how the data was collected, please see the original
+technical report:
+
+@TECHREPORT{Us2007,
+  author = {Caleb Phillips and Russell Senior},
+  title = {Unwire Portland Proof-of-Concept Network Testing},
+  institution = {unwirepdx-watch.org},
+  year = {2007},
+  owner = {cphillips},
+  timestamp = {2008.03.15}
+}
+
+Or, the subsequent conference proceedings paper:
+
+@INPROCEEDINGS{PhillipsAccessNets2008,
+  author = {Caleb Phillips and Russell Senior and Douglas Sicker and Dirk Grunwald},
+  title = {Robust Coverage and Performance Testing for Large Area Networks},
+  booktitle = {AccessNets},
+  year = {2008},
+  owner = {cphillips},
+  timestamp = {2008.08.27}
+}
+
+Although this data has been available freely online since 2007, it is being
+released on CRAWDAD for archival purposes.
+
+Please cite the data using the appropriate CRAWDAD citation if you use it. If your
+results are nifty, or if you have technical questions, 
+let me know: caleb.phillips@colorado.edu.

@@ -22,6 +22,7 @@ def tiers(G,N,t1,t2,t3):
     t1_M = [each for each in N if each in t1]
     t2_M = [each for each in N if each in t2]
     t3_M = [each for each in N if each in t3]
+    print("Here", t1_M, t1)
 
     return t1_M,t2_M,t3_M
 
