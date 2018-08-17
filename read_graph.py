@@ -18,14 +18,14 @@ def read(G):
     a = 0
     s = 0
 
-    #Add non hubs
+    #Add hubs and sub hubs
     for u in G.nodes():
         #If node id is less than 1000, it is an amenity (a)
         if int(u) > 1000:
             mapping[u] = a
             a = a + 1
 
-    #Add hubs and sub-hubs
+    #Add non hubs
     for u in G.nodes():
         # If node id is greater than 1000, it is a shelter-point(s)
         mapping[u] = a
@@ -36,8 +36,8 @@ def read(G):
     return H
 
 #Ratio of t1 and t2 nodes in DRN
-t1_ratio = 0.02
-t2_ratio = 0.08
+t1_ratio = 0.01
+t2_ratio = 0.05
 
 G = nx.read_gml('inputDRN.gml')
 

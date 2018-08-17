@@ -128,9 +128,9 @@ G1 = nx.read_gml('this_grn.gml')
 G2 = nx.read_gml('labeled_metrofi.gml')
 G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
 
-t1_G2 = pickle.load(open( "metro_HO.p", "rb" ))
-t2_G2 = pickle.load(open( "metro_SO.p", "rb" ))
-t3_G2 = pickle.load(open( "metro_NO.p", "rb" ))
+t1_G2 = pickle.load(open("metro_HO.p", "rb" ))
+t2_G2 = pickle.load(open("metro_SO.p", "rb" ))
+t3_G2 = pickle.load(open("metro_NO.p", "rb" ))
 
 print ("Number of edges in metrofi", len(G2.edges()))
 
@@ -154,12 +154,14 @@ t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
 print ("metrofi tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
 
-print("Nodes in metrofi: ", G2.nodes())
 #List of nodes in reference GRN
 L1 = [t1_G,t2_G,t3_G]
 #List of nodes in DRN
 L2 = [t1_G2,t2_G2,t3_G2]
-Y = np.array(similarity(G, G2, 0.00001))
+
+Y = np.array(similarity(G, G2, 0.01))
+S = Y.shape
+print ('Dimension of Y: ',S)
 
 #Nodes and edges in bio-DRN
 NBD = []
@@ -172,7 +174,7 @@ for i in range(len(L1)):
 
     print (i)
     YM = Y[L1[i], :][:, L2[i]]
-    #print (YM)
+    print ("YM", YM)
 
     YM = reverse(YM)
 
@@ -187,10 +189,9 @@ for i in range(len(L1)):
         NRG.append(L1[i][each[0]])
 
 
-
+#Introduce edges in Bio-DRN
 for u in NBD:
     for v in NBD:
-
         if (u,v) in G2.edges() and (NRG[NBD.index(u)],NRG[NBD.index(v)]) in G.edges():
             EBD.append((u,v))
 
@@ -205,6 +206,7 @@ GBD.add_edges_from(EBD)
 print ("NOT FINAL NODE COUNT:", len(GBD))
 print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
 
+#Address isolated or unmapped nodes
 GBD = supplement(GBD, G2, t1_G2)
 #GBD = GBD.to_undirected()
 

@@ -69,7 +69,7 @@ def readDatasets(shelterpoint_file, poi_file):
 
 
 def create_static_network(shelterpoint_file, poi_file):
-    wifi_range = 5000
+    wifi_range = 4000
 
     site_ids, site_coors, site_zones = readDatasets(shelterpoint_file, poi_file)
 

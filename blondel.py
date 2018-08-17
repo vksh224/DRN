@@ -22,17 +22,16 @@ def similarity(G1,G2,e):
     #print (len(G1))
     #print (len(G2))
 
-    inG1 = [G1.predecessors(u) for u in G1.nodes()]
-    inG2 = [G2.predecessors(u) for u in G2.nodes()]
+    inG1 = [list(G1.predecessors(u)) for u in G1.nodes()]
+    inG2 = [list(G2.predecessors(u)) for u in G2.nodes()]
 
-    outG1 = [G1.successors(u) for u in G1.nodes()]
-    outG2 = [G2.successors(u) for u in G2.nodes()]
+    outG1 = [list(G1.successors(u)) for u in G1.nodes()]
+    outG2 = [list(G2.successors(u)) for u in G2.nodes()]
 
     #print (inG1)
     #print (inG2)
     #print (outG1)
     #print (outG2)
-
 
     oS = [[-1.0 for i in range(len(G2))] for j in range(len(G1))]
     S = [[0.1 for i in range(len(G2))] for j in range(len(G1))]
@@ -42,11 +41,9 @@ def similarity(G1,G2,e):
     counter = 0
 
     while(counter < Iterate):
-
         #print (counter)
         _S = [[0.0 for i in range(len(G2))] for j in range(len(G1))]
         for i in G1.nodes():
-
             for j in G2.nodes():
                 if len(outG1[i]) == 0 or len(outG2[j]) == 0:
                     continue
@@ -57,7 +54,6 @@ def similarity(G1,G2,e):
 
         for i in G1.nodes():
             for j in G2.nodes():
-
                 if len(inG1[i]) == 0 or len(inG2[j]) == 0:
                     continue
 
@@ -87,15 +83,13 @@ def similarity(G1,G2,e):
 
 
 def check(Y,threshold):
-
     for u in range(len(Y)):
         for v in range(len(Y[0])):
             if Y[u][v] > threshold:
                 return False
-
     return True
-def denominator(Y):
 
+def denominator(Y):
     sum = 0.0
     for u in range(len(Y)):
         for v in range(len(Y[0])):

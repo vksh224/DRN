@@ -161,6 +161,9 @@ for ii in range(4,5):
     VN = ss
 
     G2 = nx.read_gml('labeled_DRN.gml')
+    #print(G2.nodes())
+    G2 = nx.convert_node_labels_to_integers(G2, first_label=0)
+
     t1_G2 = pickle.load(open( "HO.p", "rb" ))
     t2_G2 = pickle.load(open( "SO.p", "rb" ))
     t3_G2 = pickle.load(open( "NO.p", "rb" ))
@@ -173,8 +176,8 @@ for ii in range(4,5):
     #MC_G1 = motif(G1)
     MC_G2 = motif(G2)
 
-    print (MC_G1)
-    print (MC_G2)
+    #print (MC_G1)
+    #print (MC_G2)
 
     G = ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
     #degree_dist(G,'ref')
@@ -184,8 +187,8 @@ for ii in range(4,5):
 
     t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 
-    print (len(t1_G), len(t2_G), len(t3_G))
-    print (len(t1_G2), len(t2_G2), len(t3_G2))
+    print ("Ref GRN", len(t1_G), len(t2_G), len(t3_G))
+    print ("Orig DRN", len(t1_G2), len(t2_G2), len(t3_G2))
 
     #List of nodes in reference GRN
     L1 = [t1_G,t2_G,t3_G]
