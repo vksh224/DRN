@@ -213,8 +213,8 @@ GBD = supplement(GBD, G2, t1_G2)
 print ("FINAL NODE COUNT:", len(GBD))
 print ("FINAL EDGE COUNT:", len(GBD.edges()))
 
-nx.write_gml(GBD,'GBD.gml')
-nx.write_gml(G,'refG.gml')
+nx.write_gml(GBD,'GBD_metrofi.gml')
+nx.write_gml(G,'refG_metrofi.gml')
 
 #degree_dist(GBD,'bio')
 
