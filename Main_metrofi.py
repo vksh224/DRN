@@ -210,7 +210,6 @@ print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
 GBD = supplement(GBD, G2, t1_G2)
 #GBD = GBD.to_undirected()
 
-os.chdir('graphs')
 print ("FINAL NODE COUNT:", len(GBD))
 print ("FINAL EDGE COUNT:", len(GBD.edges()))
 
