@@ -160,8 +160,8 @@ L1 = [t1_G,t2_G,t3_G]
 L2 = [t1_G2,t2_G2,t3_G2]
 
 Y = np.array(similarity(G, G2, 0.01))
-S = Y.shape
-print ('Dimension of Y: ',S)
+# S = Y.shape
+# print ('Dimension of Y: ',S)
 
 #Nodes and edges in bio-DRN
 NBD = []
@@ -174,7 +174,7 @@ for i in range(len(L1)):
 
     print (i)
     YM = Y[L1[i], :][:, L2[i]]
-    print ("YM", YM)
+    # print ("YM", YM)
 
     YM = reverse(YM)
 
