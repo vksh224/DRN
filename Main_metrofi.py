@@ -45,20 +45,22 @@ def reverse(Y):
 def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
 
     # List of nodes sorted in the non-increasing order of their motif centralities
-    MC_G1 = [each[0] for each in sorted(MC_G1.items(), key=lambda x: x[1], reverse=True)]
-    MC_G2 = [each[0] for each in sorted(MC_G2.items(), key=lambda x: x[1], reverse=True)]
+    MC_G1 = [int(each[0]) for each in sorted(MC_G1.items(), key=lambda x: x[1], reverse=True)]
+    MC_G2 = [int(each[0]) for each in sorted(MC_G2.items(), key=lambda x: x[1], reverse=True)]
 
     #print("1:",MC_G1)
-    print("2:",MC_G2)
+    print("Sorted node motif centralities",MC_G2)
+
 
     # Identify tiers
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
 
-    print("Before", t1_G2, t2_G2, t3_G2)
+    print("Before: Metrofi tier nodes ", t1_G2, t2_G2, t3_G2)
+
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
 
-    # print(t1_G1, t2_G1, t3_G1)
-    print("After", t1_G2, t2_G2, t3_G2)
+    #print(t1_G1, t2_G1, t3_G1)
+    print("After: Metrofi tier nodes ", t1_G2, t2_G2, t3_G2)
 
     #Copy tiers of DRN graph
     c_t1_G2 = deepcopy(t1_G2)
@@ -67,7 +69,7 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
 
     #Nodes participating in motifs with each node
     NSM = pickle.load(open("NSM.p", "rb"))
-    #print ('NSM:',len(NSM))
+    print ('NSM:',len(NSM))
 
     # Node and edge set in reference GRN
     E = []
@@ -122,134 +124,98 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
     return G
 
-#Area of deployment
-#X = 50
-#Y = 50
-#Communication Radius
-#R = 20
-#Number of nodes in input DRN
+G1 = nx.read_gml('this_grn.gml')
+G2 = nx.read_gml('labeled_metrofi.gml')
+G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
 
-for ii in range(4,5):
+t1_G2 = pickle.load(open( "metro_HO.p", "rb" ))
+t2_G2 = pickle.load(open( "metro_SO.p", "rb" ))
+t3_G2 = pickle.load(open( "metro_NO.p", "rb" ))
 
-    #G1 = nx.read_gml('Yeast.gml')
-    #G1 = G1.reverse()
-    #G1 = nx.convert_node_labels_to_integers(G1,first_label = 0)
-    #nx.write_gml(G1,'this_grn.gml')
+print ("Number of edges in metrofi", len(G2.edges()))
 
-    #G1 = nx.read_gml('this_grn.gml')
-    #MC_G1 = motif(G1)
-    #pickle.dump(MC_G1, open("GRN_Centrality.p", "wb"))
+# Calculate node motif centralities of the two graphs
+MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
+#MC_G1 = motif(G1)
+MC_G2 = motif(G2)
 
-    #Larger GRN Graph
-    #G1 = nx.DiGraph()
-    #G1.add_edges_from([(0,2), (2,1), (0,1), (2,3),(0,3)])
-    #G1 = nx.read_gml('Yeast.gml')
-    #G1 = G1.reverse()
-    #G1 = nx.convert_node_labels_to_integers(G1,first_label = 0)
-    #nx.write_gml(G1,'this_grn.gml')
-    G1 = nx.read_gml('this_grn.gml')
-    #MC_G1 = motif(G1)
-    #pickle.dump(MC_G1, open("GRN_Centrality.p", "wb"))
+#print (MC_G1)
+print ("Node motif centrality for metrofi", MC_G2)
 
-    #Smaller DRN graph
-    #G2 = nx.DiGraph()
-    #G2.add_edges_from([(7,1), (0,1), (1,2), (0,2), (1,3), (0,3), (2,3), (0,4), (4,3), (0,5), (5,6), (0,6)])
-    #G2,t1_G2, t2_G2, t3_G2 = generate(X,Y,VN,R)
-    curr = os.getcwd()
+G = ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
 
-    #os.chdir('graphs')
-    ss = (ii + 2) * 50
-    VN = ss
+#degree_dist(G,'ref')
+print ("Ref GRN - Nodes:",len(G.nodes()))
+print ("Ref GRN - Edges:",len(G.edges()))
+#MC_G = motif(G)
 
-    G2 = nx.read_gml('labeled_metrofi.gml')
-    t1_G2 = pickle.load(open( "metro_HO.p", "rb" ))
-    t2_G2 = pickle.load(open( "metro_SO.p", "rb" ))
-    t3_G2 = pickle.load(open( "metro_NO.p", "rb" ))
+t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 
-    print ("No. of edges in DRN (metrofi): ", len(G2.edges()))
-    #os.chdir(curr)
+print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
+print ("metrofi tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
 
-    # Calculate node motif centralities of the two graphs
-    MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
-    #MC_G1 = motif(G1)
-    MC_G2 = motif(G2)
+print("Nodes in metrofi: ", G2.nodes())
+#List of nodes in reference GRN
+L1 = [t1_G,t2_G,t3_G]
+#List of nodes in DRN
+L2 = [t1_G2,t2_G2,t3_G2]
+Y = np.array(similarity(G, G2, 0.00001))
 
-    #print (MC_G1)
-    #print (MC_G2)
+#Nodes and edges in bio-DRN
+NBD = []
+EBD = []
 
-    G = ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
-    #degree_dist(G,'ref')
-    print ("Number of nodes in reference GRN:",len(G.nodes()))
-    print ("Number of edges in reference GRN:",len(G.edges()))
-    #MC_G = motif(G)
+#Corresponding mapped node of reference GRN
+NRG = []
 
-    t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
+for i in range(len(L1)):
 
-    print ("GRN tiers:", len(t1_G), len(t2_G), len(t3_G))
-    print ("DRN tiers: ", len(t1_G2), len(t2_G2), len(t3_G2))
+    print (i)
+    YM = Y[L1[i], :][:, L2[i]]
+    #print (YM)
 
-    #List of nodes in reference GRN
-    L1 = [t1_G,t2_G,t3_G]
-    #List of nodes in DRN
-    L2 = [t1_G2,t2_G2,t3_G2]
-    Y = np.array(similarity(G, G2, 0.00001))
+    YM = reverse(YM)
 
-    #Nodes and edges in bio-DRN
-    NBD = []
-    EBD = []
+    YM = YM.tolist()
+    m = Munkres()
 
-    #Corresponding mapped node of reference GRN
-    NRG = []
+    indexes = m.compute(YM)
+    print (indexes)
 
-    for i in range(len(L1)):
-
-        print (i)
-        YM = Y[L1[i], :][:, L2[i]]
-        #print (YM)
-
-        YM = reverse(YM)
-
-        YM = YM.tolist()
-        m = Munkres()
-
-        indexes = m.compute(YM)
-        print (indexes)
-
-        for each in indexes:
-            NBD.append(L2[i][each[1]])
-            NRG.append(L1[i][each[0]])
+    for each in indexes:
+        NBD.append(L2[i][each[1]])
+        NRG.append(L1[i][each[0]])
 
 
 
-    for u in NBD:
-        for v in NBD:
+for u in NBD:
+    for v in NBD:
 
-            if (u,v) in G2.edges() and (NRG[NBD.index(u)],NRG[NBD.index(v)]) in G.edges():
-                EBD.append((u,v))
+        if (u,v) in G2.edges() and (NRG[NBD.index(u)],NRG[NBD.index(v)]) in G.edges():
+            EBD.append((u,v))
 
-    print (len(NBD))
-    print (len(NRG))
-    print (len(EBD))
+print (len(NBD))
+print (len(NRG))
+print (len(EBD))
 
-    GBD = nx.DiGraph()
-    GBD.add_nodes_from(NBD)
-    GBD.add_edges_from(EBD)
+GBD = nx.DiGraph()
+GBD.add_nodes_from(NBD)
+GBD.add_edges_from(EBD)
 
-    print ("NOT FINAL NODE COUNT:", len(GBD))
-    print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
+print ("NOT FINAL NODE COUNT:", len(GBD))
+print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
 
-    GBD = supplement(GBD, G2, t1_G2)
-    #GBD = GBD.to_undirected()
+GBD = supplement(GBD, G2, t1_G2)
+#GBD = GBD.to_undirected()
 
-    os.chdir('graphs')
-    print ("FINAL NODE COUNT:", len(GBD))
-    print ("FINAL EDGE COUNT:", len(GBD.edges()))
+os.chdir('graphs')
+print ("FINAL NODE COUNT:", len(GBD))
+print ("FINAL EDGE COUNT:", len(GBD.edges()))
 
-    nx.write_gml(GBD,'GBD' + str(ss) + '.gml')
-    nx.write_gml(G,'refG' + str(ss) + '.gml')
+nx.write_gml(GBD,'GBD.gml')
+nx.write_gml(G,'refG.gml')
 
-    os.chdir(curr)
-    #degree_dist(GBD,'bio')
+#degree_dist(GBD,'bio')
 
 
 
