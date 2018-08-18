@@ -94,62 +94,62 @@ motifG /= 3
 
 print("Motifs density in GRN:", float(motifG) / 4441.0)
 
-for ii in range(2,3):
+for ii in range(4,5):
 
     ss = (ii + 2) * 50
-    print ("Number of nodes:",ss)
+    print ("Number of nodes:", ss)
     print ("--------------------\n")
 
     for f in range(5):
 
         print ("Failure percentage:",f * 0.05)
 
-        os.chdir('graphs')
-        CC = pickle.load(open( "H" + str(ii) + ".p", "rb" ))
-        S = pickle.load(open( "N" + str(ii) + ".p", "rb" ))
+        os.chdir('kathmandu')
+        CC = pickle.load(open("HO.p", "rb" ))
+        S = pickle.load(open("NO.p", "rb" ))
 
-        O = nx.read_gml('refG' + str(ss) + '.gml')
+        O = nx.read_gml('refG.gml')
         O = failures(O,f)
 
-        GBD = nx.read_gml('GBD' + str(ss) + '.gml')
+        GBD = nx.read_gml('GBD.gml')
         GBD = failures(GBD, f)
 
-        SP = nx.read_gml('S' + str(ss) + '.gml')
+        SP = nx.read_gml('S.gml')
         SP = failures(SP, f)
 
-        R = nx.read_gml('R' + str(ss) + '.gml')
+        R = nx.read_gml('R.gml')
         R = failures(R, f)
 
-        K2 = nx.read_gml('KR2-' + str(ss) + '.gml')
+        K2 = nx.read_gml('KR2.gml')
         K2 = failures(K2, f)
 
-        K4 = nx.read_gml('KR4-' + str(ss) + '.gml')
+        K4 = nx.read_gml('KR4.gml')
         K4 = failures(K4, f)
 
-        K8 = nx.read_gml('KR8-' + str(ss) + '.gml')
+        K8 = nx.read_gml('KR8.gml')
         K8 = failures(K8, f)
 
         os.chdir(curr)
 
-        print ('refG' + str(ss) + '.gml')
+        print ('refG.gml')
         perf(O.to_undirected(),CC,S)
 
-        print('GBD' + str(ss) + '.gml')
+        print('GBD.gml')
         perf(GBD.to_undirected(), CC, S)
 
-        print('S' + str(ss) + '.gml')
+        print('S.gml')
         perf(SP.to_undirected(), CC, S)
 
-        print('R' + str(ss) + '.gml')
+        print('R.gml')
         perf(R.to_undirected(), CC, S)
 
-        print('KR2-' + str(ss) + '.gml')
+        print('KR2.gml')
         perf(K2, CC, S)
 
-        print('KR4-' + str(ss) + '.gml')
+        print('KR4.gml')
         perf(K4, CC, S)
 
-        print('KR8-' + str(ss) + '.gml')
+        print('KR8.gml')
         perf(K8, CC, S)
 
         print("\n")

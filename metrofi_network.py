@@ -4,7 +4,6 @@ from degree import *
 import pickle
 
 def makedirected(G):
-
     H = nx.DiGraph()
     H.add_nodes_from(G.nodes())
 
@@ -53,10 +52,10 @@ def create_static_network(filename):
 
     return G
 
-
-G = create_static_network("metrofi/aps.txt")
+folder = "metrofi/"
+G = create_static_network(folder + "aps.txt")
 G = nx.convert_node_labels_to_integers(G,first_label = 0)
-nx.write_gml(G, "metrofi.gml")
+nx.write_gml(G, folder + "inputDRN.gml")
 
 #Ratio of t1 and t2 nodes in DRN
 t1_ratio = 0.02
@@ -73,8 +72,8 @@ t2 = allNodes[int(t1_ratio * len(G)):int(t1_ratio * len(G)) + int(t2_ratio * len
 t3 = [u for u in G.nodes() if u not in t1 and u not in t2]
 
 print (len(t1),len(t2),len(t3))
-pickle.dump(t1,open('metro_HO.p','wb'))
-pickle.dump(t2,open('metro_SO.p','wb'))
-pickle.dump(t3,open('metro_NO.p','wb'))
+pickle.dump(t1,open(folder + 'HO.p','wb'))
+pickle.dump(t2,open(folder + 'SO.p','wb'))
+pickle.dump(t3,open(folder + 'NO.p','wb'))
 
-nx.write_gml(G, "labeled_metrofi.gml")
+nx.write_gml(G, folder + "labeled_DRN.gml")

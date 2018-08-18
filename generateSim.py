@@ -4,8 +4,8 @@ import os
 import pickle
 
 from scipy.spatial.distance import *
-from bioDRN.writeFile import *
-from bioDRN.genTop import *
+from writeFile import *
+from genTop import *
 
 import networkx as nx
 import collections
@@ -258,6 +258,7 @@ def generateSim(X,Y,VN,R):
     NCN = N[(HC + SC):]
 
     print (HCN,SCN,NCN)
+
     '''
     while(len(N) > 0):
 
@@ -325,7 +326,7 @@ def generateSim(X,Y,VN,R):
 
     return loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8,HCN, SCN, NCN
 
-# Area of deployment
+# # Area of deployment
 X = 50
 Y = 50
 # Communication Radius

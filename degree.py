@@ -46,14 +46,18 @@ def plot_deg_dist(G, filename):
 # plot_deg_dist(origG, "origGRN")
 
 #MetroFi
-metroFi = nx.read_gml('metrofi.gml')
-plot_deg_dist(metroFi, "metroFi")
+# metroFi = nx.read_gml('metrofi.gml')
+# plot_deg_dist(metroFi, "metroFi")
+#
+# bioMetroFi = nx.read_gml('GBD_metrofi.gml')
+# plot_deg_dist(bioMetroFi, "bioMetroFi")
+#
+# refG_metroFi = nx.read_gml('refG_metrofi.gml')
+# plot_deg_dist(refG_metroFi, "refG_metroFi")
+#
+# origG = nx.read_gml('this_grn.gml')
+# plot_deg_dist(origG, "origGRN")
 
-bioMetroFi = nx.read_gml('GBD_metrofi.gml')
-plot_deg_dist(bioMetroFi, "bioMetroFi")
-
-refG_metroFi = nx.read_gml('refG_metrofi.gml')
-plot_deg_dist(refG_metroFi, "refG_metroFi")
-
-origG = nx.read_gml('this_grn.gml')
-plot_deg_dist(origG, "origGRN")
+GBD = nx.read_gml('inputDRN.gml')
+print ("Original DRN: Nodes", len(GBD))
+print ("Original DRN: Edges", len(GBD.edges()))

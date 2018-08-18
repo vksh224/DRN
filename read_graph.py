@@ -35,11 +35,12 @@ def read(G):
 
     return H
 
+folder = "kathmandu/"
 #Ratio of t1 and t2 nodes in DRN
 t1_ratio = 0.01
 t2_ratio = 0.05
 
-G = nx.read_gml('inputDRN.gml')
+G = nx.read_gml(folder + 'inputDRN.gml')
 
 G = read(G)
 
@@ -55,8 +56,8 @@ t3 = [u for u in G.nodes() if u not in t1 and u not in t2]
 
 print (len(t1),len(t2),len(t3))
 print (t1, t2)
-pickle.dump(t1,open('HO.p','wb'))
-pickle.dump(t2,open('SO.p','wb'))
-pickle.dump(t3,open('NO.p','wb'))
+pickle.dump(t1,open(folder + 'HO.p','wb'))
+pickle.dump(t2,open(folder + 'SO.p','wb'))
+pickle.dump(t3,open(folder + 'NO.p','wb'))
 
-nx.write_gml(G,"labeled_DRN.gml")
+nx.write_gml(G, folder + "labeled_DRN.gml")

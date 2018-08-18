@@ -54,8 +54,6 @@ def randomDRN(O,B):
     return R
 
 def spanning(R):
-
-
     O_U = R.to_undirected()
     S = nx.minimum_spanning_tree(O_U)
 
@@ -79,43 +77,38 @@ def main(O,B):
     # R: random DRN
 
     R = randomDRN(O,B)
+    print("Random edges:", len(R.edges()))
+
     S = spanning(R.copy())
+    print("S edges:", len(S.edges()))
     #K2 = kconnected(R.copy(),2)
     #K4 = kconnected(O.copy(),4)
 
     KR2 = kregular(O.copy(),2)
+    print("KR2 edges:", len(KR2.edges()))
+
     KR4 = kregular(O.copy(),4)
+    print("KR4 edges:", len(KR4.edges()))
+
     KR8 = kregular(O.copy(),8)
+    print("KR8 edges:", len(KR8.edges()))
 
-    print (len(KR2.edges()))
-    print (len(KR4.edges()))
-    print (len(KR8.edges()))
-    return R,S, KR2, KR4, KR8
+    return R, S, KR2, KR4, KR8
 
-'''
-curr = os.getcwd()
-for ii in range(2,3):
 
-    print (ii)
-    s = (ii + 2) * 50
 
-    os.chdir('graphs')
-    O = nx.read_gml('O' + str(s) + '.gml')
-    B = nx.read_gml('GBD' + str(s) + '.gml')
-    os.chdir(curr)
+folder = "kathmandu/"
+O = nx.read_gml(folder + 'labeled_DRN.gml')
+print("Original DRN edges:", len(O.edges()))
 
-    #R, S, K2, K4,K8 = main(O,B)
-    R, S, KR2, KR4, KR8 = main(O,B)
-    os.chdir('graphs')
-    nx.write_gml(R,'R' + str(s) + '.gml')
-    nx.write_gml(S,'S' + str(s) + '.gml')
+B = nx.read_gml(folder + 'GBD.gml')
+print("Bio DRN edges:", len(B.edges()))
 
-    #nx.write_gml(K2,'K2-' + str(s) + '.gml')
-    #nx.write_gml(K4,'K4-' + str(s) + '.gml')
+R, S, KR2, KR4, KR8 = main(O, B)
 
-    nx.write_gml(KR2, 'KR2-' + str(s) + '.gml')
-    nx.write_gml(KR4, 'KR4-' + str(s) + '.gml')
-    nx.write_gml(KR8, 'KR8-' + str(s) + '.gml')
+nx.write_gml(R, folder + 'R.gml')
+nx.write_gml(S, folder + 'S.gml')
+nx.write_gml(KR2, folder + 'KR2.gml')
+nx.write_gml(KR4, folder + 'KR4.gml')
+nx.write_gml(KR8, folder + 'KR8.gml')
 
-    os.chdir(curr)
-'''

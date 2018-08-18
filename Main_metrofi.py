@@ -14,28 +14,19 @@ from dist import *
 def supplement(GBD,G2,t1_G2):
 
     D = list(set(G2.nodes()) - set(GBD.nodes()))
-
     GBD.add_nodes_from(D)
-
     D.extend(nx.isolates(GBD))
 
     for u in D:
-
         for v in t1_G2:
-
             if nx.has_path(G2,u,v):
-
                 p = nx.shortest_path(G2,source = u,target = v)
-
                 for i in range(1,len(p)):
                     GBD.add_edge(p[i - 1],p[i])
-
                 break
-
     return GBD
 
 def reverse(Y):
-
     for i in range(len(Y)):
         for j in range(len(Y[0])):
                 Y[i,j] = - float(Y[i,j])
@@ -51,16 +42,15 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     #print("1:",MC_G1)
     print("Sorted node motif centralities",MC_G2)
 
-
     # Identify tiers
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
 
-    print("Before: Metrofi tier nodes ", t1_G2, t2_G2, t3_G2)
+    print("Before: DRN tier nodes ", t1_G2, t2_G2, t3_G2)
 
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
 
     #print(t1_G1, t2_G1, t3_G1)
-    print("After: Metrofi tier nodes ", t1_G2, t2_G2, t3_G2)
+    print("After: DRN tier nodes ", t1_G2, t2_G2, t3_G2)
 
     #Copy tiers of DRN graph
     c_t1_G2 = deepcopy(t1_G2)
@@ -76,13 +66,10 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     N = []
 
     while (True):
-
         flag = False
         for j in t2_G2:
-
             #print("j:", j)
             for k in t2_G1:
-
                 d_G1_t1 = find_tier_degree(k, t1_G1, G1)
                 d_G2_t1 = find_tier_degree(j, t1_G2, G2)
 
@@ -90,7 +77,6 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
                 d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
                 if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
-
                     N.append(k)
 
                     for each in d_G1_t1:
@@ -124,15 +110,16 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
     return G
 
+folder = "kathmandu/"
 G1 = nx.read_gml('this_grn.gml')
-G2 = nx.read_gml('labeled_metrofi.gml')
+G2 = nx.read_gml(folder + 'labeled_DRN.gml')
 G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
 
-t1_G2 = pickle.load(open("metro_HO.p", "rb" ))
-t2_G2 = pickle.load(open("metro_SO.p", "rb" ))
-t3_G2 = pickle.load(open("metro_NO.p", "rb" ))
+t1_G2 = pickle.load(open(folder + "HO.p", "rb" ))
+t2_G2 = pickle.load(open(folder + "SO.p", "rb" ))
+t3_G2 = pickle.load(open(folder + "NO.p", "rb" ))
 
-print ("Number of edges in metrofi", len(G2.edges()))
+print ("Number of edges in DRN", len(G2.edges()))
 
 # Calculate node motif centralities of the two graphs
 MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
@@ -140,7 +127,7 @@ MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
 MC_G2 = motif(G2)
 
 #print (MC_G1)
-print ("Node motif centrality for metrofi", MC_G2)
+print ("Node motif centrality for DRN", MC_G2)
 
 G = ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
 
@@ -152,7 +139,7 @@ print ("Ref GRN - Edges:",len(G.edges()))
 t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 
 print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
-print ("metrofi tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
+print ("DRN tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
 
 #List of nodes in reference GRN
 L1 = [t1_G,t2_G,t3_G]
@@ -171,13 +158,9 @@ EBD = []
 NRG = []
 
 for i in range(len(L1)):
-
     print (i)
     YM = Y[L1[i], :][:, L2[i]]
-    # print ("YM", YM)
-
     YM = reverse(YM)
-
     YM = YM.tolist()
     m = Munkres()
 
@@ -187,7 +170,6 @@ for i in range(len(L1)):
     for each in indexes:
         NBD.append(L2[i][each[1]])
         NRG.append(L1[i][each[0]])
-
 
 #Introduce edges in Bio-DRN
 for u in NBD:
@@ -213,8 +195,8 @@ GBD = supplement(GBD, G2, t1_G2)
 print ("FINAL NODE COUNT:", len(GBD))
 print ("FINAL EDGE COUNT:", len(GBD.edges()))
 
-nx.write_gml(GBD,'GBD_metrofi.gml')
-nx.write_gml(G,'refG_metrofi.gml')
+nx.write_gml(GBD, folder + 'GBD.gml')
+nx.write_gml(G, folder + 'refG.gml')
 
 #degree_dist(GBD,'bio')
 
