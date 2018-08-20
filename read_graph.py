@@ -2,7 +2,6 @@ import networkx as nx
 import pickle
 
 def makedirected(G):
-
     H = nx.DiGraph()
     H.add_nodes_from(G.nodes())
 
@@ -13,7 +12,6 @@ def makedirected(G):
     return H
 
 def read(G):
-
     mapping = {}
     a = 0
     s = 0
@@ -41,8 +39,12 @@ t1_ratio = 0.01
 t2_ratio = 0.05
 
 G = nx.read_gml(folder + 'inputDRN.gml')
+print("Original DRN Nodes:", len(G.nodes()))
+print("Original DRN Edges:", len(G.edges()))
+print("Original DRN isConnected:", nx.number_connected_components(G))
 
 G = read(G)
+
 
 #print("Before ", G.nodes())
 G = makedirected(G)

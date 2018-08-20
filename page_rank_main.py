@@ -1,7 +1,7 @@
 import networkx as nx
 from embedding import *
 
-
+folder = "metrofi/"
 fidelity = 0.8
 
 #Read GRN
@@ -9,7 +9,7 @@ GRN = nx.read_gml('this_grn.gml')
 #GRN = GRN.reverse()
 GRN = nx.convert_node_labels_to_integers(GRN,first_label = 0)
 
-DRN = nx.read_gml('inputDRN.gml')
+DRN = nx.read_gml(folder + 'inputDRN.gml')
 DRN = nx.convert_node_labels_to_integers(DRN,first_label = 0)
 
 print("\nNumber of nodes in GRN: ", len(GRN))

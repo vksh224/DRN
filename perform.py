@@ -4,19 +4,15 @@ import os
 import numpy as np
 
 def failures(G,f):
-
     n = int(f * 0.05 * len(G))
-
     i = 0
     while(i <= n):
-
         i = i + 1
         G.remove_node(np.random.choice(G.nodes()))
 
     return G
 
 def pathcount(G,CC,S):
-
     p = 0.0
     for s in S:
         if s not in G.nodes():
@@ -32,7 +28,6 @@ def pathcount(G,CC,S):
     return p
 
 def efficiency(G,CC,S):
-
     e = 0.0
     den = 0.0
     for s in S:
@@ -40,7 +35,6 @@ def efficiency(G,CC,S):
             continue
 
         for c in CC:
-
             if c not in G.nodes():
                 continue
 
@@ -56,7 +50,6 @@ def efficiency(G,CC,S):
     return float(e)/den
 
 def motif(G):
-
     m = 0
     for u in G.nodes():
         for v in G.nodes():
@@ -72,11 +65,10 @@ def motif(G):
     return m
 
 def perf(G,CC,S):
-
     m = motif(G)
     print ("Number of nodes:",len(G))
     print ("Number of motifs in G:",m)
-    print("Number of isolated nodes in G:", len(nx.isolates(G)))
+    #print("Number of isolated nodes in G:", len(nx.isolates(G)))
     print ("Motifs density in G:",float(m)/float(len(G)))
 
     e = efficiency(G,CC,S)
@@ -95,7 +87,6 @@ motifG /= 3
 print("Motifs density in GRN:", float(motifG) / 4441.0)
 
 for ii in range(4,5):
-
     ss = (ii + 2) * 50
     print ("Number of nodes:", ss)
     print ("--------------------\n")

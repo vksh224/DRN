@@ -12,13 +12,13 @@ import collections
 import pickle
 import os
 
-from bioDRN.Centrality import *
-from bioDRN.find_tiers import *
+from Centrality import *
+from find_tiers import *
 from munkres import Munkres
-from bioDRN.blondel import *
-from bioDRN.find_tiers import *
+from blondel import *
+from find_tiers import *
 #from bioDRN.generateDRN import *
-from bioDRN.dist import *
+from dist import *
 
 def supplement(GBD,G2,t1_G2):
 

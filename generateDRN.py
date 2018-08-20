@@ -4,7 +4,7 @@ import os
 import pickle
 
 from scipy.spatial.distance import *
-from bioDRN.writeFile import *
+from writeFile import *
 
 def generate(X,Y,VN,R):
 
