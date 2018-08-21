@@ -33,13 +33,12 @@ def reverse(Y):
     return Y
 
 def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
-
     # List of nodes sorted in the non-increasing order of their motif centralities
     MC_G1 = [int(each[0]) for each in sorted(MC_G1.items(), key=lambda x: x[1], reverse=True)]
     MC_G2 = [int(each[0]) for each in sorted(MC_G2.items(), key=lambda x: x[1], reverse=True)]
 
     #print("1:",MC_G1)
-    print("Sorted node motif centralities",MC_G2)
+    print("Sorted node motif centralities", MC_G2)
 
     # Identify tiers
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
@@ -75,21 +74,21 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
                 d_G1_t3 = find_tier_degree(k, t3_G1, G1)
                 d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
-                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
-                    N.append(k)
+                # if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
+                N.append(k)
 
-                    for each in d_G1_t1:
-                        if each not in N and each in NSM[k]:
-                            N.append(each)
+                for each in d_G1_t1:
+                    if each not in N and each in NSM[k]:
+                        N.append(each)
 
-                    for each in d_G1_t3:
-                        if each not in N and each in NSM[k]:
-                            N.append(each)
+                for each in d_G1_t3:
+                    if each not in N and each in NSM[k]:
+                        N.append(each)
 
-                    t2_G2.pop(t2_G2.index(j))
-                    t2_G1.pop(t2_G1.index(k))
-                    flag = True
-                    break
+                t2_G2.pop(t2_G2.index(j))
+                t2_G1.pop(t2_G1.index(k))
+                flag = True
+                break
 
             if flag:
                 break

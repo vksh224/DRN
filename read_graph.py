@@ -1,5 +1,18 @@
 import networkx as nx
 import pickle
+import matplotlib.pyplot as plt
+from Centrality import motif
+
+def plot_graph(G, filename):
+    plt.figure()
+    plt.title("Nodes: " + str(len(G.nodes())) + " Edges: " + str(len(G.edges())))
+    nx.draw(G, with_labels=True)
+    # plt.xlabel('Degree')
+    # plt.ylabel('Number of nodes')
+    plt.draw()
+    plt.savefig("Plots/" + filename + "_" + str(len(G.nodes())) + ".png")
+    plt.close()
+
 
 def makedirected(G):
     H = nx.DiGraph()
@@ -35,8 +48,8 @@ def read(G):
 
 folder = "kathmandu/"
 #Ratio of t1 and t2 nodes in DRN
-t1_ratio = 0.01
-t2_ratio = 0.05
+t1_ratio = 0.02
+t2_ratio = 0.08
 
 G = nx.read_gml(folder + 'inputDRN.gml')
 print("Original DRN Nodes:", len(G.nodes()))
@@ -45,21 +58,31 @@ print("Original DRN isConnected:", nx.number_connected_components(G))
 
 G = read(G)
 
-
 #print("Before ", G.nodes())
 G = makedirected(G)
 G = nx.convert_node_labels_to_integers(G, first_label = 0)
 #print("After ", G.nodes())
 
-allNodes = [u for u in G.nodes()]
+#Non-increasing motif central nodes
+MC_G = motif(G)
+MC_G = [each[0] for each in sorted(MC_G.items(), key=lambda x: x[1], reverse=True)]
+allNodes = MC_G
+
+#Non-increasing degree central nodes
+# degrees = G.degree()
+# allNodes = [each[0] for each in sorted(degrees.items(), key=lambda x: x[1], reverse=True)]
+
 t1 = allNodes[:int(t1_ratio * len(G))]
 t2 = allNodes[int(t1_ratio * len(G)):int(t1_ratio * len(G)) + int(t2_ratio * len(G))]
 t3 = [u for u in G.nodes() if u not in t1 and u not in t2]
 
-print (len(t1),len(t2),len(t3))
-print (t1, t2)
-pickle.dump(t1,open(folder + 'HO.p','wb'))
-pickle.dump(t2,open(folder + 'SO.p','wb'))
-pickle.dump(t3,open(folder + 'NO.p','wb'))
+print("Cardinality of DRN tier nodes", len(t1),len(t2),len(t3))
+print("DRN tier 1 and 2 nodes", t1, t2)
+print("DRN tier 1 and 2 degree", [G.degree(u) for u in t1], [G.degree(u) for u in t2])
+
+pickle.dump(t1, open(folder + 'HO.p','wb'))
+pickle.dump(t2, open(folder + 'SO.p','wb'))
+pickle.dump(t3, open(folder + 'NO.p','wb'))
 
 nx.write_gml(G, folder + "labeled_DRN.gml")
+plot_graph(G, "labeled_DRN")

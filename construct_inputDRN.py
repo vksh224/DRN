@@ -3,6 +3,7 @@ import networkx as nx
 import re
 from math import radians, cos, sin, asin, sqrt, fsum
 from degree import *
+#from read_graph import plot_graph
 
 def funHaversine(lon1, lat1, lon2, lat2):
     """
@@ -29,6 +30,7 @@ def centroid(points):
     centroid_x = fsum(x_coords)/_len
     centroid_y = fsum(y_coords)/_len
     return (centroid_x, centroid_y)
+
 
 def farthest_nodes_from_centroid(site_coors, centroid):
     max_dist = -1
@@ -60,6 +62,7 @@ def farthest_nodes(site_coors):
     #print(max_dist)
     return int(max_dist/1000)
 
+
 def readDatasets(shelterpoint_file, poi_file):
     site_ids = []
     site_coors = []
@@ -67,6 +70,7 @@ def readDatasets(shelterpoint_file, poi_file):
     SP_coors = []
     POI_coors = []
     POI_ids = []
+    POI_types = []
 
     with open(shelterpoint_file, 'r') as csvfile:
         SP_rows = csv.reader(csvfile, delimiter=',')
@@ -89,38 +93,49 @@ def readDatasets(shelterpoint_file, poi_file):
 
     with open(poi_file, 'r') as csvfile:
         poi_rows = csv.reader(csvfile, delimiter=',')
-        count_notSchools = 0
+
         for row in poi_rows:
-            if row[2] != "school" and row[2]!= "college"  and row[2] != "community_centre" and row[2] != "social_facility":
-                patternMatch = re.match(r'^Polygon \(\((.*)\)\)', row[0], re.M | re.I)
-                if patternMatch:
-                    #print ("Pattern 1: ", patternMatch.group(1))
-                    selected_coordinate = patternMatch.group(1).split(",")[0]
-                    #print ("Coor: ", selected_coordinate)
-                    x_coor = selected_coordinate.split(" ")[0]
-                    y_coor = selected_coordinate.split(" ")[1]
+            patternMatch = re.match(r'^Polygon \(\((.*)\)\)', row[0], re.M | re.I)
+            if patternMatch:
+                #print ("Pattern 1: ", patternMatch.group(1))
+                selected_coordinate = patternMatch.group(1).split(",")[0]
+                #print ("Coor: ", selected_coordinate)
+                x_coor = selected_coordinate.split(" ")[0]
+                y_coor = selected_coordinate.split(" ")[1]
 
-                    if len(POI_coors) > 0:
-                        dist = funHaversine(float(y_coor), float(x_coor), float(POI_coors[0][1]), float(POI_coors[0][0]))
-                    else:
-                        dist = 0
+                #print("X Y", x_coor, y_coor)
+                site_ids.append(row[1])
+                POI_ids.append(row[1])
+                site_coors.append((x_coor, y_coor))
+                POI_coors.append((x_coor, y_coor))
+                POI_types.append(row[2])
 
-                    if dist <= 3000:
-                        #print("X Y", x_coor, y_coor)
-                        site_ids.append(row[1])
-                        POI_ids.append(row[1])
-                        site_coors.append((x_coor, y_coor))
-                        POI_coors.append((x_coor, y_coor))
+        #print("Not schools: ", count_notSchools)
+    return POI_coors, POI_ids, POI_types
 
-                count_notSchools += 1
-        print("Not schools: ", count_notSchools)
-    return site_ids, site_coors, site_zones, SP_coors, POI_coors, POI_ids, SP_centroid
 
+def filter_POIs(POI_coors, POI_ids, POI_types, farthest_distance):
+    filtered_POI_coors = []
+    filtered_POI_ids = []
+
+    POI_centroid = centroid(POI_coors)
+    print(POI_centroid)
+
+    for ind in range(len(POI_coors)):
+        if POI_types[ind] != "school" and POI_types[ind] != "college":
+            dist = funHaversine(float(POI_coors[ind][1]), float(POI_coors[ind][0]), float(POI_centroid[1]), float(POI_centroid[0]))
+
+            if dist <= farthest_distance:
+                filtered_POI_coors.append(POI_coors[ind])
+                filtered_POI_ids.append(POI_ids[ind])
+
+    return filtered_POI_coors, filtered_POI_ids
 
 def create_static_network(shelterpoint_file, poi_file):
     wifi_range = 700
 
-    site_ids, site_coors, site_zones, SP_coors, POI_coors, POI_ids, SP_centroid = readDatasets(shelterpoint_file, poi_file)
+    POI_coors, POI_ids, POI_types = readDatasets(shelterpoint_file, poi_file)
+    POI_coors, POI_ids = filter_POIs(POI_coors, POI_ids, POI_types, 3000)
 
     # Initialize graph
     G = nx.Graph()
@@ -157,7 +172,7 @@ def create_static_network(shelterpoint_file, poi_file):
 folder = "kathmandu/"
 G = create_static_network('kathmandu/NepalEarthquakeR4.csv', "kathmandu/KTM_POIs.csv")
 nx.write_gml(G, folder + "inputDRN.gml")
-#deg(G)
+#plot_graph(G, "inputDRN")
 
 
 

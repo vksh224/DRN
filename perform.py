@@ -3,13 +3,38 @@ import pickle
 import os
 import numpy as np
 
+#Motif files
+def generate_motif_files(number_of_nodes, all_topologies_list, failure_perc):
+    with open("GraphExperiments/motif_" + str(number_of_nodes) + ".txt", "a") as f:
+        line_str = str(round(failure_perc, 2)) + " "
+        for eachG in all_topologies_list:
+            line_str += str(motif(eachG)) + " "
+        f.write(line_str +"\n")
+
+#NE files
+def generate_NE_files(number_of_nodes, all_topologies_list, failure_perc, CC, S):
+    with open("GraphExperiments/NE_" + str(number_of_nodes) + ".txt", "a") as f:
+        line_str = str(round(failure_perc, 2)) + " "
+        for eachG in all_topologies_list:
+            eff = efficiency(eachG, CC, S)
+            line_str += str(round(eff, 3)) + " "
+        f.write(line_str + "\n")
+
+#Path Count files
+def generate_NE_files(number_of_nodes, all_topologies_list, failure_perc, CC, S):
+    with open("GraphExperiments/Path_" + str(number_of_nodes) + ".txt", "a") as f:
+        line_str = str(round(failure_perc, 2)) + " "
+        for eachG in all_topologies_list:
+            eff = efficiency(eachG, CC, S)
+            line_str += str(round(eff, 3)) + " "
+        f.write(line_str + "\n")
+
 def failures(G,f):
     n = int(f * 0.05 * len(G))
     i = 0
     while(i <= n):
         i = i + 1
         G.remove_node(np.random.choice(G.nodes()))
-
     return G
 
 def pathcount(G,CC,S):
@@ -24,7 +49,6 @@ def pathcount(G,CC,S):
             if nx.has_path(G,s,c):
                 paths = nx.all_simple_paths(G, source = s, target = c,cutoff = 4)
                 p += len(list(paths))
-
     return p
 
 def efficiency(G,CC,S):
@@ -77,7 +101,6 @@ def perf(G,CC,S):
     p = pathcount(G,CC,S)
     print("Path count of G:", p)
 
-
 curr = os.getcwd()
 
 MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
@@ -86,6 +109,20 @@ motifG /= 3
 
 print("Motifs density in GRN:", float(motifG) / 4441.0)
 
+os.chdir('kathmandu')
+CC = pickle.load(open("HO.p", "rb"))
+S = pickle.load(open("NO.p", "rb"))
+
+refG = nx.read_gml('refG.gml')
+GBD = nx.read_gml('GBD.gml')
+SP = nx.read_gml('S.gml')
+R = nx.read_gml('R.gml')
+K2 = nx.read_gml('KR2.gml')
+K4 = nx.read_gml('KR4.gml')
+K8 = nx.read_gml('KR8.gml')
+
+number_of_nodes = len(GBD.nodes())
+
 for ii in range(4,5):
     ss = (ii + 2) * 50
     print ("Number of nodes:", ss)
@@ -93,37 +130,20 @@ for ii in range(4,5):
 
     for f in range(5):
 
-        print ("Failure percentage:",f * 0.05)
+        print("Failure percentage:", round(f * 0.05, 2))
 
-        os.chdir('kathmandu')
-        CC = pickle.load(open("HO.p", "rb" ))
-        S = pickle.load(open("NO.p", "rb" ))
-
-        O = nx.read_gml('refG.gml')
-        O = failures(O,f)
-
-        GBD = nx.read_gml('GBD.gml')
+        refG = failures(refG,f)
         GBD = failures(GBD, f)
-
-        SP = nx.read_gml('S.gml')
         SP = failures(SP, f)
-
-        R = nx.read_gml('R.gml')
         R = failures(R, f)
-
-        K2 = nx.read_gml('KR2.gml')
         K2 = failures(K2, f)
-
-        K4 = nx.read_gml('KR4.gml')
         K4 = failures(K4, f)
-
-        K8 = nx.read_gml('KR8.gml')
         K8 = failures(K8, f)
 
         os.chdir(curr)
 
-        print ('refG.gml')
-        perf(O.to_undirected(),CC,S)
+        print('refG.gml')
+        perf(refG.to_undirected(), CC, S)
 
         print('GBD.gml')
         perf(GBD.to_undirected(), CC, S)
@@ -142,6 +162,10 @@ for ii in range(4,5):
 
         print('KR8.gml')
         perf(K8, CC, S)
+
+        all_topologies_list = [refG.to_undirected(), GBD.to_undirected(), SP.to_undirected(), R.to_undirected(), K2, K4, K8]
+        generate_motif_files(number_of_nodes, all_topologies_list, f * 0.05)
+        generate_NE_files(number_of_nodes, all_topologies_list, f * 0.05, CC, S)
 
         print("\n")
 

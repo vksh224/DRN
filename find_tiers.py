@@ -1,7 +1,6 @@
 import networkx as nx
 
 def tiers(G,N,t1,t2,t3):
-
     if t1 == [] or t2 == [] or t3 == []:
         if N == None:
             N = G.nodes()
@@ -26,7 +25,6 @@ def tiers(G,N,t1,t2,t3):
     return t1_M,t2_M,t3_M
 
 def find_tier_degree(curr_node,t,G):
-
     listnodes = []
 
     for u in t:

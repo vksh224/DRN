@@ -1,0 +1,20 @@
+Approach issues:
+--------------------
+Issue 1. How do we make sure that there exist a path from each tier 3 node to a tier 1 node in Bio-DRN?
+
+Issue 2: How do we make sure that Bio-DRN is not  disconnected (even when original DRN is connected)?
+
+
+Code issues:
+--------------------
+Issue 1: Why do we have K-regular graph as undirected graph?
+
+
+
+
+Future directions:
+--------------------
+1. First investigate undirected DRN and GRN topologies - As long as the topology (original DRN or bioDRN or any other) is connected,
+there exists a path from each tier 3 node to a tier 1 node.
+
+2. As long as the bioDRN is connected, there always exist atleast one path from each tier 3 node to atleast one tier 1 node.
