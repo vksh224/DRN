@@ -100,13 +100,17 @@ def readDatasets(shelterpoint_file, poi_file):
                     x_coor = selected_coordinate.split(" ")[0]
                     y_coor = selected_coordinate.split(" ")[1]
 
-                    #dist = funHaversine(float(y_coor), float(x_coor), float(SP_centroid[1]), float(SP_centroid[0]))
-                    #if dist <= 200:
-                    #print("X Y", x_coor, y_coor)
-                    site_ids.append(row[1])
-                    POI_ids.append(row[1])
-                    site_coors.append((x_coor, y_coor))
-                    POI_coors.append((x_coor, y_coor))
+                    if len(POI_coors) > 0:
+                        dist = funHaversine(float(y_coor), float(x_coor), float(POI_coors[0][1]), float(POI_coors[0][0]))
+                    else:
+                        dist = 0
+
+                    if dist <= 3000:
+                        #print("X Y", x_coor, y_coor)
+                        site_ids.append(row[1])
+                        POI_ids.append(row[1])
+                        site_coors.append((x_coor, y_coor))
+                        POI_coors.append((x_coor, y_coor))
 
                 count_notSchools += 1
         print("Not schools: ", count_notSchools)
@@ -114,7 +118,7 @@ def readDatasets(shelterpoint_file, poi_file):
 
 
 def create_static_network(shelterpoint_file, poi_file):
-    wifi_range = 2000
+    wifi_range = 700
 
     site_ids, site_coors, site_zones, SP_coors, POI_coors, POI_ids, SP_centroid = readDatasets(shelterpoint_file, poi_file)
 
@@ -142,7 +146,7 @@ def create_static_network(shelterpoint_file, poi_file):
     print("Number of nodes in G: ",len(G))
     print("Number of edges in G: ",len(G.edges()))
     print("Density of G: ",(2 * len(G.edges()))/(len(G) * (len(G) - 1)))
-
+    print("Is Connected:" , nx.is_connected(G), nx.number_connected_components(G))
     #print("Farthest shelter points:", farthest_nodes(SP_coors), "km")
     #print("Farthest shelter points from centroid:", farthest_nodes_from_centroid(SP_coors, SP_centroid), "km")
     print("Farthest POIs: ", farthest_nodes(POI_coors), "km")

@@ -12,7 +12,6 @@ from find_tiers import *
 from dist import *
 
 def supplement(GBD,G2,t1_G2):
-
     D = list(set(G2.nodes()) - set(GBD.nodes()))
     GBD.add_nodes_from(D)
     D.extend(nx.isolates(GBD))

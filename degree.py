@@ -59,5 +59,5 @@ def plot_deg_dist(G, filename):
 # plot_deg_dist(origG, "origGRN")
 
 GBD = nx.read_gml('inputDRN.gml')
-print ("Original DRN: Nodes", len(GBD))
-print ("Original DRN: Edges", len(GBD.edges()))
+#print ("Original DRN: Nodes", len(GBD))
+#print ("Original DRN: Edges", len(GBD.edges()))

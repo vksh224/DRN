@@ -86,18 +86,20 @@ def main(O,B):
     return R, S, KR2, KR4, KR8
 
 folder = "kathmandu/"
-O = nx.read_gml(folder + 'labeled_DRN.gml')
-print("Original DRN edges:", len(O.edges()))
-print("Original DRN isConnected:", nx.number_weakly_connected_components(O))
 
-# B = nx.read_gml(folder + 'GBD.gml')
-# print("Bio DRN edges:", len(B.edges()))
-#
-# R, S, KR2, KR4, KR8 = main(O, B)
-#
-# nx.write_gml(R, folder + 'R.gml')
-# nx.write_gml(S, folder + 'S.gml')
-# nx.write_gml(KR2, folder + 'KR2.gml')
-# nx.write_gml(KR4, folder + 'KR4.gml')
-# nx.write_gml(KR8, folder + 'KR8.gml')
-#
+O = nx.read_gml(folder + 'labeled_DRN.gml')
+U_O = O.to_undirected()
+print("Original DRN edges:", len(O.edges()))
+print("Original DRN isConnected:", nx.is_connected(U_O))
+
+B = nx.read_gml(folder + 'GBD.gml')
+print("Bio DRN edges:", len(B.edges()))
+print("Bio DRN: is connected", nx.number_weakly_connected_components(B))
+R, S, KR2, KR4, KR8 = main(O, B)
+
+nx.write_gml(R, folder + 'R.gml')
+nx.write_gml(S, folder + 'S.gml')
+nx.write_gml(KR2, folder + 'KR2.gml')
+nx.write_gml(KR4, folder + 'KR4.gml')
+nx.write_gml(KR8, folder + 'KR8.gml')
+
