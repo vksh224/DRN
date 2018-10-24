@@ -259,6 +259,19 @@ def generateSim(X,Y,VN,R):
 
     print (HCN,SCN,NCN)
 
+    # CC location
+    for i in HCN:
+        C[i] = (random.randint(0, X), random.randint(0, Y))
+
+    # PoI location
+    for i in SCN:
+        C[i] = (random.randint(0, X), random.randint(0, Y))
+
+    # Survivor location
+    for i in NCN:
+        C[i] = (random.randint(max(C[i][0] - poi_radius, 0), min(X, C[i][0] + poi_radius)),
+                random.randint(max(C[i][0] - poi_radius, 0), min(Y, C[i][0] + poi_radius)))
+
     '''
     while(len(N) > 0):
 
@@ -290,22 +303,54 @@ def generateSim(X,Y,VN,R):
     N = [i for i in range(VN)]
     for i in range(13):
 
-        change = random.sample(range(1, len(G)), int(0.2 * len(G)))
-        for each in change:
+        change = random.sample(range(1, len(G)), int(0.2 * len(NCN)))
+        for i in change:
 
-            while each in HCN:
-                each = (each + 1) % len(G)
+            # while each in NCN:
+                # each = (each + 1) % len(G)
 
-            C[each] = (random.randint(0,X),random.randint(0,Y))
+            C[i] = (random.randint(max(C[i][0] - poi_radius, 0), min(X, C[i][0] + poi_radius)),
+                random.randint(max(C[i][0] - poi_radius, 0), min(Y, C[i][0] + poi_radius)))
 
         G = nx.DiGraph()
         G.add_nodes_from(N)
 
+        # # Introduce edges
+        # for u in G.nodes():
+        #     for v in G.nodes():
+        #         if u != v and euclidean(C[u],C[v]) <= R:
+        #             G.add_edge(u,v)
+
         # Introduce edges
         for u in G.nodes():
             for v in G.nodes():
-                if u != v and euclidean(C[u],C[v]) <= R:
-                    G.add_edge(u,v)
+                # CC and CC
+                if u != v and u in HCN and v in HCN and euclidean(C[u], C[v]) <= tower_range:
+                    G.add_edge(u, v)
+                    # print("C - C", u, v, HCN)
+
+                # CC and PoI
+                if u != v and u in HCN and v in SCN and euclidean(C[u], C[v]) <= tower_range:
+                    G.add_edge(u, v)
+                    # print("C - P", u, v, HCN)
+
+                # PoI and PoI
+                if u != v and u in SCN and v in SCN and euclidean(C[u], C[v]) <= tower_range:
+                    G.add_edge(u, v)
+                    # print("P - P", u, v, HCN)
+
+                # PoI and Survivor
+                if u != v and u in SCN and v in NCN and euclidean(C[u], C[v]) <= ble_range:
+                    G.add_edge(u, v)
+                    # print("P - S", u, v, HCN)
+
+                # Survivor and Survivor
+                if u != v and u in NCN and v in NCN and euclidean(C[u], C[v]) <= ble_range:
+                    G.add_edge(u, v)
+                    # print("S - S", u, v, HCN)
+
+                    # if u != v and euclidean(C[u],C[v]) <= R:
+                    #     G.add_edge(u,v)
 
         GBD = bioD(G, HCN, SCN, NCN)
         RA = randomDRN(G,GBD)
@@ -326,11 +371,15 @@ def generateSim(X,Y,VN,R):
 
     return loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8,HCN, SCN, NCN
 
-# # Area of deployment
+# Area of deployment
 X = 50
 Y = 50
 # Communication Radius
 R = 20
+
+tower_range = 20
+ble_range = 10
+poi_radius = 10
 
 # Number of nodes in input DRN
 # VN = 100
