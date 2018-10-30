@@ -1,6 +1,6 @@
 from computeHarvesine import *
 import networkx as nx
-from degree import *
+#from degree import *
 import pickle
 
 def makedirected(G):
@@ -48,11 +48,12 @@ def create_static_network(filename):
 
     print ("Number of nodes in G: ",len(G))
     print ("Number of edges in G: ",len(G.edges()))
-    print ("Density of G: ",(2 * len(G.edges()))/(len(G) * (len(G) - 1)))
+    print ("Density of G: ", float(2 * len(G.edges()))/((len(G) * (len(G) - 1))))
 
     return G
 
 folder = "metrofi/"
+#folder = "metrofi/"
 G = create_static_network(folder + "aps.txt")
 G = nx.convert_node_labels_to_integers(G,first_label = 0)
 nx.write_gml(G, folder + "inputDRN.gml")
@@ -71,7 +72,8 @@ t1 = allNodes[:int(t1_ratio * len(G))]
 t2 = allNodes[int(t1_ratio * len(G)):int(t1_ratio * len(G)) + int(t2_ratio * len(G))]
 t3 = [u for u in G.nodes() if u not in t1 and u not in t2]
 
-print (len(t1),len(t2),len(t3))
+print ("# of nodes in tiers ", len(t1),len(t2),len(t3))
+
 pickle.dump(t1,open(folder + 'HO.p','wb'))
 pickle.dump(t2,open(folder + 'SO.p','wb'))
 pickle.dump(t3,open(folder + 'NO.p','wb'))
