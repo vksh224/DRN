@@ -126,6 +126,9 @@ X = 50
 Y = 50
 #Communication Radius
 R = 20
+
+tower_range = 50
+ble_range = 20
 #Number of nodes in input DRN
 
 for ii in range(4,5):
