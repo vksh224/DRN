@@ -39,7 +39,7 @@ def get_tier1_tier2_links(G):
 
 
 def generate_Nepal_DRN():
-    time_periods = 720
+    time_periods = 12
     loc_o = '0 ' + str(time_periods * 300) + " 0 " + str(X) + " 0 " + str(Y) + '\n'
     nei_o = '0 ' + str(time_periods * 300) + '\n'
 
@@ -134,8 +134,8 @@ for loc in S_loc:
 
 G, loc_o, nei_o = generate_Nepal_DRN()
 
-neigh_des_folder = "/Users/vijay/BioDRNICDCSWorkSpace/ONEICDCS/src/NeighborList/"
-loc_des_folder = "/Users/vijay/BioDRNICDCSWorkSpace/ONEICDCS/src/NodePosition/"
+neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/"
+loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
 
 f = open(loc_des_folder + 'O_C' + str(sum(PoI_S_count)) + '_new.txt','w')
 f.write(loc_o)
