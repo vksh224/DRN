@@ -19,13 +19,28 @@ def write_paths_to_a_file(Res_path_list, type):
 
 def get_responder_paths(CC_locs, PoI_locs):
     Res_path_list = []
+    all_visited_pois = []
+
+    rem_PoI_locs = [loc for loc in PoI_locs]
     for r in range(no_of_R):
+
         curr_res_path = []
         no_of_assigned_PoIs = random.randint(min_no_PoIs_for_R, max_no_PoI_for_R)
         curr_res_path.append(random.choice(CC_locs))
+
         for poi in range(no_of_assigned_PoIs):
-            curr_res_path.append(random.choice(PoI_locs))
+            if len(rem_PoI_locs) == 0:
+                rem_PoI_locs = [loc for loc in PoI_locs]
+
+            if len(rem_PoI_locs) > 0:
+                poi_loc = random.choice(rem_PoI_locs)
+                curr_res_path.append(poi_loc)
+                all_visited_pois.append(poi_loc)
+                rem_PoI_locs.remove(poi_loc)
         Res_path_list.append(curr_res_path)
+
+    print("Total unique PoIs served", len(set(all_visited_pois)), set(all_visited_pois))
+
     return Res_path_list
 
 #---------------------------------- Survivor location --------------------------
@@ -65,8 +80,8 @@ def get_volunteer_paths(PoI_locs, PoI_radii, Vol_count_In_PoI):
             polygon = turtle.Turtle()
 
             num_sides = random.randint(min_num_sides, max_num_sides)
-            side_length = random.randint(min_side_length, PoI_radii[poi_id])
-            angle = random.randint(min_side_angle, max_side_angle) / num_sides
+            side_length = random.randint(min_side_length, max_side_length)
+            angle = 360/ num_sides
 
             polygon.setposition(PoI_locs[poi_id])
 
@@ -74,7 +89,8 @@ def get_volunteer_paths(PoI_locs, PoI_radii, Vol_count_In_PoI):
             #print("Number of sides: ", num_sides)
             for i in range(num_sides):
                 # print(i, polygon.position())
-                curr_vol_path.append((int(polygon.position()[0]), int(polygon.position()[1])))
+                if euclideanDistance(PoI_locs[poi_id][0], PoI_locs[poi_id][1], polygon.position()[0], polygon.position()[1]) < PoI_radii[poi_id]:
+                    curr_vol_path.append((int(polygon.position()[0]), int(polygon.position()[1])))
                 polygon.forward(side_length)
                 polygon.right(angle)
 
@@ -93,15 +109,26 @@ def update_volunteer_loc(Vol_locs, Vol_path_list, prev_time, curr_time):
         curr_speed = random.uniform(min_V_speed, max_V_speed)
         dist_trav = curr_speed * (curr_time - prev_time)
         pos = Vol_path_list[i].index(curr_loc)
+        chosen_loc = curr_loc
 
+        iteration = 0
         while True:
-            next_loc = Vol_path_list[pos]
-            if (euclideanDistance(next_loc[0], next_loc[1], curr_loc[0], curr_loc[1]) < dist_trav):
-                Vol_locs[i] = curr_loc
-                break
-            else:
-                pos = (pos + 1)%len(Vol_path_list[i])
+            pos = (pos + 1) % len(Vol_path_list[i])
+            next_loc = Vol_path_list[i][pos]
 
+            # if i == 0:
+            #     print(i, "Curr loc", curr_loc, "Next loc", next_loc, Vol_path_list[i])
+            #     print(euclideanDistance(next_loc[0], next_loc[1], curr_loc[0], curr_loc[1]), dist_trav)
+
+            if iteration > len(Vol_path_list[i]):
+                break
+
+            if (euclideanDistance(next_loc[0], next_loc[1], curr_loc[0], curr_loc[1]) > dist_trav):
+                Vol_locs[i] = chosen_loc
+                break
+            chosen_loc = next_loc
+            iteration += 1
+    return Vol_locs
 #--------------------------------------------------------------------------------
 
 
