@@ -7,7 +7,7 @@ def euclideanDistance(coor1X, coor1Y, coor2X, coor2Y):
     return (math.sqrt((float(coor1X) - float(coor2X))**2 + (float(coor1Y) - float(coor2Y))**2))
 
 def write_paths_to_a_file(Res_path_list, type):
-    f = open('Bhaktapur/responder_paths.txt', type)
+    f = open(directory + 'responder_paths.txt', type)
     path_count = 1
     for res_path in Res_path_list:
         line_str = "Group.waypoints" + str(path_count) +" = "
@@ -163,4 +163,3 @@ def initial_setup():
     Vol_locs = initial_volunteer_loc(Vol_path_list)
 
     return CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, Vol_locs
-

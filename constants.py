@@ -1,5 +1,8 @@
 directory = "Bhaktapur/"
 
+loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
+#loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
+
 X = 10000
 Y = 10000
 
@@ -8,9 +11,12 @@ hX = 5000
 lY = 3000
 hY = 6000
 
-time_interval = 5
+time_interval = 300
 #in minutes (equivalent to 12 hours)
 total_simulation_time = 3600
+
+#15 minutes
+network_construction_interval = 1500
 
 no_of_CC = 2
 no_of_PoI = 10
@@ -30,7 +36,7 @@ max_S_in_PoI = 20
 min_PoI_radius= 100
 max_PoI_radius = 300
 
-bt_range = 50
+bt_range = 100
 tower_range = 500
 
 #----- related to volunteer path

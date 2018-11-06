@@ -1,4 +1,5 @@
 from construct_NepalDRN_utility import *
+import pickle
 
 #Main starts here
 
@@ -9,32 +10,34 @@ CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_
 old_track_node_id = 0
 new_track_node_id = len(CC_locs)
 print("CC:", len(CC_locs), "Start-id ", old_track_node_id, "End-id", new_track_node_id - 1)
+pickle.dump(CC_locs, open(directory + "Data/" + 'CC_locs.p','wb'))
 
 old_track_node_id = new_track_node_id
 new_track_node_id += len(PoI_locs)
 print("PoI:", len(PoI_locs), "Start-id", old_track_node_id, "End-id", new_track_node_id - 1)
 print("PoI locs:", [loc for loc in PoI_locs])
-old_track_node_id = new_track_node_id
-new_track_node_id += len(Res_path_list)
-print("Responders:", len(Res_path_list), "Start-id", old_track_node_id, "End-id", new_track_node_id - 1)
+pickle.dump(PoI_locs, open(directory + "Data/" + 'PoI_locs.p','wb'))
 
 old_track_node_id = new_track_node_id
 new_track_node_id += len(Vol_path_list)
 print("Volunteers:", len(Vol_path_list), "Start-id", old_track_node_id, "End-id", new_track_node_id - 1)
-print ("Volunteer locs: ", [loc for loc in Vol_locs])
-print("Volunteer paths: ", [path for path in Vol_path_list])
+pickle.dump(Vol_locs, open(directory + "Data/" + 'Vol_locs.p','wb'))
 
 old_track_node_id = new_track_node_id
 new_track_node_id += len(S_locs)
 print("Survivors:", len(S_locs), " Start-id", old_track_node_id, "End-id", new_track_node_id)
+pickle.dump(S_locs, open(directory + "Data/" + 'S_locs.p','wb'))
+
+
+old_track_node_id = new_track_node_id
+new_track_node_id += len(Res_path_list)
+print("Responders:", len(Res_path_list), "Start-id", old_track_node_id, "End-id", new_track_node_id - 1)
+pickle.dump(Res_path_list, open(directory + "Data/" + 'Res_paths.p','wb'))
 
 #Write responder paths to a file
 write_paths_to_a_file (Res_path_list, "w")
 
 #---------------------------------END: Initial Setup -----------------------------------------------------
-
-#loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
-loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
 
 f = open(loc_des_folder + 'ext_position.txt','w')
 
@@ -44,7 +47,8 @@ f.write("0 " + str(7200) + " 0 " + str(X) + " 0 " + str(Y) + "\n")
 start_time = 0
 end_time = total_simulation_time
 
-for t in range (start_time, end_time, 300):
+
+for t in range (start_time, end_time, time_interval):
     #Get starting CC_id
     node_id = 0
 
@@ -60,18 +64,20 @@ for t in range (start_time, end_time, 300):
         f.write(str(t) + " " + str(node_id) + " " + str(loc[0]) + " " + str(loc[1]) + "\n")
         node_id += 1
 
-    #Get Starting Volunteer id
-    node_id = len(CC_locs) + len(PoI_locs) + len(Res_path_list)
+    #Get starting volunteer id
+    node_id = len(CC_locs) + len(PoI_locs)
     for loc in Vol_locs:
         f.write(str(t) + " " + str(node_id) + " " + str(loc[0]) + " " + str(loc[1]) + "\n")
         node_id += 1
 
     #Get starting survivor id
-    node_id = len(CC_locs) + len(PoI_locs) + len(Res_path_list) + len(Vol_path_list)
+    node_id = len(CC_locs) + len(PoI_locs) + len(Vol_path_list)
 
     for loc in S_locs:
         f.write(str(t) + " " + str(node_id) + " " + str(loc[0]) + " " + str(loc[1]) + "\n")
         node_id += 1
+
+    #Note: Responders get the last few IDS in the ONE simulator
 
     S_locs = update_survivor_loc(S_locs, t, t + time_interval)
     Vol_locs = update_volunteer_loc(Vol_locs, Vol_path_list, t, t + time_interval)
