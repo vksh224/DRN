@@ -1,5 +1,5 @@
 directory = "Bhaktapur/"
-
+data_directory = "Bhaktapur/Data/"
 loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
 #loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
 
@@ -18,12 +18,12 @@ total_simulation_time = 3600
 #15 minutes
 network_construction_interval = 1500
 
-no_of_CC = 2
-no_of_PoI = 10
+no_of_CC = 1
+no_of_PoI = 5
 no_of_R = 10
 
-min_no_PoIs_for_R = 2
-max_no_PoI_for_R = 5
+min_no_PoIs_for_R = 1
+max_no_PoI_for_R = 3
 
 no_of_Towers = 5
 
@@ -54,8 +54,8 @@ max_side_angle = 360
 #------------------
 
 moving_S_prob = 0.5
-min_S_speed = 0
-max_S_speed = 20
+min_S_speed = 0.12
+max_S_speed = 0.15
 
 #In m/s
 min_V_speed = 1

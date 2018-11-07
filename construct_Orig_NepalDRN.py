@@ -5,7 +5,7 @@ import pickle
 
 #---------------- Initial setup -------------------------------------------------------------------------
 
-CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, Vol_locs = initial_setup()
+CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs = initial_setup()
 
 old_track_node_id = 0
 new_track_node_id = len(CC_locs)
@@ -48,7 +48,7 @@ start_time = 0
 end_time = total_simulation_time
 
 
-for t in range (start_time, end_time, time_interval):
+for t in range (start_time, total_simulation_time, time_interval):
     #Get starting CC_id
     node_id = 0
 
@@ -78,8 +78,8 @@ for t in range (start_time, end_time, time_interval):
         node_id += 1
 
     #Note: Responders get the last few IDS in the ONE simulator
-
-    S_locs = update_survivor_loc(S_locs, t, t + time_interval)
+    S_locs = initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI)
+    #S_locs = update_survivor_loc(PoI_locs, PoI_radii, S_locs, t, t + time_interval)
     Vol_locs = update_volunteer_loc(Vol_locs, Vol_path_list, t, t + time_interval)
 
 f.close()

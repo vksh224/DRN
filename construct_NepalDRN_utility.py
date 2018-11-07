@@ -1,6 +1,9 @@
 import random
 import math
 import turtle
+import pickle
+import networkx as nx
+import matplotlib.pyplot as plt
 from constants import *
 
 def euclideanDistance(coor1X, coor1Y, coor2X, coor2Y):
@@ -57,7 +60,9 @@ def initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI):
             S_locs.append((int(x), int(y)))
     return S_locs
 
-def update_survivor_loc (S_locs, prev_time, curr_time):
+def update_survivor_loc (PoI_locs, PoI_radii, S_locs, prev_time, curr_time):
+    S_init_locs = pickle.load(open(directory + "Data/S_locs.p", "rb"))
+
     for i in range(len(S_locs)):
         moving_prob = random.uniform(0, 1)
         if moving_prob > moving_S_prob:
@@ -65,9 +70,19 @@ def update_survivor_loc (S_locs, prev_time, curr_time):
             alpha = 2 * math.pi * random.random()
             curr_speed = random.uniform (min_S_speed, max_S_speed)
             r = curr_speed * (curr_time - prev_time) * math.sqrt(random.random())
-            x = r * math.cos(alpha) + S_locs[i][0]
-            y = r * math.sin(alpha) + S_locs[i][1]
+
+            x = -1
+            y = -1
+            #Check if a survivor belong to the current PoI
+            for poi_ind in range(len(PoI_locs)):
+                if euclideanDistance(S_init_locs[i][0], S_init_locs[i][1], PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) <= PoI_radii[poi_ind]:
+                    x = max(S_locs[i][0] + r * math.cos(alpha), S_init_locs[i][0] + PoI_radii[poi_ind] * math.cos(alpha))
+                    y = min(S_locs[i][1] + r * math.sin(alpha), S_init_locs[i][1] + PoI_radii[poi_ind] * math.sin(alpha))
+                    print("Check: ", S_init_locs[i], PoI_locs[poi_ind], S_locs[i], x, y)
+                    break
+
             S_locs[i] = (int(x), int(y))
+
     return S_locs
 #-------------------End: Survivor related -------------------------------------
 
@@ -162,4 +177,15 @@ def initial_setup():
     #Get volunteer locations
     Vol_locs = initial_volunteer_loc(Vol_path_list)
 
-    return CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, Vol_locs
+    return CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs
+
+
+def plot_graph(G, filename):
+    plt.figure()
+    plt.title("Nodes: " + str(len(G.nodes())) + " Edges: " + str(len(G.edges())))
+    nx.draw(G, with_labels=True)
+    # plt.xlabel('Degree')
+    # plt.ylabel('Number of nodes')
+    plt.draw()
+    plt.savefig(directory + "Plots/" + filename + "_" + str(len(G.nodes())) + ".png")
+    plt.close()

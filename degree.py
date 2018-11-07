@@ -30,21 +30,21 @@ def plot_deg_dist(G, filename):
     # plt.xlabel('Degree')
     # plt.ylabel('Number of nodes')
     plt.plot(X, Y)
-    plt.savefig("Plots/" + filename + ".png")
+    plt.savefig(filename + ".png")
     plt.close()
 
-folder = "kathmandu/"
-inputDRN = nx.read_gml(folder + 'inputDRN.gml')
-plot_deg_dist(inputDRN, folder + "inputDRN")
-
-bioDRN = nx.read_gml(folder + 'GBD.gml')
-plot_deg_dist(bioDRN, folder + "bioDRN")
-
-refG = nx.read_gml(folder + 'refG.gml')
-plot_deg_dist(refG, folder + "refG")
-
-origG = nx.read_gml('this_grn.gml')
-plot_deg_dist(origG, "origGRN")
+# folder = "kathmandu/"
+# inputDRN = nx.read_gml(folder + 'inputDRN.gml')
+# plot_deg_dist(inputDRN, folder + "inputDRN")
+#
+# bioDRN = nx.read_gml(folder + 'GBD.gml')
+# plot_deg_dist(bioDRN, folder + "bioDRN")
+#
+# refG = nx.read_gml(folder + 'refG.gml')
+# plot_deg_dist(refG, folder + "refG")
+#
+# origG = nx.read_gml('this_grn.gml')
+# plot_deg_dist(origG, "origGRN")
 
 ## ================ MetroFi
 # metroFi = nx.read_gml('metrofi.gml')

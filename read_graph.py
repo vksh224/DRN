@@ -85,4 +85,4 @@ pickle.dump(t2, open(folder + 'SO.p','wb'))
 pickle.dump(t3, open(folder + 'NO.p','wb'))
 
 nx.write_gml(G, folder + "labeled_DRN.gml")
-plot_graph(G, "labeled_DRN")
+plot_graph(G, "labeled_DRN2")
