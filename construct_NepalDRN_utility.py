@@ -187,5 +187,5 @@ def plot_graph(G, filename):
     # plt.xlabel('Degree')
     # plt.ylabel('Number of nodes')
     plt.draw()
-    plt.savefig(directory + "Plots/" + filename + "_" + str(len(G.nodes())) + ".png")
+    plt.savefig(plot_directory + filename + "_" + str(len(G.nodes())) + ".png")
     plt.close()
