@@ -179,7 +179,6 @@ def initial_setup():
 
     return CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs
 
-
 def plot_graph(G, filename):
     plt.figure()
     plt.title("Nodes: " + str(len(G.nodes())) + " Edges: " + str(len(G.edges())))
@@ -187,5 +186,5 @@ def plot_graph(G, filename):
     # plt.xlabel('Degree')
     # plt.ylabel('Number of nodes')
     plt.draw()
-    plt.savefig(plot_directory + filename + "_" + str(len(G.nodes())) + ".png")
+    plt.savefig(filename + "_" + str(len(G.nodes())) + ".png")
     plt.close()

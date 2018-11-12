@@ -17,7 +17,7 @@ def responder_visiting_IDs():
                     Res_visiting_IDs.append(len(CC_locs) + j)
                     break
         # print("Res locs", k, Res_paths[k])
-        print("Res ", k, Res_visiting_IDs)
+        #print("Res ", k, Res_visiting_IDs)
         Res_visiting_IDs_list.append(Res_visiting_IDs)
 
     return Res_visiting_IDs_list
@@ -136,5 +136,5 @@ pickle.dump(t3, open(data_directory + 'NO.p','wb'))
 nx.write_gml(G, directory + "Orig_NepalDRN.gml")
 nx.write_gml(sparseG, directory + "Sparse_Orig_NepalDRN.gml")
 
-plot_graph(G, "Orig_NepalDRN")
-plot_graph(sparseG, "Sparse_Orig_NepalDRN")
+plot_graph(G, plot_directory + "Orig_NepalDRN")
+plot_graph(sparseG, plot_directory + "Sparse_Orig_NepalDRN")

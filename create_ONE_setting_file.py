@@ -8,8 +8,6 @@ Vol_locs = pickle.load(open(directory + "Data/Vol_locs.p", "rb"))
 S_locs = pickle.load(open(directory + "Data/S_locs.p", "rb"))
 Res_paths = pickle.load(open(directory + "Data/Res_paths.p", "rb"))
 
-setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
-
 setting_files = os.listdir(setting_directory)
 
 updated_setting_lines = []

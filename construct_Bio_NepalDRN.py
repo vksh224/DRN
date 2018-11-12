@@ -50,7 +50,7 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     c_t3_G2 = deepcopy(t3_G2)
 
     #Nodes participating in motifs with each node
-    NSM = pickle.load(open("NSM.p", "rb"))
+    NSM = pickle.load(open(data_directory + "NSM.p", "rb"))
     print ('NSM:',len(NSM))
 
     # Node and edge set in reference GRN
@@ -60,7 +60,6 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     while (True):
         flag = False
         for j in t2_G2:
-            #print("j:", j)
             for k in t2_G1:
                 d_G1_t1 = find_tier_degree(k, t1_G1, G1)
                 d_G2_t1 = find_tier_degree(j, t1_G2, G2)
@@ -68,16 +67,43 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
                 d_G1_t3 = find_tier_degree(k, t3_G1, G1)
                 d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
-                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
+                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3) or 1 == 1:
                     N.append(k)
 
-                for each in d_G1_t1:
-                    if each not in N and each in NSM[k]:
-                        N.append(each)
+                    for i in range(len(d_G1_t1)):
+                        # print("GRN tier 1: ", len(d_G1_t1), "DRN tier 1: ", len(d_G2_t1))
+                        if d_G1_t1[i] not in N and d_G1_t3[i] in NSM[k]:
+                            N.append(d_G1_t1[i])
 
-                for each in d_G1_t3:
-                    if each not in N and each in NSM[k]:
-                        N.append(each)
+                    #For tier 3 nodes
+                    #Get first k elements of motif sorted nodes
+
+                    sorted_G1_t3_ids = sorted(d_G1_t3)
+                    # print("Sorted G1 T3 ids", " len: ", len(sorted_G1_t3_ids), ": first 5 ", sorted_G1_t3_ids[:5],
+                    #       " last 5: ", sorted_G1_t3_ids[len(sorted_G1_t3_ids) - 5:])
+
+                    unsorted_NSM_G1_t3 = [len(NSM[each]) for each in sorted_G1_t3_ids]
+                    # print("Unsorted G1 T3 ids", " len: ", len(unsorted_NSM_G1_t3), ": first 5 ", unsorted_NSM_G1_t3[:5],
+                    #       " last 5: ", unsorted_NSM_G1_t3[len(unsorted_NSM_G1_t3) - 5:])
+
+                    sorted_NSM_G1_t3_ids = [x for y,x in sorted(zip(unsorted_NSM_G1_t3, sorted_G1_t3_ids), reverse=True)]
+                    # print("Sorted G1 T3 ids", " len: ", len(sorted_NSM_G1_t3_ids), ": first 5 ", sorted_NSM_G1_t3_ids[:5],
+                    #       " last 5: ", sorted_NSM_G1_t3_ids[len(sorted_NSM_G1_t3_ids) - 5:])
+                    # print("Sorted G1 T3", " len: ", len(sorted_NSM_G1_t3_ids), ": first 5 ", [len(NSM[x]) for x in sorted_NSM_G1_t3_ids[:5]],
+                    #       " last 5: ", [len(NSM[x]) for x in sorted_NSM_G1_t3_ids[len(sorted_NSM_G1_t3_ids) - 5:]], "\n")
+
+                    for i in range(min(len(sorted_NSM_G1_t3_ids), 4 * len(d_G2_t3))):
+                        #print("GRN tier 3: ", len(d_G1_t3), "DRN tier 3: ", len(d_G2_t3))
+                        if sorted_NSM_G1_t3_ids[i] not in N and sorted_NSM_G1_t3_ids[i] in NSM[k]:
+                            N.append(sorted_NSM_G1_t3_ids[i])
+
+                    # for each in d_G1_t1:
+                    #     if each not in N and each in NSM[k]:
+                    #         N.append(each)
+                    #
+                    # for each in d_G1_t3:
+                    #     if each not in N and each in NSM[k]:
+                    #         N.append(each)
 
                 t2_G2.pop(t2_G2.index(j))
                 t2_G1.pop(t2_G1.index(k))
@@ -102,7 +128,56 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
     return G
 
-G1 = nx.read_gml('this_grn.gml')
+def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
+    # List of nodes in reference GRN
+    L1 = [t1_G, t2_G, t3_G]
+    # List of nodes in DRN
+    L2 = [t1_G2, t2_G2, t3_G2]
+
+    Y = np.array(similarity(G, G2, 0.01))
+    # S = Y.shape
+    # print ('Dimension of Y: ',S)
+
+    # Nodes and edges in bio-DRN
+    NBD = []
+    EBD = []
+
+    # Corresponding mapped node of reference GRN
+    NRG = []
+
+    for i in range(len(L1)):
+        print (i)
+        YM = Y[L1[i], :][:, L2[i]]
+        YM = reverse(YM)
+        YM = YM.tolist()
+        m = Munkres()
+
+        indexes = m.compute(YM)
+        print(indexes)
+
+        for each in indexes:
+            NBD.append(L2[i][each[1]])
+            NRG.append(L1[i][each[0]])
+
+    # Introduce edges in Bio-DRN
+    for u in NBD:
+        for v in NBD:
+            if (u, v) in G2.edges() and (NRG[NBD.index(u)], NRG[NBD.index(v)]) in G.edges():
+                EBD.append((u, v))
+
+    print (len(NBD))
+    print (len(NRG))
+    print (len(EBD))
+
+    GBD = nx.DiGraph()
+    GBD.add_nodes_from(NBD)
+    GBD.add_edges_from(EBD)
+
+    return GBD
+
+#Main starts here
+
+G1 = nx.read_gml('yeast_grn_reversed.gml')
 G2 = nx.read_gml(directory + 'Sparse_Orig_NepalDRN.gml')
 G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
 
@@ -113,7 +188,7 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 print ("Number of edges in DRN", len(G2.edges()))
 
 # Calculate node motif centralities of the two graphs
-MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
+MC_G1 = pickle.load(open(data_directory + "GRN_Centrality.p", "rb"))
 #MC_G1 = motif(G1)
 MC_G2 = motif(G2)
 
@@ -132,49 +207,8 @@ t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
 print ("DRN tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
 
-#List of nodes in reference GRN
-L1 = [t1_G,t2_G,t3_G]
-#List of nodes in DRN
-L2 = [t1_G2,t2_G2,t3_G2]
-
-Y = np.array(similarity(G, G2, 0.01))
-# S = Y.shape
-# print ('Dimension of Y: ',S)
-
-#Nodes and edges in bio-DRN
-NBD = []
-EBD = []
-
-#Corresponding mapped node of reference GRN
-NRG = []
-
-for i in range(len(L1)):
-    print (i)
-    YM = Y[L1[i], :][:, L2[i]]
-    YM = reverse(YM)
-    YM = YM.tolist()
-    m = Munkres()
-
-    indexes = m.compute(YM)
-    print(indexes)
-
-    for each in indexes:
-        NBD.append(L2[i][each[1]])
-        NRG.append(L1[i][each[0]])
-
-#Introduce edges in Bio-DRN
-for u in NBD:
-    for v in NBD:
-        if (u,v) in G2.edges() and (NRG[NBD.index(u)],NRG[NBD.index(v)]) in G.edges():
-            EBD.append((u,v))
-
-print (len(NBD))
-print (len(NRG))
-print (len(EBD))
-
-GBD = nx.DiGraph()
-GBD.add_nodes_from(NBD)
-GBD.add_edges_from(EBD)
+#G is reference GRN, and G2 is DRN
+GBD = generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
 
 print ("NOT FINAL NODE COUNT:", len(GBD))
 print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
@@ -189,8 +223,8 @@ print ("FINAL EDGE COUNT:", len(GBD.edges()))
 nx.write_gml(GBD, data_directory + 'GBD.gml')
 nx.write_gml(G, data_directory + 'refG.gml')
 
-plot_deg_dist(GBD, data_directory + 'Bio_NepalDRN_degree')
-plot_graph(G, data_directory + "Bio_NepalDRN")
+plot_deg_dist(GBD, plot_directory + 'Bio_NepalDRN_degree')
+plot_graph(G, plot_directory + "Bio_NepalDRN")
 
 
 

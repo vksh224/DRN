@@ -1,8 +1,12 @@
 directory = "Bhaktapur/"
 data_directory = "Bhaktapur/Data/"
 plot_directory = "Bhaktapur/Plots/"
-loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
-#loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
+#loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
+loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
+setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
+#setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
+
+input_grn = "Yeast.gml"
 
 X = 10000
 Y = 10000
@@ -20,8 +24,8 @@ total_simulation_time = 3600
 network_construction_interval = 1500
 
 no_of_CC = 1
-no_of_PoI = 10
-no_of_R = 20
+no_of_PoI = 5
+no_of_R = 30
 
 min_no_PoIs_for_R = 1
 max_no_PoI_for_R = 3
@@ -32,7 +36,7 @@ min_V_in_PoI = 2
 max_V_in_PoI = 5
 
 min_S_in_PoI = 10
-max_S_in_PoI = 30
+max_S_in_PoI = 20
 
 min_PoI_radius= 100
 max_PoI_radius = 300
