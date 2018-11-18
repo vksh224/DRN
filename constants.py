@@ -1,9 +1,11 @@
+GRN_directory ="Yeast_Data/"
 directory = "Bhaktapur/"
 data_directory = "Bhaktapur/Data/"
 plot_directory = "Bhaktapur/Plots/"
 #loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
 loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
 setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
+
 #setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
 
 input_grn = "Yeast.gml"

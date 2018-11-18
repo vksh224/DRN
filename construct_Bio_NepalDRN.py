@@ -50,7 +50,7 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     c_t3_G2 = deepcopy(t3_G2)
 
     #Nodes participating in motifs with each node
-    NSM = pickle.load(open(data_directory + "NSM.p", "rb"))
+    NSM = pickle.load(open(GRN_directory + "NSM.p", "rb"))
     print ('NSM:',len(NSM))
 
     # Node and edge set in reference GRN
@@ -177,7 +177,7 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 
 #Main starts here
 
-G1 = nx.read_gml('yeast_grn_reversed.gml')
+G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
 G2 = nx.read_gml(directory + 'Sparse_Orig_NepalDRN.gml')
 G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
 
@@ -188,7 +188,8 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 print ("Number of edges in DRN", len(G2.edges()))
 
 # Calculate node motif centralities of the two graphs
-MC_G1 = pickle.load(open(data_directory + "GRN_Centrality.p", "rb"))
+MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
+print(MC_G1)
 #MC_G1 = motif(G1)
 MC_G2 = motif(G2)
 

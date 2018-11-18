@@ -66,17 +66,17 @@ def compute_GRN_NSM_NMC(G):
                         NMC[v] += 1
                         NMC[w] += 1
 
-    pickle.dump(NMC, open(data_directory + "GRN_Centrality.p", "wb"))
+    pickle.dump(NMC, open(data_directory + "NMC.p", "wb"))
     pickle.dump(NSM, open(data_directory + "NSM.p", "wb"))
     #return NMC, NSM
 
 
-# os.system('python construct_Orig_NepalDRN.py')
-# os.system('python construct_Orig_NepalDRN_network.py')
-# os.system('python create_ONE_setting_file.py')
-# os.system('python3 construct_Bio_NepalDRN.py')
+os.system('python construct_Orig_NepalDRN.py')
+os.system('python construct_Orig_NepalDRN_network.py')
+os.system('python create_ONE_setting_file.py')
+#os.system('python3 construct_Bio_NepalDRN.py')
 
 #------------- Make GRN ready for mapping with DRN - to create Bio-DRN
 # input GRN with edge directions reversed
-G = generate_GRN_edge_directions_reversed(input_grn)
-compute_GRN_NSM_NMC(G)
+#G = generate_GRN_edge_directions_reversed(input_grn)
+#compute_GRN_NSM_NMC(G)
