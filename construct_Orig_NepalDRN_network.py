@@ -49,7 +49,7 @@ def create_static_network(Res_visiting_IDs_list, start_time, end_time):
     sparseG = G.copy()
 
     #Add edges between each pair of nodes for the given time interval
-    with open(loc_des_folder + "ext_position.txt", "r") as f:
+    with open("ext_position.txt", "r") as f:
         node_pos_lines = f.readlines()[1:]
 
     for line1 in node_pos_lines:

@@ -71,9 +71,9 @@ def compute_GRN_NSM_NMC(G):
     #return NMC, NSM
 
 
-os.system('python construct_Orig_NepalDRN.py')
+#os.system('python construct_Orig_NepalDRN.py')
 os.system('python construct_Orig_NepalDRN_network.py')
-os.system('python create_ONE_setting_file.py')
+#os.system('python create_ONE_setting_file.py')
 #os.system('python3 construct_Bio_NepalDRN.py')
 
 #------------- Make GRN ready for mapping with DRN - to create Bio-DRN
