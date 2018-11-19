@@ -39,7 +39,7 @@ write_paths_to_a_file (Res_path_list, "w")
 
 #---------------------------------END: Initial Setup -----------------------------------------------------
 
-f = open('ext_position.txt','w')
+f = open(loc_des_folder + 'ext_position.txt','w')
 
 #0 7200 0 10000 0 10000
 f.write("0 " + str(7200) + " 0 " + str(X) + " 0 " + str(Y) + "\n")

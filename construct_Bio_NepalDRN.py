@@ -28,6 +28,77 @@ def reverse(Y):
 
     return Y
 
+def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
+    # List of nodes sorted in the non-increasing order of their motif centralities
+    MC_G1 = [each[0] for each in sorted(MC_G1.items(), key=lambda x: x[1], reverse=True)]
+    MC_G2 = [each[0] for each in sorted(MC_G2.items(), key=lambda x: x[1], reverse=True)]
+
+    # Identify tiers
+    t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
+    t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
+
+    #Copy tiers of DRN graph
+    c_t1_G2 = deepcopy(t1_G2)
+    c_t2_G2 = deepcopy(t2_G2)
+    c_t3_G2 = deepcopy(t3_G2)
+
+    #Nodes participating in motifs with each node
+    NSM = pickle.load(open("NSM.p", "rb"))
+    print ('NSM:',len(NSM))
+
+    # Node and edge set in reference GRN
+    E = []
+    N = []
+
+    while (True):
+
+        flag = False
+        for j in t2_G2:
+
+            #print("j:", j)
+            for k in t2_G1:
+
+                d_G1_t1 = find_tier_degree(k, t1_G1, G1)
+                d_G2_t1 = find_tier_degree(j, t1_G2, G2)
+
+                d_G1_t3 = find_tier_degree(k, t3_G1, G1)
+                d_G2_t3 = find_tier_degree(j, t3_G2, G2)
+
+                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
+
+                    N.append(k)
+
+                    for each in d_G1_t1:
+                        if each not in N and each in NSM[k]:
+                            N.append(each)
+
+                    for each in d_G1_t3:
+                        if each not in N and each in NSM[k]:
+                            N.append(each)
+
+                    t2_G2.pop(t2_G2.index(j))
+                    t2_G1.pop(t2_G1.index(k))
+                    flag = True
+                    break
+
+            if flag:
+                break
+
+        if not flag or len(t2_G2) == 0:
+            break
+
+    G = nx.DiGraph()
+    for u in N:
+        for v in N:
+            if G1.has_edge(u, v):
+                E.append((u, v))
+
+    G.add_nodes_from(N)
+    G.add_edges_from(E)
+
+    G = nx.convert_node_labels_to_integers(G,first_label = 0)
+    return G
+
 #G1 - GRN, G2 - DRN
 def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     # List of nodes sorted in the non-increasing order of their motif centralities
@@ -73,42 +144,19 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
                     N.append(k)
 
                     for i in range(len(d_G1_t1)):
-                        # print("GRN tier 1: ", len(d_G1_t1), "DRN tier 1: ", len(d_G2_t1))
-                        #print ('***',NSM[k])
-                        #print ('****', d_G1_t1[i])
-
                         if d_G1_t1[i] not in N and d_G1_t1[i] in NSM[k]:
                             N.append(d_G1_t1[i])
 
                     #For tier 3 nodes
                     #Get first k elements of motif sorted nodes
-
                     sorted_G1_t3_ids = sorted(d_G1_t3)
-                    # print("Sorted G1 T3 ids", " len: ", len(sorted_G1_t3_ids), ": first 5 ", sorted_G1_t3_ids[:5],
-                    #       " last 5: ", sorted_G1_t3_ids[len(sorted_G1_t3_ids) - 5:])
 
                     unsorted_NSM_G1_t3 = [len(NSM[each]) for each in sorted_G1_t3_ids]
-                    # print("Unsorted G1 T3 ids", " len: ", len(unsorted_NSM_G1_t3), ": first 5 ", unsorted_NSM_G1_t3[:5],
-                    #       " last 5: ", unsorted_NSM_G1_t3[len(unsorted_NSM_G1_t3) - 5:])
-
                     sorted_NSM_G1_t3_ids = [x for y,x in sorted(zip(unsorted_NSM_G1_t3, sorted_G1_t3_ids), reverse=True)]
-                    # print("Sorted G1 T3 ids", " len: ", len(sorted_NSM_G1_t3_ids), ": first 5 ", sorted_NSM_G1_t3_ids[:5],
-                    #       " last 5: ", sorted_NSM_G1_t3_ids[len(sorted_NSM_G1_t3_ids) - 5:])
-                    # print("Sorted G1 T3", " len: ", len(sorted_NSM_G1_t3_ids), ": first 5 ", [len(NSM[x]) for x in sorted_NSM_G1_t3_ids[:5]],
-                    #       " last 5: ", [len(NSM[x]) for x in sorted_NSM_G1_t3_ids[len(sorted_NSM_G1_t3_ids) - 5:]], "\n")
-
                     for i in range(min(len(sorted_NSM_G1_t3_ids), 4 * len(d_G2_t3))):
-                        #print("GRN tier 3: ", len(d_G1_t3), "DRN tier 3: ", len(d_G2_t3))
+                    #for i in range(len(sorted_NSM_G1_t3_ids)):
                         if sorted_NSM_G1_t3_ids[i] not in N and sorted_NSM_G1_t3_ids[i] in NSM[k]:
                             N.append(sorted_NSM_G1_t3_ids[i])
-
-                    # for each in d_G1_t1:
-                    #     if each not in N and each in NSM[k]:
-                    #         N.append(each)
-                    #
-                    # for each in d_G1_t3:
-                    #     if each not in N and each in NSM[k]:
-                    #         N.append(each)
 
                 t2_G2.pop(t2_G2.index(j))
                 t2_G1.pop(t2_G1.index(k))
@@ -132,6 +180,7 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
 
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
     return G
+
 
 def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
     # List of nodes in reference GRN
@@ -181,23 +230,27 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
     return GBD
 
 #Main starts here
-
 #G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
 G1 = nx.read_gml('Yeast_Ordered.gml')
 G1 = G1.reverse()
 
-G2 = nx.read_gml(directory + 'Sparse_Orig_NepalDRN.gml')
+G2 = nx.read_gml(directory + 'Orig_NepalDRN.gml')
 G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
+# G2 = nx.erdos_renyi_graph(n  = 50,p = 0.3,directed = True)
 
 t1_G2 = pickle.load(open(data_directory + "HO.p", "rb" ))
 t2_G2 = pickle.load(open(data_directory + "SO.p", "rb" ))
 t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 
+# t1_G2 = [0]
+# t2_G2 = [i for i in range(1, 10)]
+# t3_G2 = [i for i in range(10, 50)]
+
 print ("Number of edges in DRN", len(G2.edges()))
 
 # Calculate node motif centralities of the two graphs
 MC_G1 = pickle.load(open("NMC.p", "rb"))
-print(MC_G1)
+#print(MC_G1)
 #MC_G1 = motif(G1)
 MC_G2 = motif(G2)
 
