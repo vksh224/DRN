@@ -61,16 +61,4 @@ aI69
 aI70
 aI71
 aI72
-aI73
-aI74
-aI75
-aI76
-aI77
-aI78
-aI79
-aI80
-aI81
-aI82
-aI83
-aI84
 a.

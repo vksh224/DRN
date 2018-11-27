@@ -1,5 +1,5 @@
 #from writer import *
-from LCN.inputs import *
+from inputs import *
 from numpy import linalg as LA
 
 import pickle
@@ -37,6 +37,21 @@ def plot_deg_dist(G, filename):
     plt.plot(X, Y)
     plt.savefig(filename + '_' + str(len(G.nodes())) + ".png")
     plt.close()
+
+def supplement(GBD,G2,t1_G2):
+    D = list(set(G2.nodes()) - set(GBD.nodes()))
+    GBD.add_nodes_from(D)
+    D.extend(nx.isolates(GBD))
+    print("Isolated nodes:", len(D))
+
+    for u in D:
+        for v in t1_G2:
+            if nx.has_path(G2,u,v):
+                p = nx.shortest_path(G2,source = u,target = v)
+                for i in range(1,len(p)):
+                    GBD.add_edge(p[i - 1],p[i])
+                break
+    return GBD
 
 def prep(_hG,_sG,_nG,hD,sD,nD,sim,mNO):
 
@@ -120,7 +135,6 @@ def similarity(G1,G2):
     #print (inG2)
     #print (outG1)
     #print (outG2)
-
 
     oS = [[-1.0 for i in range(len(G2))] for j in range(len(G1))]
     S = [[0.1 for i in range(len(G2))] for j in range(len(G1))]
@@ -549,13 +563,24 @@ sim = similarity(_rG, gD)
 _hG, _sG, _nG, hD, sD, nD = prep(hG[:hCount], sG[:sCount], nG[:nCount], hD, sD, nD, sim, mNO)
 
 mgD = mapToGRN(rG, gD, _hG, _sG, _nG, hD, sD, nD)
+
 print("Number of nodes in BIO-DRN graph:", len(mgD))
 print("Number of edges in BIO-DRN graph:", len(mgD.edges()))
+print("Is Bio-DRN connected?", nx.is_connected(mgD.to_undirected()))
+#print("Largest connected component", len(list(nx.connected_component_subgraphs(mgD.to_undirected()))))
 
-print(mgD.nodes())
+plot_deg_dist(mgD, 'Plots/notFinal_bio_degree')
+plot_graph(mgD, "Plots/notFinal_bio")
 
-plot_deg_dist(mgD, 'Plots/Bio_NepalDRN_degree')
-plot_graph(mgD, "Plots/Bio_NepalDRN")
+mgD = supplement(mgD, gD, hD)
+print ("FINAL NODE COUNT:", len(mgD))
+print ("FINAL EDGE COUNT:", len(mgD.edges()))
+print("Is Bio-DRN connected after supplementary step?", nx.is_connected(mgD.to_undirected()))
+
+#print(mgD.nodes())
+
+plot_deg_dist(mgD, 'Plots/bio_final_degree')
+plot_graph(mgD, "Plots/bio_final")
 
 '''
 while(True):

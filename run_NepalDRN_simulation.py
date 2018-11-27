@@ -3,7 +3,12 @@ import networkx as nx
 import pickle
 from constants import input_grn, data_directory
 
+os.system('python construct_Orig_NepalDRN.py')
+os.system('python construct_Orig_NepalDRN_network.py')
+os.system('python create_ONE_setting_file.py')
+#os.system('python3 construct_Bio_NepalDRN.py')
 
+'''
 def generate_GRN_edge_directions_reversed(input_grn):
     G1 = nx.read_gml(input_grn)
     G1 = G1.reverse()
@@ -69,12 +74,7 @@ def compute_GRN_NSM_NMC(G):
     pickle.dump(NMC, open(data_directory + "NMC.p", "wb"))
     pickle.dump(NSM, open(data_directory + "NSM.p", "wb"))
     #return NMC, NSM
-
-
-#os.system('python construct_Orig_NepalDRN.py')
-os.system('python construct_Orig_NepalDRN_network.py')
-#os.system('python create_ONE_setting_file.py')
-#os.system('python3 construct_Bio_NepalDRN.py')
+'''
 
 #------------- Make GRN ready for mapping with DRN - to create Bio-DRN
 # input GRN with edge directions reversed
