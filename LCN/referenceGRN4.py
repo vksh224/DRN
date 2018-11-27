@@ -1,5 +1,5 @@
-from writer import *
-from inputs import *
+#from writer import *
+from LCN.inputs import *
 from numpy import linalg as LA
 
 import pickle
@@ -230,7 +230,7 @@ def place(Xlim, Ylim, TRan, N):
 
         Coor.append([x, y])
 
-    print Coor
+    print (Coor)
     #plt.scatter([pt[0] for pt in Coor], [pt[1] for pt in Coor], s=3, c='blue')
     #plt.show()
 
@@ -378,7 +378,7 @@ def findSinks(G,D,K,t,gSink,dSink):
     contenders = sorted(range(len(allcontenders)), key = lambda x: allcontenders[x])
     contenders = contenders[- int(K):]
     contenders = [allcontenders[each] for each in contenders]
-    print contenders
+    print (contenders)
 
     with open(gSink, "a") as myfile:
         myfile.write(str(contenders) + '\n')
@@ -491,7 +491,7 @@ mC,rmC,hG,sG,nG = mCount(mList,gG,hG,sG,nG)
 #print (mList)
 
 #pickle.dump(mList, open( "mList.p", "wb" ))
-print len(hG)
+print (len(hG))
 
 '''
 gD,coor = place(Xlim,Ylim,TRan,ND)
@@ -516,8 +516,8 @@ coor.append(pickle.load(open('../Bhaktapur/Data/S_locs.p', 'rb')))
 plot_deg_dist(gD, 'Plots/Orig_NepalDRN_degree')
 plot_graph(gD, "Plots/Orig_NepalDRN")
 
-print "Number of nodes in DRN graph:", len(gD)
-print "Number of edges in DRN graph:", len(gD.edges())
+print("Number of nodes in DRN graph:", len(gD))
+print("Number of edges in DRN graph:", len(gD.edges()))
 print("Density: ", (2 * float(len(gD.edges()))/ (len(gD) * (len(gD) - 1))))
 
 hD = pickle.load(open(data_directory + "HO.p", "rb" ))
@@ -549,10 +549,10 @@ sim = similarity(_rG, gD)
 _hG, _sG, _nG, hD, sD, nD = prep(hG[:hCount], sG[:sCount], nG[:nCount], hD, sD, nD, sim, mNO)
 
 mgD = mapToGRN(rG, gD, _hG, _sG, _nG, hD, sD, nD)
-print "Number of nodes in BIO-DRN graph:", len(mgD)
-print "Number of edges in BIO-DRN graph:", len(mgD.edges())
+print("Number of nodes in BIO-DRN graph:", len(mgD))
+print("Number of edges in BIO-DRN graph:", len(mgD.edges()))
 
-print mgD.nodes()
+print(mgD.nodes())
 
 plot_deg_dist(mgD, 'Plots/Bio_NepalDRN_degree')
 plot_graph(mgD, "Plots/Bio_NepalDRN")
