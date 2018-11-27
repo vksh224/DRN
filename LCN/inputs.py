@@ -16,11 +16,11 @@ hR = 0.05
 sR = 0.3
 
 #Deployment Area
-Xlim = 100
-Ylim = 100
+Xlim = 500
+Ylim = 500
 
 #Transmission Range
-TRan = 50
+TRan = 100
 
 #Number of reassigned nodes
 r = 0.05 * ND
