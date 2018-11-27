@@ -37,13 +37,8 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
 
-    #Copy tiers of DRN graph
-    c_t1_G2 = deepcopy(t1_G2)
-    c_t2_G2 = deepcopy(t2_G2)
-    c_t3_G2 = deepcopy(t3_G2)
-
     #Nodes participating in motifs with each node
-    NSM = pickle.load(open("NSM.p", "rb"))
+    NSM = pickle.load(open(GRN_directory + "NSM.p", "rb"))
     print ('NSM:',len(NSM))
 
     # Node and edge set in reference GRN
@@ -51,11 +46,8 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     N = []
 
     while (True):
-
         flag = False
         for j in t2_G2:
-
-            #print("j:", j)
             for k in t2_G1:
 
                 d_G1_t1 = find_tier_degree(k, t1_G1, G1)
@@ -122,7 +114,7 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
 
     #Nodes participating in motifs with each node
     #NSM = pickle.load(open(GRN_directory + "NSM.p", "rb"))
-    NSM = pickle.load(open("NSM.p", "rb"))
+    NSM = pickle.load(open(GRN_directory + "NSM.p", "rb"))
 
     print ('NSM:',len(NSM))
 
@@ -231,7 +223,7 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 
 #Main starts here
 #G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
-G1 = nx.read_gml('Yeast_Ordered.gml')
+G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
 G1 = G1.reverse()
 
 G2 = nx.read_gml(directory + 'Orig_NepalDRN.gml')
@@ -249,7 +241,7 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 print ("Number of edges in DRN", len(G2.edges()))
 
 # Calculate node motif centralities of the two graphs
-MC_G1 = pickle.load(open("NMC.p", "rb"))
+MC_G1 = pickle.load(open(GRN_directory + "NMC.p", "rb"))
 #print(MC_G1)
 #MC_G1 = motif(G1)
 MC_G2 = motif(G2)
@@ -257,7 +249,7 @@ MC_G2 = motif(G2)
 #print (MC_G1)
 print ("Node motif centrality for DRN", MC_G2)
 
-G = ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
+G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
 
 #degree_dist(G,'ref')
 print ("Ref GRN - Nodes:",len(G.nodes()))
@@ -286,7 +278,9 @@ nx.write_gml(GBD, data_directory + 'GBD.gml')
 nx.write_gml(G, data_directory + 'refG.gml')
 
 plot_deg_dist(GBD, plot_directory + 'Bio_NepalDRN_degree')
-plot_graph(G, plot_directory + "Bio_NepalDRN")
+plot_graph(GBD, plot_directory + "Bio_NepalDRN")
+plot_deg_dist(G, plot_directory + 'refG_NepalDRN_degree')
+plot_graph(G, plot_directory + "refG_NepalDRN")
 
 
 
