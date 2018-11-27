@@ -9,9 +9,34 @@ import random
 import networkx as nx
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 np.set_printoptions(suppress = True)
 np.set_printoptions(precision = 6)
+
+def plot_graph(G, filename):
+    plt.figure()
+    plt.title("Nodes: " + str(len(G.nodes())) + " Edges: " + str(len(G.edges())))
+    nx.draw(G, with_labels=True)
+    # plt.xlabel('Degree')
+    # plt.ylabel('Number of nodes')
+    plt.draw()
+    plt.savefig(filename + "_" + str(len(G.nodes())) + ".png")
+    plt.close()
+
+def plot_deg_dist(G, filename):
+    md = max([G.degree(u) for u in G.nodes()])
+
+    Y = [0.0 for i in range(md + 1)]
+    X = [i for i in range(md + 1)]
+
+    for u in G.nodes():
+        Y[G.degree(u)] += 1
+
+    plt.figure()
+    plt.plot(X, Y)
+    plt.savefig(filename + '_' + str(len(G.nodes())) + ".png")
+    plt.close()
 
 def prep(_hG,_sG,_nG,hD,sD,nD,sim,mNO):
 
@@ -438,6 +463,8 @@ def place(Xlim, Ylim, TRan, N):
 
     return G, Coor
 
+
+#Main starts here
 isFirst = True
 hD = []
 sD = []
@@ -447,7 +474,9 @@ cnt = -1
 #fileR = str(ND) + 'R.txt'
 #fileG = str(ND) + 'G.txt'
 
-gG = nx.read_gml('Yeast.gml')
+yeast_directory = "../Yeast_Data/"
+data_directory = '../Bhaktapur/Data/'
+gG = nx.read_gml(yeast_directory + 'Yeast_Ordered.gml')
 gG = nx.convert_node_labels_to_integers(gG)
 #print "Number of nodes in GRN graph:",len(gG)
 #print "Number of edges in GRN graph:",len(gG.edges())
@@ -456,18 +485,16 @@ hG , sG, nG = tiers(gG)
 
 
 #Count motif list and motif centrality in GRN graph gG
-mList = pickle.load( open( "mList.p", "rb" ) )
+mList = pickle.load( open(yeast_directory + "Motif_Yeast.p", "rb" ) )
 #mList = []
 mC,rmC,hG,sG,nG = mCount(mList,gG,hG,sG,nG)
-#print mList
+#print (mList)
 
 #pickle.dump(mList, open( "mList.p", "wb" ))
 print len(hG)
 
+'''
 gD,coor = place(Xlim,Ylim,TRan,ND)
-
-print "Number of nodes in DRN graph:", len(gD)
-print "Number of edges in DRN graph:", len(gD.edges())
 
 # Distribution of hub, sub and non nodes in DRN graph gD
 hCount = int(hR * float(ND))
@@ -478,6 +505,30 @@ nCount = ND - hCount - sCount
 hD = [i for i in range(hCount)]
 sD = [(i + hCount) for i in range(sCount)]
 nD = [(i + hCount + sCount) for i in range(nCount)]
+'''
+
+gD = nx.read_gml('../Bhaktapur/Orig_NepalDRN.gml')
+coor = pickle.load(open('../Bhaktapur/Data/CC_locs.p', 'rb'))
+coor.append(pickle.load(open('../Bhaktapur/Data/PoI_locs.p', 'rb')))
+coor.append(pickle.load(open('../Bhaktapur/Data/Vol_locs.p', 'rb')))
+coor.append(pickle.load(open('../Bhaktapur/Data/S_locs.p', 'rb')))
+
+plot_deg_dist(gD, 'Plots/Orig_NepalDRN_degree')
+plot_graph(gD, "Plots/Orig_NepalDRN")
+
+print "Number of nodes in DRN graph:", len(gD)
+print "Number of edges in DRN graph:", len(gD.edges())
+print("Density: ", (2 * float(len(gD.edges()))/ (len(gD) * (len(gD) - 1))))
+
+hD = pickle.load(open(data_directory + "HO.p", "rb" ))
+sD = pickle.load(open(data_directory + "SO.p", "rb" ))
+nD = pickle.load(open(data_directory + "NO.p", "rb" ))
+
+hCount = len(hD)
+sCount = len(sD)
+nCount = len(nD)
+
+print("hD", hD, sD)
 
 # Find reference GRN
 rG = refGRN(gG, hG, sG, nG, hCount, sCount, nCount, kh, kn, mC)
@@ -502,6 +553,9 @@ print "Number of nodes in BIO-DRN graph:", len(mgD)
 print "Number of edges in BIO-DRN graph:", len(mgD.edges())
 
 print mgD.nodes()
+
+plot_deg_dist(mgD, 'Plots/Bio_NepalDRN_degree')
+plot_graph(mgD, "Plots/Bio_NepalDRN")
 
 '''
 while(True):
