@@ -6,12 +6,13 @@ from find_tiers import *
 from constants import *
 from construct_NepalDRN_utility import plot_graph
 from degree import plot_deg_dist
+import operator
 
 def supplement(GBD,G2,t1_G2):
     D = list(set(G2.nodes()) - set(GBD.nodes()))
     GBD.add_nodes_from(D)
     D.extend(nx.isolates(GBD))
-
+    print("Isolated nodes: ", len(D))
     for u in D:
         for v in t1_G2:
             if nx.has_path(G2,u,v):
@@ -38,7 +39,7 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
 
     #Nodes participating in motifs with each node
-    NSM = pickle.load(open(GRN_directory + "NSM.p", "rb"))
+    NSM = pickle.load(open(GRN_directory + "NSM_Y.p", "rb"))
     print ('NSM:',len(NSM))
 
     # Node and edge set in reference GRN
@@ -56,8 +57,7 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
                 d_G1_t3 = find_tier_degree(k, t3_G1, G1)
                 d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
-                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
-
+                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3) or 1 == 1:
                     N.append(k)
 
                     for each in d_G1_t1:
@@ -173,6 +173,61 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
     return G
 
+def generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
+
+    n_D = len(G2)
+    n_G = len(G)
+
+    #DRN
+    D_T = [t1_G2, t2_G2, t3_G2]
+    #Reference GRN
+    G_T = [t1_G, t2_G, t3_G]
+
+    M = np.array(similarity(G, G2, 0.01))
+
+    # mapping function
+    m = {}
+
+    for k in range(len(D_T)):
+
+        D = {}
+        for u in G_T[k]:
+            for v in D_T[k]:
+                D[(u, v)] = M[u, v]
+
+        # print (D)
+
+        cnt = 0
+        while cnt < len(D_T[k]):
+
+            max_v = max(D.items(), key=operator.itemgetter(1))[0]
+            # print (k,max_v)
+            # input('Enter a character.')
+
+            m[max_v[1]] = max_v[0]
+
+            remove_keys = []
+            for keys in D.keys():
+                if max_v[0] == keys[0] or max_v[1] == keys[1]:
+                    remove_keys.append(keys)
+                    #D.pop(keys, None)
+
+            D = {key: D[key] for key in D if key not in remove_keys}
+
+            cnt += 1
+
+    print(m)
+
+    GBD = nx.DiGraph()
+    GBD.add_nodes_from(G2.nodes())
+
+    # Introduce edges in Bio-DRN
+    for u in GBD.nodes():
+        for v in GBD.nodes():
+            if (u, v) in G2.edges() and (m[u],m[v]) in G.edges():
+                GBD.add_edge(u,v)
+
+    return GBD
 
 def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
     # List of nodes in reference GRN
@@ -237,11 +292,12 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 # t1_G2 = [0]
 # t2_G2 = [i for i in range(1, 10)]
 # t3_G2 = [i for i in range(10, 50)]
-
+print("Number of nodes in DRN", len(G2))
 print ("Number of edges in DRN", len(G2.edges()))
+print("Density:", float(len(G2.edges()) * 2) / (len(G2) * (len(G2) - 1)))
 
 # Calculate node motif centralities of the two graphs
-MC_G1 = pickle.load(open(GRN_directory + "NMC.p", "rb"))
+MC_G1 = pickle.load(open(GRN_directory + "NMC_Y.p", "rb"))
 #print(MC_G1)
 #MC_G1 = motif(G1)
 MC_G2 = motif(G2)
@@ -262,7 +318,7 @@ print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
 print ("DRN tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
 
 #G is reference GRN, and G2 is DRN
-GBD = generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
+GBD = generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
 
 print ("NOT FINAL NODE COUNT:", len(GBD))
 print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
