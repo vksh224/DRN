@@ -2,8 +2,7 @@ import networkx as nx
 
 def writeF(G,t):
 
-    #s = '0 7200 \n'
-    s = ''
+    s = '0 7200 \n'
     N = G.nodes()
     N = sorted(N,reverse = False)
 
@@ -13,7 +12,7 @@ def writeF(G,t):
         l = []
 
         if nx.is_directed(G):
-            l.extend(G.predecessors(u))
+            #l.extend(G.predecessors(u))
             l.extend(G.successors(u))
         else:
             l.extend(G.neighbors(u))

@@ -40,6 +40,7 @@ def get_responder_paths(CC_locs, PoI_locs):
                 curr_res_path.append(poi_loc)
                 all_visited_pois.append(poi_loc)
                 rem_PoI_locs.remove(poi_loc)
+
         Res_path_list.append(curr_res_path)
 
     print("Total unique PoIs served", len(set(all_visited_pois)), set(all_visited_pois))
@@ -178,6 +179,48 @@ def initial_setup():
     Vol_locs = initial_volunteer_loc(Vol_path_list)
 
     return CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs
+
+
+#Get list of CC/PoI nodes visited by a certain responder
+def responder_visiting_IDs(Res_paths, CC_locs, PoI_locs, num_of_nodes):
+    # Get CC and PoI IDs that each responder visits
+    Res_visiting_IDs_dict = {}
+    count = 0
+    for k in range(len(Res_paths)):
+        Res_visiting_IDs = []
+        for loc in Res_paths[k]:
+            #CC locs and ids
+            for i in range(len(CC_locs)):
+                if loc == CC_locs[i]:
+                    Res_visiting_IDs.append(i)
+                    break
+            #PoI locs and ids
+            for j in range(len(PoI_locs)):
+                if loc == PoI_locs[j]:
+                    Res_visiting_IDs.append(len(CC_locs) + j)
+                    break
+        # print("Res locs", k, Res_paths[k])
+        # print("Res ", k, Res_visiting_IDs)
+        Res_visiting_IDs_dict[num_of_nodes + count] = Res_visiting_IDs
+        count = count + 1
+    return Res_visiting_IDs_dict
+
+
+#Get list of responders who visit a certain CC/PoI node
+def nodes_served_by_res_ids(Res_visiting_IDs_dict, CC_locs, PoI_locs):
+    Node_visting_res_dict = {}
+
+    for u in range(len(CC_locs) + len(PoI_locs)):
+        node_list = []
+        for res_id, nodes in Res_visiting_IDs_dict.items():
+            # print("Res, nodes ", u, res_id, nodes)
+            if u in nodes:
+                # print(u, "exists in node list", node_list)
+                node_list.append(res_id)
+
+        Node_visting_res_dict[u] = node_list
+    return Node_visting_res_dict
+
 
 def plot_graph(G, filename):
     plt.figure()

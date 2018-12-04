@@ -1,55 +1,84 @@
 from construct_NepalDRN_utility import *
 from Centrality import motif
+from writeFile import *
 
-def responder_visiting_IDs():
-    # Get CC and PoI IDs that each responder visits
-    Res_visiting_IDs_list = []
-
-    for k in range(len(Res_paths)):
-        Res_visiting_IDs = []
-        for loc in Res_paths[k]:
-            for i in range(len(CC_locs)):
-                if loc == CC_locs[i]:
-                    Res_visiting_IDs.append(i)
-                    break
-            for j in range(len(PoI_locs)):
-                if loc == PoI_locs[j]:
-                    Res_visiting_IDs.append(len(CC_locs) + j)
-                    break
-        # print("Res locs", k, Res_paths[k])
-        #print("Res ", k, Res_visiting_IDs)
-        Res_visiting_IDs_list.append(Res_visiting_IDs)
-
-    return Res_visiting_IDs_list
-
-#Get links between tier 1 and tier 2 nodes
-def get_tier1_tier2_links(G, Res_visiting_IDs_list):
+#This function returns the actual indirect links. For example, if responder 29 visits CC 0, PoI 1 and 2, then
+# following links exist: 0 - 29, 1 - 29, 2 - 29
+def get_indirect_tier1_tier2_links(G, Res_visiting_IDs_list):
+    count = 0 #Count number of responders
     for res in Res_visiting_IDs_list:
         for u in res:
-            for v in res:
+            if G.has_edge(u, num_of_nodes + count) == False:
+                G.add_edge(u, num_of_nodes + count)
+                # print("Edge: ", r, num_of_nodes + count)
+
+            if G.has_edge(num_of_nodes + count, u) == False:
+                G.add_edge(num_of_nodes + count, u)
+        count = count + 1
+
+#This function returns the actual indirect links. For example, if responder 29 visits CC 0, PoI 1 and 2, then
+# following links exist: 0 - 29, 1 - 29, 2 - 29
+def get_tier1_tier2_indirect_links(G, node_visited_by_all_responders_dict):
+    # could be node_id, res_list
+    for node_id, res_list in node_visited_by_all_responders_dict.items():
+        for res_id in res_list:
+            if G.has_edge(node_id, res_id) == False:
+                G.add_edge(node_id, res_id)
+
+            if G.has_edge(res_id, node_id) == False:
+                G.add_edge(res_id, node_id)
+
+#Get links between tier 1 and tier 2 nodes
+# This function returns the representational links. For example, if responder 29 visits CC 0, PoI 1 and 2, then
+# following links exist: 0 - 1, 1 - 2, 0 - 2
+def get_tier1_tier2_links(G, res_visiting_all_nodes_dict):
+    for res_id, node_list in res_visiting_all_nodes_dict.items():
+        for u in node_list:
+            for v in node_list:
                 if u != v and G.has_edge(u, v) == False:
                     G.add_edge(u, v)
-                    #G.add_edge(v, u)
+                if u != v and G.has_edge(v, u) == False:
+                    G.add_edge(v, u)
 
-def create_static_network(Res_visiting_IDs_list, start_time, end_time):
+
+def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, start_time, end_time):
     G = nx.DiGraph()
+    # For ONE simulator
+    real_world_G = nx.DiGraph()
 
     #Add DRN nodes
     for id in CC_IDs:
         G.add_node(id)
+        real_world_G.add_node(id)
+
     for id in PoI_IDs:
         G.add_node(id)
+        real_world_G.add_node(id)
+
     for id in Vol_IDs:
         G.add_node(id)
+        real_world_G.add_node(id)
+
     for id in S_IDs:
         G.add_node(id)
+        real_world_G.add_node(id)
 
-    get_tier1_tier2_links(G, Res_visiting_IDs_list)
+    #add responders as nodes in real world network. Note they are not part of nodes in the Original DRN
+    for id in Res_IDs:
+        real_world_G.add_node(id)
+
+    #Add edges
+    get_tier1_tier2_indirect_links(real_world_G, node_visited_by_all_responders_dict)
+    print("all_nodes_visited_by_a_res_dict", node_visited_by_all_responders_dict.items()[1])
+
+    get_tier1_tier2_links(G, res_visiting_all_nodes_dict)
+    print("Res_visiting_IDs_dict", res_visiting_all_nodes_dict.items()[1])
 
     sparseG = G.copy()
 
+    V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
     #Add edges between each pair of nodes for the given time interval
-    with open(loc_des_folder + "ext_position.txt", "r") as f:
+    with open(loc_des_folder + "ext_position_" + str(V) + ".txt", "r") as f:
         node_pos_lines = f.readlines()[1:]
 
     for line1 in node_pos_lines:
@@ -62,32 +91,43 @@ def create_static_network(Res_visiting_IDs_list, start_time, end_time):
 
             # u != v, and start_time < t(u), t(v) <= end_time, and t(u) == t(v) and dist(u, v) < range
             if line1_arr[1] != line2_arr[1] \
-                and line1_arr[0] > start_time and line1_arr[0] <= end_time \
-                and line2_arr[0] > start_time and line2_arr[0] <= end_time \
+                and line1_arr[0] >= start_time and line1_arr[0] <= end_time \
+                and line2_arr[0] >= start_time and line2_arr[0] <= end_time \
                 and line1_arr[0] == line2_arr[0] \
                 and euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= bt_range:
 
                 G.add_edge(line1_arr[1], line2_arr[1])
+                real_world_G.add_edge(line1_arr[1], line2_arr[1])
+
                 if S_IDs.__contains__(line1_arr[1]) and S_IDs.__contains__(line2_arr[1]):
                     continue
                 else:
                     sparseG.add_edge(line1_arr[1], line2_arr[1])
 
-    print("# Nodes", len(G), len(sparseG))
-    print("# Edges", len(G.edges()), len(sparseG.edges()))
-    print("Density:", float(len(G.edges()) * 2) / (len(G) * (len(G) - 1)))
+    print("G: # Nodes", len(G), len(sparseG))
+    print("G: # Edges", len(G.edges()), len(sparseG.edges()))
+    print("G: Density:", float(len(G.edges()) * 2) / (len(G) * (len(G) - 1)))
 
-    return G, sparseG
+    print("Real world G: # Nodes", len(real_world_G))
+    print("Real world G: # Edges", len(real_world_G.edges()))
+    print("Real world G: Density:", float(len(real_world_G.edges()) * 2) / (len(real_world_G) * (len(real_world_G) - 1)))
+
+    return G, sparseG, real_world_G
 
 
 #Main Starts here
 
 #Get CC, PoI, Vol, S, Res (in this order for node ID)
-CC_locs = pickle.load(open(directory + "Data/CC_locs.p", "rb"))
-PoI_locs = pickle.load(open(directory + "Data/PoI_locs.p", "rb"))
-Vol_locs = pickle.load(open(directory + "Data/Vol_locs.p", "rb"))
-S_locs = pickle.load(open(directory + "Data/S_locs.p", "rb"))
-Res_paths = pickle.load(open(directory + "Data/Res_paths.p", "rb"))
+CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
+PoI_locs = pickle.load(open(data_directory + "PoI_locs.p", "rb"))
+Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
+S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
+Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
+res_visiting_all_nodes_dict = pickle.load(open(data_directory + "res_visiting_all_nodes.p", "rb"))
+node_visited_by_all_responders_dict = pickle.load(open(data_directory + "node_visited_by_all_responders.p", "rb"))
+
+#Node that responders do not belong to node list (in the Orig DRN)
+num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
 #Except survivors
 CC_IDs = [i for i in range(len(CC_locs))]
@@ -95,20 +135,28 @@ PoI_IDs = [i for i in range(len(CC_locs), len(CC_locs) + len(PoI_locs))]
 Vol_IDs = [i for i in range(len(CC_locs) + len(PoI_locs), len(CC_locs) + len(PoI_locs) + len(Vol_locs))]
 S_IDs = [i for i in range(len(CC_locs) + len(PoI_locs) + len(Vol_locs), len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs))]
 
+#only for real world network (i.e., ONE simulator)
+Res_IDs = [i for i in range(len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs), len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths))]
+
 print ("CC-count ", len(CC_locs), "s-id", CC_IDs[0], "e-id", CC_IDs[len(CC_IDs) - 1])
 print ("PoI-count ", len(PoI_locs), "s-id", PoI_IDs[0], "e-id", PoI_IDs[len(PoI_IDs) - 1])
 print ("Vol-count ", len(Vol_locs), "s-id", Vol_IDs[0], "e-id", Vol_IDs[len(Vol_IDs) - 1])
 print ("S-count ", len(S_locs), "s-id", S_IDs[0], "e-id", S_IDs[len(S_IDs) - 1])
-print ("Res-count ", len(Res_paths))
+print ("Res-count ", len(Res_paths), "s-id", Res_IDs[0], "e-id", Res_IDs[len(Res_IDs) - 1])
 
-print("last node_id", S_IDs[len(S_IDs) - 1])
-Res_visiting_IDs_list = responder_visiting_IDs()
+#print("last node_id", S_IDs[len(S_IDs) - 1])
+#Res_visiting_IDs_list = responder_visiting_IDs()
 
+#Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
 start_time = 0
-end_time = 1500
+end_time = 900
 
-G, sparseG = create_static_network(Res_visiting_IDs_list, start_time, end_time)
+G, sparseG, real_world_G = create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, start_time, end_time)
 
+nei_o = writeF(real_world_G, 0)
+f = open(neigh_des_folder + 'O_N' + str(len(real_world_G.nodes())) + '.txt','w')
+f.write(nei_o)
+f.close()
 #Non-increasing motif central nodes
 # MC_G = motif(sparseG)
 # MC_G = [each[0] for each in sorted(MC_G.items(), key=lambda x: x[1], reverse=True)]
@@ -138,3 +186,4 @@ nx.write_gml(sparseG, directory + "Sparse_Orig_NepalDRN.gml")
 
 plot_graph(G, plot_directory + "Orig_NepalDRN")
 plot_graph(sparseG, plot_directory + "Sparse_Orig_NepalDRN")
+
