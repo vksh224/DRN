@@ -149,14 +149,18 @@ print ("Res-count ", len(Res_paths), "s-id", Res_IDs[0], "e-id", Res_IDs[len(Res
 
 #Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
 start_time = 0
-end_time = 900
+end_time = 1800
 
 G, sparseG, real_world_G = create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, start_time, end_time)
 
+
 nei_o = writeF(real_world_G, 0)
-f = open(neigh_des_folder + 'O_N' + str(len(real_world_G.nodes())) + '.txt','w')
+orig_neighList_filename = 'O_N' + str(len(real_world_G.nodes())) + ".txt"
+print("Orig - Neighbor list filename", orig_neighList_filename)
+f = open(neigh_des_folder + orig_neighList_filename,'w')
 f.write(nei_o)
 f.close()
+
 #Non-increasing motif central nodes
 # MC_G = motif(sparseG)
 # MC_G = [each[0] for each in sorted(MC_G.items(), key=lambda x: x[1], reverse=True)]

@@ -42,7 +42,11 @@ for file in setting_files:
             if "ExternalMovement.file" in lines[index]:
                 updated_setting_lines.append("ExternalMovement.file = NodePosition/ext_position_" + str(V) + '.txt\n')
             elif "Group.neighborListFile" in lines[index]:
-                updated_setting_lines.append("Group.neighborListFile = NeighborList/O_N" + str(V + len(Res_paths)) + '.txt\n')
+                if "bioDRN" in file:
+                    updated_setting_lines.append(
+                        "Group.neighborListFile = NeighborList/B_N" + str(V + len(Res_paths)) + '.txt\n')
+                elif "origDRN" in file:
+                    updated_setting_lines.append("Group.neighborListFile = NeighborList/O_N" + str(V + len(Res_paths)) + '.txt\n')
             else:
                 updated_setting_lines.append(lines[index])
             index += 1
