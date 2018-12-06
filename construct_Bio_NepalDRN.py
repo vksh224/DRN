@@ -90,10 +90,9 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
             d_G1_t3 = find_tier_degree(k, t3_G1, G1)
             d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
-            # if (len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3)):
-
+            if (len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3)) and k not in visited_t2_G1_nodes:
             #Tier 2 node must have both in-degree and out-degree
-            if len(d_G1_t1) > 0 and len(d_G1_t3) > 0 and k not in visited_t2_G1_nodes:
+            # if len(d_G1_t1) > 0 and len(d_G1_t3) > 0 and k not in visited_t2_G1_nodes:
                 N.append(k)
 
                 #add each tier 1 GRN nodes (with an edge with node K) in the ref GRN
@@ -328,7 +327,9 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 start_time = 0
 end_time = total_simulation_time + 60
 
-end_time = 1
+
+#TODO: temporary fix to run generate the network for 0th time slot only
+end_time = network_construction_interval
 
 #Original DRN at time 0
 G2 = nx.read_gml(directory + 'Orig_NepalDRN_0.gml')

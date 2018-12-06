@@ -5,6 +5,7 @@ import os
 #Main starts here
 
 #---------------- Initial setup -------------------------------------------------------------------------
+
 #Create Bhaktapur and its sub-directories
 if not os.path.exists(directory):
     os.mkdir(directory)

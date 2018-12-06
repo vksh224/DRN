@@ -124,7 +124,6 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
 
     return G, sparseG, real_world_G
 
-
 #Main Starts here
 
 #Get CC, PoI, Vol, S, Res (in this order for node ID)
@@ -184,11 +183,11 @@ start_time = 0
 end_time = total_simulation_time + 60
 
 #TODO: temporary fix to run generate the network for 0th time slot only
-end_time = network_construction_interval + 1
+end_time = network_construction_interval
 
 nei_o = '0 ' + str(end_time + 60) + '\n'
 orig_neighList_filename = 'O_N' + str(num_of_nodes + len(Res_IDs)) + ".txt"
-print("\nOrig - Neighbor list filename" + orig_neighList_filename + "\n")
+print("\nOrig - Neighbor list filename " + orig_neighList_filename + "\n")
 f = open(neigh_des_folder + orig_neighList_filename, 'w')
 f.write(nei_o)
 

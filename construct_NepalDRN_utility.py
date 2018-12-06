@@ -110,7 +110,8 @@ def get_volunteer_paths(PoI_locs, PoI_radii, Vol_count_In_PoI):
                 polygon.forward(side_length)
                 polygon.right(angle)
 
-        Vol_path_list.append(curr_vol_path)
+            Vol_path_list.append(curr_vol_path)
+
     return Vol_path_list
 
 def initial_volunteer_loc(Vol_path_list):
@@ -171,6 +172,7 @@ def initial_setup():
 
     #Get Volunteer paths
     Vol_path_list = get_volunteer_paths(PoI_locs, PoI_radii, Vol_count_In_PoI)
+    # print("Vol path list: ", len(Vol_path_list), "PoI", len(PoI_locs))
 
     #Get survivors locations
     S_locs = initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI)
