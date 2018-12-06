@@ -65,8 +65,9 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
 
     # Identify tiers
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
-    t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
+    t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2, t1_G2, t2_G2, t3_G2)
 
+    print("Total tier 2 nodes in GRN ", len(t2_G1), " DRN", len(t2_G2))
     #Nodes participating in motifs with each node
     NSM = pickle.load(open(GRN_directory + "NSM_Y.p", "rb"))
     print ('NSM:',len(NSM))
@@ -75,39 +76,47 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     E = []
     N = []
 
-    while (True):
-        flag = False
-        for j in t2_G2:
-            for k in t2_G1:
+    visited_t2_G2_nodes = []
+    visited_t2_G1_nodes = []
+    # while (True):
+    #flag = False
+    for j in t2_G2:
 
-                d_G1_t1 = find_tier_degree(k, t1_G1, G1)
-                d_G2_t1 = find_tier_degree(j, t1_G2, G2)
+        for k in t2_G1:
 
-                d_G1_t3 = find_tier_degree(k, t3_G1, G1)
-                d_G2_t3 = find_tier_degree(j, t3_G2, G2)
+            d_G1_t1 = find_tier_degree(k, t1_G1, G1)
+            d_G2_t1 = find_tier_degree(j, t1_G2, G2)
 
-                #if (len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3)) or 1 == 1:
-                if True:
-                    N.append(k)
+            d_G1_t3 = find_tier_degree(k, t3_G1, G1)
+            d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
-                    for each in d_G1_t1:
-                        if each not in N and each in NSM[k]:
-                            N.append(each)
+            # if (len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3)):
 
-                    for each in d_G1_t3:
-                        if each not in N and each in NSM[k]:
-                            N.append(each)
+            #Tier 2 node must have both in-degree and out-degree
+            if len(d_G1_t1) > 0 and len(d_G1_t3) > 0 and k not in visited_t2_G1_nodes:
+                N.append(k)
 
-                    t2_G2.pop(t2_G2.index(j))
-                    t2_G1.pop(t2_G1.index(k))
-                    flag = True
-                    break
+                #add each tier 1 GRN nodes (with an edge with node K) in the ref GRN
+                for each in d_G1_t1:
+                    if each not in N and each in NSM[k]:
+                        N.append(each)
 
-            if flag:
+                for each in d_G1_t3:
+                    if each not in N and each in NSM[k]:
+                        N.append(each)
+
+                visited_t2_G2_nodes.append(j)
+                visited_t2_G1_nodes.append(k)
+                # t2_G2.pop(t2_G2.index(j))
+                # t2_G1.pop(t2_G1.index(k))
+                # flag = True
                 break
 
-        if not flag or len(t2_G2) == 0:
-            break
+        # if flag:
+        #     break
+
+    # if not flag or len(t2_G2) == 0:
+    #     break
 
     G = nx.DiGraph()
     for u in N:
@@ -311,75 +320,95 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
 G1 = G1.reverse()
 
-G2 = nx.read_gml(directory + 'Orig_NepalDRN.gml')
-G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
-# G2 = nx.erdos_renyi_graph(n  = 50,p = 0.3,directed = True)
-
 t1_G2 = pickle.load(open(data_directory + "HO.p", "rb" ))
 t2_G2 = pickle.load(open(data_directory + "SO.p", "rb" ))
 t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 
-# t1_G2 = [0]
-# t2_G2 = [i for i in range(1, 10)]
-# t3_G2 = [i for i in range(10, 50)]
-print("Number of nodes in DRN", len(G2))
-print ("Number of edges in DRN", len(G2.edges()))
-print("Density:", float(len(G2.edges()) * 2) / (len(G2) * (len(G2) - 1)))
+# Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
+start_time = 0
+end_time = total_simulation_time + 60
 
-# Calculate node motif centralities of the two graphs
-MC_G1 = pickle.load(open(GRN_directory + "NMC_Y.p", "rb"))
-#print(MC_G1)
-#MC_G1 = motif(G1)
-MC_G2 = motif(G2)
+end_time = 1
 
-#print (MC_G1)
-print ("Node motif centrality for DRN", MC_G2)
+#Original DRN at time 0
+G2 = nx.read_gml(directory + 'Orig_NepalDRN_0.gml')
 
-G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
+nei_o = '0 ' + str(end_time + 60) + '\n'
+bio_neighList_filename = 'B_N' + str(len(G2.nodes())) + ".txt"
+print("\nBio - Neighbor list filename" + bio_neighList_filename + "\n")
+f = open(neigh_des_folder + bio_neighList_filename, 'w')
+f.write(nei_o)
 
-#degree_dist(G,'ref')
-print ("Ref GRN - Nodes:",len(G.nodes()))
-print ("Ref GRN - Edges:",len(G.edges()))
-#MC_G = motif(G)
+network_construction_interval = snapshot_time_interval
 
-t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
+# Create static original graph snapshots for given time interval
+for t in range(start_time, end_time, network_construction_interval):
+    print("\n======= Start Time : " + str(t) + " ======== ")
 
-print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
-print ("DRN tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
+    G2 = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
+    G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
+    # G2 = nx.erdos_renyi_graph(n  = 50,p = 0.3,directed = True)
 
-#G is reference GRN, and G2 is DRN
-GBD = generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
+    # t1_G2 = [0]
+    # t2_G2 = [i for i in range(1, 10)]
+    # t3_G2 = [i for i in range(10, 50)]
 
-print ("NOT FINAL NODE COUNT:", len(GBD))
-print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
+    print("Number of nodes in DRN", len(G2))
+    print ("Number of edges in DRN", len(G2.edges()))
+    print("Density:", float(len(G2.edges()) * 2) / (len(G2) * (len(G2) - 1)))
+    print("Is Orig-DRN connected: ", nx.is_connected(G2.to_undirected()))
 
-#Address isolated or unmapped nodes
-GBD = supplement(GBD, G2, t1_G2)
-#GBD = GBD.to_undirected()
+    # Calculate node motif centralities of the two graphs
+    MC_G1 = pickle.load(open(GRN_directory + "NMC_Y.p", "rb"))
+    #MC_G1 = motif(G1)
+    MC_G2 = motif(G2)
+    # print ("Node motif centrality for DRN", MC_G2)
 
-print ("FINAL NODE COUNT:", len(GBD))
-print ("FINAL EDGE COUNT:", len(GBD.edges()))
+    G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
 
-print("Is Bio-DRN connected after supplementary step?", nx.is_connected(GBD.to_undirected()))
+    #degree_dist(G,'ref')
+    print ("Ref GRN - Nodes:",len(G.nodes()))
+    print ("Ref GRN - Edges:",len(G.edges()))
+    #MC_G = motif(G)
 
-real_world_G = convert_to_real_world_DRN(GBD)
-print ("Real world G: #nodes:", len(real_world_G))
-print ("Real world G: #edges:", len(real_world_G.edges()))
+    t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 
-nei_b = writeF(real_world_G, 0)
-bio_neighList_filename = 'B_N' + str(len(real_world_G.nodes())) + '.txt'
-print("Bio Neighbor list filename", bio_neighList_filename)
-f = open(neigh_des_folder + bio_neighList_filename,'w')
-f.write(nei_b)
+    print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
+    print ("DRN tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
+
+    #G is reference GRN, and G2 is DRN
+    GBD = generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
+
+    print ("NOT FINAL NODE COUNT:", len(GBD))
+    print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
+
+    #Address isolated or unmapped nodes
+    GBD = supplement(GBD, G2, t1_G2)
+
+    print ("FINAL NODE COUNT:", len(GBD))
+    print ("FINAL EDGE COUNT:", len(GBD.edges()))
+
+    print("Is Bio-DRN connected after supplementary step?", nx.is_connected(GBD.to_undirected()))
+
+    real_world_G = convert_to_real_world_DRN(GBD)
+    print ("Real world G: #nodes:", len(real_world_G))
+    print ("Real world G: #edges:", len(real_world_G.edges()))
+
+    nei_b = writeF(real_world_G, t)
+    f.write(nei_b)
+
+    nx.write_gml(GBD, data_directory + 'GBD_' + str(t) + '.gml')
+    nx.write_gml(G, data_directory + 'refG.gml')
+
+    if t == 0:
+        plot_deg_dist(GBD, plot_directory + 'GBD_deg_' + str(t))
+        plot_graph(GBD, plot_directory + "GBD_" + str(t))
+
+        plot_deg_dist(G, plot_directory + 'refG_deg_' + str(t))
+        plot_graph(G, plot_directory + "refG_" + str(t))
+
 f.close()
 
-nx.write_gml(GBD, data_directory + 'GBD.gml')
-nx.write_gml(G, data_directory + 'refG.gml')
-
-plot_deg_dist(GBD, plot_directory + 'Bio_NepalDRN_degree')
-plot_graph(GBD, plot_directory + "Bio_NepalDRN")
-plot_deg_dist(G, plot_directory + 'refG_NepalDRN_degree')
-plot_graph(G, plot_directory + "refG_NepalDRN")
 
 
 

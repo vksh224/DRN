@@ -2,7 +2,8 @@ import networkx as nx
 
 def writeF(G,t):
 
-    s = '0 7200 \n'
+    #s = '0 7200 \n'
+    s = ''
     N = G.nodes()
     N = sorted(N,reverse = False)
 
@@ -19,7 +20,7 @@ def writeF(G,t):
 
         l = sorted(l, reverse = False)
 
-        s = s + str(t * 600) + ' ' + str(u) + ' '
+        s = s + str(t) + ' ' + str(u) + ' '
 
         for v in l:
             s = s + str(v) + ' '
