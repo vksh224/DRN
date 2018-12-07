@@ -3,8 +3,9 @@ directory = "Bhaktapur/"
 data_directory = "Bhaktapur/Data/"
 plot_directory = "Bhaktapur/Plots/"
 #loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
-loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/"
-setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
+loc_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
+setting_directory = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
+neigh_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
 
 #setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
 
@@ -18,7 +19,7 @@ hX = 5000
 lY = 3000
 hY = 6000
 
-time_interval = 300
+snapshot_time_interval = 300
 #in minutes (equivalent to 12 hours)
 total_simulation_time = 3600
 
