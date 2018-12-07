@@ -345,17 +345,17 @@ f.write(nei_o)
 for t in range(start_time, end_time, network_construction_interval):
     print("\n======= Start Time : " + str(t) + " ======== ")
 
-    G2 = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
-    G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
-    # G2 = nx.erdos_renyi_graph(n  = 50,p = 0.3,directed = True)
+    #G2 = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
+    #G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
+    G2 = nx.erdos_renyi_graph(n  = 100, p = 0.3, directed = True)
 
-    # t1_G2 = [0]
-    # t2_G2 = [i for i in range(1, 10)]
-    # t3_G2 = [i for i in range(10, 50)]
+    t1_G2 = [0]
+    t2_G2 = [i for i in range(1, 5)]
+    t3_G2 = [i for i in range(5, 100)]
 
     print("Number of nodes in DRN", len(G2))
     print ("Number of edges in DRN", len(G2.edges()))
-    print("Density:", float(len(G2.edges()) * 2) / (len(G2) * (len(G2) - 1)))
+    print("Density:", float(len(G2.edges())) / (len(G2) * (len(G2) - 1)))
     print("Is Orig-DRN connected: ", nx.is_connected(G2.to_undirected()))
 
     # Calculate node motif centralities of the two graphs
@@ -364,8 +364,8 @@ for t in range(start_time, end_time, network_construction_interval):
     MC_G2 = motif(G2)
     # print ("Node motif centrality for DRN", MC_G2)
 
-    #G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
-    G = G1.copy()
+    G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
+    # G = G1.copy()
 
     #degree_dist(G,'ref')
     print ("Ref GRN - Nodes:",len(G.nodes()))
