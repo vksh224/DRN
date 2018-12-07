@@ -331,10 +331,11 @@ end_time = total_simulation_time + 60
 end_time = network_construction_interval
 
 #Original DRN at time 0
-G2 = nx.read_gml(directory + 'Orig_NepalDRN_0.gml')
+#G2 = nx.read_gml(directory + 'Orig_NepalDRN_0.gml')
 
 nei_o = '0 ' + str(end_time + 60) + '\n'
-bio_neighList_filename = 'B_N' + str(len(G2.nodes())) + ".txt"
+#bio_neighList_filename = 'B_N' + str(len(G2.nodes())) + ".txt"
+bio_neighList_filename = "random_Orig_DRN.txt"
 print("\nBio - Neighbor list filename" + bio_neighList_filename + "\n")
 f = open(neigh_des_folder + bio_neighList_filename, 'w')
 f.write(nei_o)
