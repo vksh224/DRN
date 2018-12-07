@@ -80,9 +80,8 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     visited_t2_G1_nodes = []
     # while (True):
     #flag = False
-    for j in t2_G2:
-
-        for k in t2_G1:
+    for j in t2_G2: #DRN
+        for k in t2_G1: #GRN
 
             d_G1_t1 = find_tier_degree(k, t1_G1, G1)
             d_G2_t1 = find_tier_degree(j, t1_G2, G2)
@@ -170,7 +169,7 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
                 d_G1_t3 = find_tier_degree(k, t3_G1, G1)
                 d_G2_t3 = find_tier_degree(j, t3_G2, G2)
 
-                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3) or 1 == 1:
+                if len(d_G2_t1) <= len(d_G1_t1) and len(d_G2_t3) <= len(d_G1_t3):
                     N.append(k)
 
                     for i in range(len(d_G1_t1)):
@@ -340,7 +339,7 @@ print("\nBio - Neighbor list filename" + bio_neighList_filename + "\n")
 f = open(neigh_des_folder + bio_neighList_filename, 'w')
 f.write(nei_o)
 
-network_construction_interval = snapshot_time_interval
+#network_construction_interval = snapshot_time_interval
 
 # Create static original graph snapshots for given time interval
 for t in range(start_time, end_time, network_construction_interval):
@@ -365,7 +364,8 @@ for t in range(start_time, end_time, network_construction_interval):
     MC_G2 = motif(G2)
     # print ("Node motif centrality for DRN", MC_G2)
 
-    G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
+    #G = ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2)
+    G = G1.copy()
 
     #degree_dist(G,'ref')
     print ("Ref GRN - Nodes:",len(G.nodes()))
