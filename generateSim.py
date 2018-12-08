@@ -27,6 +27,7 @@ def supplement(GBD,G2,t1_G2):
     GBD.add_nodes_from(D)
 
     D.extend(nx.isolates(GBD))
+    print("Isolated nodes: ", len(D))
 
     for u in D:
 
@@ -67,8 +68,8 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
 
-    print(t1_G1, t2_G1, t3_G1)
-    print(t1_G2, t2_G2, t3_G2)
+    # print("G1 Tiers", t1_G1, t2_G1, t3_G1)
+    # print("G2 Tiers", t1_G2, t2_G2, t3_G2)
 
     #Copy tiers of DRN graph
     c_t1_G2 = deepcopy(t1_G2)
@@ -197,7 +198,7 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
 
     for i in range(len(L1)):
 
-        print (i)
+        # print (i)
         YM = Y[L1[i], :][:, L2[i]]
         #print (YM)
 
@@ -207,7 +208,7 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
         m = Munkres()
 
         indexes = m.compute(YM)
-        print (indexes)
+        # print (indexes)
 
         for each in indexes:
             NBD.append(L2[i][each[1]])
@@ -229,11 +230,17 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
 
     print ("***Number of nodes in GBD:",len(GBD))
     print ("***Number of edges in GBD:",len(GBD.edges()))
+    #print("Density:", float(len(GBD.edges())) / (len(GBD) * (len(GBD) - 1)))
+    print("Is Orig-DRN connected: ", nx.is_connected(GBD.to_undirected()))
+
     GBD = supplement(GBD,G2,t1_G2)
     #GBD = GBD.to_undirected()
 
     print ("***Number of nodes in GBD:",len(GBD))
     print ("***Number of edges in GBD:",len(GBD.edges()))
+    #print("Density:", float(len(GBD.edges())) / (len(GBD) * (len(GBD) - 1)))
+    print("Is Orig-DRN connected: ", nx.is_connected(GBD.to_undirected()))
+
     return GBD
 
 def generateSim(X,Y,VN,R):
@@ -253,11 +260,15 @@ def generateSim(X,Y,VN,R):
     NC = VN - HC - SC
 
     # Set of hub, sub and non-hubs
-    HCN = N[:HC]
-    SCN = N[HC:(HC + SC)]
-    NCN = N[(HC + SC):]
+    # HCN = N[:HC]
+    # SCN = N[HC:(HC + SC)]
+    # NCN = N[(HC + SC):]
 
-    print (HCN,SCN,NCN)
+    HCN = pickle.load(open("Bhaktapur/Data/HO.p", "rb"))
+    SCN = pickle.load(open("Bhaktapur/Data/SO.p", "rb"))
+    NCN = pickle.load(open("Bhaktapur/Data/NO.p", "rb"))
+
+    print ("Tier 1 and 2 nodes ", HCN,SCN)
 
     '''
     while(len(N) > 0):
@@ -288,41 +299,50 @@ def generateSim(X,Y,VN,R):
     nei_k8 = '0 7200 \n'
 
     N = [i for i in range(VN)]
-    for i in range(13):
+    for i in range(1):
 
-        change = random.sample(range(1, len(G)), int(0.2 * len(G)))
-        for each in change:
+        # change = random.sample(range(1, len(G)), int(0.2 * len(G)))
+        # for each in change:
+        #
+        #     while each in HCN:
+        #         each = (each + 1) % len(G)
+        #
+        #     C[each] = (random.randint(0,X),random.randint(0,Y))
 
-            while each in HCN:
-                each = (each + 1) % len(G)
 
-            C[each] = (random.randint(0,X),random.randint(0,Y))
+        # G = nx.DiGraph()
+        # G.add_nodes_from(N)
+        #
+        # # Introduce edges
+        # for u in G.nodes():
+        #     for v in G.nodes():
+        #         if u != v and euclidean(C[u],C[v]) <= R:
+        #             G.add_edge(u,v)
 
-        G = nx.DiGraph()
-        G.add_nodes_from(N)
+        G = nx.read_gml('Bhaktapur/Orig_NepalDRN_' + str(i) + '.gml')
+        G = nx.convert_node_labels_to_integers(G, first_label = 0)
 
-        # Introduce edges
-        for u in G.nodes():
-            for v in G.nodes():
-                if u != v and euclidean(C[u],C[v]) <= R:
-                    G.add_edge(u,v)
+        print("Number of nodes in DRN", len(G))
+        print ("Number of edges in DRN", len(G.edges()))
+        print("Density:", float(len(G.edges())) / (len(G) * (len(G) - 1)))
+        print("Is Orig-DRN connected: ", nx.is_connected(G.to_undirected()))
 
         GBD = bioD(G, HCN, SCN, NCN)
-        RA = randomDRN(G,GBD)
-        S = spanning(RA.copy())
-
-        KR2 = kregular(RA,2)
-        KR4 = kregular(RA,4)
-        KR8 = kregular(RA,8)
+        # RA = randomDRN(G,GBD)
+        # S = spanning(RA.copy())
+        #
+        # KR2 = kregular(RA,2)
+        # KR4 = kregular(RA,4)
+        # KR8 = kregular(RA,8)
 
         loc_o += writeC(C,i)
         nei_o += writeF(G,i)
         nei_b += writeF(GBD,i)
-        nei_s += writeF(S,i)
-        nei_r += writeF(RA,i)
-        nei_k2 += writeF(KR2, i)
-        nei_k4 += writeF(KR4, i)
-        nei_k8 += writeF(KR8, i)
+        # nei_s += writeF(S,i)
+        # nei_r += writeF(RA,i)
+        # nei_k2 += writeF(KR2, i)
+        # nei_k4 += writeF(KR4, i)
+        # nei_k8 += writeF(KR8, i)
 
     return loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8,HCN, SCN, NCN
 
@@ -337,10 +357,11 @@ R = 20
 
 curr = os.getcwd()
 
-for i in range(4,5):
+for i in range(1):
 
     print ('i:',i)
-    s = (i + 2) * 50
+    # s = (i + 2) * 50
+    s = 84
 
     loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8, HCN, SCN, NCN = generateSim(X, Y, s, R)
 
@@ -359,25 +380,25 @@ for i in range(4,5):
     f.write(nei_b)
     f.close()
 
-    f = open('S_N' + str(s) + '.txt','w')
-    f.write(nei_s)
-    f.close()
-
-    f = open('R_N' + str(s) + '.txt','w')
-    f.write(nei_r)
-    f.close()
-
-    f = open('K2_' + str(s) + '.txt','w')
-    f.write(nei_k2)
-    f.close()
-
-    f = open('K4_' + str(s) + '.txt','w')
-    f.write(nei_k4)
-    f.close()
-
-    f = open('K8_' + str(s) + '.txt','w')
-    f.write(nei_k8)
-    f.close()
+    # f = open('S_N' + str(s) + '.txt','w')
+    # f.write(nei_s)
+    # f.close()
+    #
+    # f = open('R_N' + str(s) + '.txt','w')
+    # f.write(nei_r)
+    # f.close()
+    #
+    # f = open('K2_' + str(s) + '.txt','w')
+    # f.write(nei_k2)
+    # f.close()
+    #
+    # f = open('K4_' + str(s) + '.txt','w')
+    # f.write(nei_k4)
+    # f.close()
+    #
+    # f = open('K8_' + str(s) + '.txt','w')
+    # f.write(nei_k8)
+    # f.close()
 
     #nx.write_gml(G,'O' + str(s) + '.gml')
     pickle.dump(HCN, open('H' + str(i) + '.p', "wb"))
