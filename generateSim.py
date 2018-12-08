@@ -5,7 +5,7 @@ import pickle
 
 from scipy.spatial.distance import *
 from writeFile import *
-#from genTop import *
+from genTop import *
 
 import networkx as nx
 import collections
@@ -16,7 +16,7 @@ from Centrality import *
 from find_tiers import *
 from munkres import Munkres
 from blondel import *
-#from find_tiers import *
+from find_tiers import *
 #from bioDRN.generateDRN import *
 from dist import *
 
@@ -67,8 +67,8 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2,t1_G2, t2_G2, t3_G2)
 
-    #print("DRN Tier nodes ", t1_G1, t2_G1, t3_G1)
-    #print("GRN Tier nodes ", t1_G2, t2_G2, t3_G2)
+    print(t1_G1, t2_G1, t3_G1)
+    print(t1_G2, t2_G2, t3_G2)
 
     #Copy tiers of DRN graph
     c_t1_G2 = deepcopy(t1_G2)
@@ -179,8 +179,8 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
 
     t1_G, t2_G, t3_G = tiers(G,None,[],[],[])
 
-    print ("GRN: Number of nodes in each tier ", len(t1_G), len(t2_G), len(t3_G))
-    print ("DRN: Number of nodes in each tier ", len(t1_G2), len(t2_G2), len(t3_G2))
+    #print (len(t1_G), len(t2_G), len(t3_G))
+    #print (len(t1_G2), len(t2_G2), len(t3_G2))
 
     #List of nodes in reference GRN
     L1 = [t1_G,t2_G,t3_G]
@@ -197,7 +197,7 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
 
     for i in range(len(L1)):
 
-        print ("Tier ", i)
+        print (i)
         YM = Y[L1[i], :][:, L2[i]]
         #print (YM)
 
@@ -207,7 +207,7 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
         m = Munkres()
 
         indexes = m.compute(YM)
-        print ("Mapped nodes ", indexes)
+        print (indexes)
 
         for each in indexes:
             NBD.append(L2[i][each[1]])
@@ -257,48 +257,7 @@ def generateSim(X,Y,VN,R):
     SCN = N[HC:(HC + SC)]
     NCN = N[(HC + SC):]
 
-    print ("HCN: ", HCN)
-    print ("SCN: ", SCN)
-
-    # CC location
-    for i in HCN:
-        C[i] = (random.randint(0, X), random.randint(0, Y))
-
-    chosen_survivors = []
-    count_pois = 0
-    # PoI location
-    for i in SCN:
-        count_pois += 1
-        C[i] = (random.randint(0, X), random.randint(0, Y))
-
-        rem_survivors = [x for x in NCN if x not in chosen_survivors]
-        avg_survivors_per_poi = len(NCN)/len(SCN)
-
-        rand_survivors = int(random.uniform(0.5 * avg_survivors_per_poi, 1.5 * avg_survivors_per_poi))
-        count_chosen_survivors = 0
-        #print("\n ====== PoI", i, C[i])
-        #print("\n Rem. survivors ", len(rem_survivors))
-        # Survivor location
-        for j in rem_survivors:
-            if count_pois== len(SCN): #last PoI - need to include all remaining survivors
-                rand_survivors = len(rem_survivors)
-
-            if count_chosen_survivors <= rand_survivors:
-                # random angle
-                alpha = 2 * math.pi * random.random()
-                r = poi_radius * math.sqrt(random.random())
-                # calculating coordinates
-                x = r * math.cos(alpha) + C[i][0]
-                y = r * math.sin(alpha) + C[i][1]
-
-                C[j] = (x, y)
-                # print("Survivor", j, C[j])
-                # C[j] = (random.randint(max(C[i][0] - poi_radius, 0), min(X, C[i][0] + poi_radius)),
-                #         random.randint(max(C[i][0] - poi_radius, 0), min(Y, C[i][0] + poi_radius)))
-                count_chosen_survivors += 1
-                chosen_survivors.append(j)
-
-    print ("Assigned CC, PoIs, and survivors: ", len(HCN), len(SCN), len(chosen_survivors))
+    print (HCN,SCN,NCN)
 
     '''
     while(len(N) > 0):
@@ -319,145 +278,106 @@ def generateSim(X,Y,VN,R):
             NCN.append(r)
     '''
 
-    time_periods = 13
-
-    loc_o = '0 ' + str(time_periods * 600) + " 0 " + str(X) + " 0 " + str(Y) + '\n'
-    nei_o = '0 ' + str(time_periods * 600) + '\n'
-    nei_b = '0 ' + str(time_periods * 600) + '\n'
-    nei_s = '0 ' + str(time_periods * 600) + '\n'
-    nei_r = '0 ' + str(time_periods * 600) + '\n'
-    nei_k2 = '0 ' + str(time_periods * 600) + '\n'
-    nei_k4 = '0 ' + str(time_periods * 600) + '\n'
-    nei_k8 = '0 ' + str(time_periods * 600) + '\n'
+    loc_o = ''
+    nei_o = '0 7200 \n'
+    nei_b = '0 7200 \n'
+    nei_s = '0 7200 \n'
+    nei_r = '0 7200 \n'
+    nei_k2 = '0 7200 \n'
+    nei_k4 = '0 7200 \n'
+    nei_k8 = '0 7200 \n'
 
     N = [i for i in range(VN)]
-    for i in range(time_periods):
+    for i in range(13):
 
-        # change = random.sample(range(1, len(G)), int(0.2 * len(NCN)))
-        # for j in change:
-        #     C[j] = (random.randint(max(C[j][0] - poi_radius, 0), min(X, C[j][0] + poi_radius)),
-        #             random.randint(max(C[j][0] - poi_radius, 0), min(Y, C[j][0] + poi_radius)))
+        change = random.sample(range(1, len(G)), int(0.2 * len(G)))
+        for each in change:
+
+            while each in HCN:
+                each = (each + 1) % len(G)
+
+            C[each] = (random.randint(0,X),random.randint(0,Y))
 
         G = nx.DiGraph()
         G.add_nodes_from(N)
 
-        # # Introduce edges
-        # for u in G.nodes():
-        #     for v in G.nodes():
-        #         if u != v and euclidean(C[u],C[v]) <= R:
-        #             G.add_edge(u,v)
-
         # Introduce edges
         for u in G.nodes():
             for v in G.nodes():
-                # CC and CC
-                if u != v and u in HCN and v in HCN and euclidean(C[u], C[v]) <= tower_range:
-                    G.add_edge(u, v)
-                    # print("C - C", u, v, HCN)
-
-                # CC and PoI
-                if u != v and u in HCN and v in SCN and euclidean(C[u], C[v]) <= tower_range:
-                    G.add_edge(u, v)
-                    # print("C - P", u, v, HCN)
-
-                # PoI and PoI
-                if u != v and u in SCN and v in SCN and euclidean(C[u], C[v]) <= tower_range:
-                    G.add_edge(u, v)
-                    # print("P - P", u, v, HCN)
-
-                # PoI and Survivor
-                if u != v and u in SCN and v in NCN and euclidean(C[u], C[v]) <= ble_range:
-                    G.add_edge(u, v)
-                    # print("P - S", u, v, HCN)
-
-                # Survivor and Survivor
-                if u != v and u in NCN and v in NCN and euclidean(C[u], C[v]) <= ble_range:
-                    G.add_edge(u, v)
-                    # print("S - S", u, v, HCN)
-
-                    # if u != v and euclidean(C[u],C[v]) <= R:
-                    #     G.add_edge(u,v)
+                if u != v and euclidean(C[u],C[v]) <= R:
+                    G.add_edge(u,v)
 
         GBD = bioD(G, HCN, SCN, NCN)
-        # RA = randomDRN(G,GBD)
-        # S = spanning(RA.copy())
+        RA = randomDRN(G,GBD)
+        S = spanning(RA.copy())
 
-        # KR2 = kregular(RA,2)
-        # KR4 = kregular(RA,4)
-        # KR8 = kregular(RA,8)
+        KR2 = kregular(RA,2)
+        KR4 = kregular(RA,4)
+        KR8 = kregular(RA,8)
 
         loc_o += writeC(C,i)
         nei_o += writeF(G,i)
         nei_b += writeF(GBD,i)
-        # nei_s += writeF(S,i)
-        # nei_r += writeF(RA,i)
-        # nei_k2 += writeF(KR2, i)
-        # nei_k4 += writeF(KR4, i)
-        # nei_k8 += writeF(KR8, i)
+        nei_s += writeF(S,i)
+        nei_r += writeF(RA,i)
+        nei_k2 += writeF(KR2, i)
+        nei_k4 += writeF(KR4, i)
+        nei_k8 += writeF(KR8, i)
 
-    # return loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8,HCN, SCN, NCN
-    return loc_o, nei_o, nei_b, HCN, SCN, NCN
+    return loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8,HCN, SCN, NCN
 
-# Area of deployment
-X = 3000
-Y = 3000
+# # Area of deployment
+X = 50
+Y = 50
 # Communication Radius
-R = 20 #Obsolete
-
-tower_range = 500
-ble_range = 100
-poi_radius = 200
+R = 20
 
 # Number of nodes in input DRN
 # VN = 100
 
 curr = os.getcwd()
 
-for i in range(2,3):
+for i in range(4,5):
 
     print ('i:',i)
-    s = i * 100
+    s = (i + 2) * 50
 
-    # loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8, HCN, SCN, NCN = generateSim(X, Y, s, R)
-    loc_o, nei_o, nei_b, HCN, SCN, NCN = generateSim(X, Y, s, R)
+    loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8, HCN, SCN, NCN = generateSim(X, Y, s, R)
 
-    #os.chdir('simulation')
-    # os.chdir(str(s))
+    os.chdir('simulation')
+    os.chdir(str(s))
 
-    neigh_des_folder = "/Users/vijay/BioDRNICDCSWorkSpace/ONEICDCS/src/NeighborList/"
-    loc_des_folder = "/Users/vijay/BioDRNICDCSWorkSpace/ONEICDCS/src/NodePosition/"
-
-    f = open(loc_des_folder + 'O_C' + str(s) + '.txt','w')
+    f = open('O_C' + str(s) + '.txt','w')
     f.write(loc_o)
     f.close()
 
-    f = open(neigh_des_folder + 'O_N' + str(s) + '.txt','w')
+    f = open('O_N' + str(s) + '.txt','w')
     f.write(nei_o)
     f.close()
 
-    f = open(neigh_des_folder + 'B_N' + str(s) + '.txt','w')
+    f = open('B_N' + str(s) + '.txt','w')
     f.write(nei_b)
     f.close()
-    #
-    # f = open('S_N' + str(s) + '.txt','w')
-    # f.write(nei_s)
-    # f.close()
-    #
-    # f = open('R_N' + str(s) + '.txt','w')
-    # f.write(nei_r)
-    # f.close()
-    #
-    # f = open('K2_' + str(s) + '.txt','w')
-    # f.write(nei_k2)
-    # f.close()
-    #
-    # f = open('K4_' + str(s) + '.txt','w')
-    # f.write(nei_k4)
-    # f.close()
-    #
-    # f = open('K8_' + str(s) + '.txt','w')
-    # f.write(nei_k8)
-    # f.close()
+
+    f = open('S_N' + str(s) + '.txt','w')
+    f.write(nei_s)
+    f.close()
+
+    f = open('R_N' + str(s) + '.txt','w')
+    f.write(nei_r)
+    f.close()
+
+    f = open('K2_' + str(s) + '.txt','w')
+    f.write(nei_k2)
+    f.close()
+
+    f = open('K4_' + str(s) + '.txt','w')
+    f.write(nei_k4)
+    f.close()
+
+    f = open('K8_' + str(s) + '.txt','w')
+    f.write(nei_k8)
+    f.close()
 
     #nx.write_gml(G,'O' + str(s) + '.gml')
     pickle.dump(HCN, open('H' + str(i) + '.p', "wb"))
