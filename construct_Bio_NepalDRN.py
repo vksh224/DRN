@@ -392,6 +392,13 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 #Main starts here
 data_directory = directory + "Data/"
 plot_directory = directory + "Plot/"
+CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
+PoI_locs = pickle.load(open(data_directory + "PoI_locs.p", "rb"))
+Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
+S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
+Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
+
+num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
 #G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
 #G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
@@ -410,11 +417,9 @@ end_time = total_simulation_time + 60
 #TODO: temporary fix to run generate the network for 0th time slot only
 # end_time = network_construction_interval
 
-#Original DRN at time 0
-G2 = nx.read_gml(directory + 'Orig_NepalDRN_0.gml')
 
 nei_o = '0 ' + str(end_time + 60) + '\n'
-bio_neighList_filename = 'B_N' + str(len(G2.nodes())) + ".txt"
+bio_neighList_filename = 'B_N' + str(num_of_nodes  + len(Res_paths)) + ".txt"
 #bio_neighList_filename = "random_Orig_DRN.txt"
 
 print("\nBio - Neighbor list filename" + bio_neighList_filename + "\n")
