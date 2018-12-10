@@ -1,12 +1,49 @@
 import os
 import networkx as nx
 import pickle
-from constants import input_grn, data_directory
 
-os.system('python construct_Orig_NepalDRN.py')
-os.system('python construct_Orig_NepalDRN_network.py')
-os.system('python create_ONE_setting_file.py')
-#os.system('python3 construct_Bio_NepalDRN.py')
+count_PoI = 3
+min_S_in_PoI = 15
+
+#option - high - More PoIs
+for option in range(1, 3):
+    for run in range(1, 3):
+
+        no_of_PoI = count_PoI + 2 * option
+        #max_S_in_PoI = 30
+
+        root_directory = "Bhaktapur_P" + str(no_of_PoI) +"/"
+        directory = root_directory + str(run) + "/"
+        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(run) + "/"
+        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(run) + "/"
+        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(run) + "/"
+
+        with open("constants.py", "r") as f:
+            lines = f.readlines()
+
+        with open("constants.py", "w") as f:
+            for line in lines:
+                if ("root_directory" not in line) and \
+                    ("directory" not in line) and \
+                    ("loc_des_folder" not in line) and \
+                    ("neigh_des_folder" not in line) and \
+                    ("setting_directory" not in line) and \
+                    ("no_of_PoI" not in line):
+
+                    f.write(line)
+
+            f.write("root_directory = '" + str(root_directory) + "'\n")
+            f.write("directory = '" + str(directory) + "'\n")
+            f.write("loc_des_folder = '" + str(loc_des_folder) + "'\n")
+            f.write("neigh_des_folder = '" + str(neigh_des_folder) + "'\n")
+            f.write("setting_directory = '" + str(setting_directory) + "'\n")
+            f.write("no_of_PoI = " + str(no_of_PoI) + "\n")
+            #f.write("max_S_in_PoI = " + str(max_S_in_PoI) + "\n")
+
+        os.system('python construct_Orig_NepalDRN.py')
+        os.system('python construct_Orig_NepalDRN_network.py')
+        # os.system('python create_ONE_setting_file.py')
+        os.system('python3 construct_Bio_NepalDRN.py')
 
 '''
 def generate_GRN_edge_directions_reversed(input_grn):

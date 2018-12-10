@@ -46,6 +46,7 @@ def read(G):
 
     return H
 
+'''
 folder = "kathmandu/"
 #Ratio of t1 and t2 nodes in DRN
 t1_ratio = 0.02
@@ -86,3 +87,5 @@ pickle.dump(t3, open(folder + 'NO.p','wb'))
 
 nx.write_gml(G, folder + "labeled_DRN.gml")
 plot_graph(G, "labeled_DRN2")
+
+'''

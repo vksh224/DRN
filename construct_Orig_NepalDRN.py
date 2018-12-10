@@ -7,14 +7,23 @@ import os
 #---------------- Initial setup -------------------------------------------------------------------------
 
 #Create Bhaktapur and its sub-directories
+if not os.path.exists(root_directory):
+    os.mkdir(root_directory)
+
 if not os.path.exists(directory):
     os.mkdir(directory)
+
+data_directory = directory + "Data/"
+plot_directory = directory + "Plot/"
 
 if not os.path.exists(data_directory):
     os.mkdir(data_directory)
 
 if not os.path.exists(plot_directory):
     os.mkdir(plot_directory)
+
+if not os.path.exists(loc_des_folder):
+    os.mkdir(loc_des_folder)
 
 CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs = initial_setup()
 num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
@@ -47,12 +56,12 @@ Res_path_list = pickle.load(open(directory + "Data/Res_paths.p", "rb"))
 num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
 res_visiting_all_nodes = responder_visiting_IDs(Res_path_list, CC_locs, PoI_locs, num_of_nodes)
-pickle.dump(res_visiting_all_nodes, open(data_directory + 'res_visiting_all_nodes.p','wb'))
-print("Res_locs", Res_path_list[1])
-print("Res_visiting_IDs_dict", res_visiting_all_nodes.items()[1])
+pickle.dump(res_visiting_all_nodes, open(directory + 'Data/res_visiting_all_nodes.p','wb'))
+print("Res_locs", num_of_nodes + 1, Res_path_list[1])
+print("Res_visiting_IDs_dict", num_of_nodes + 1, res_visiting_all_nodes.get(num_of_nodes + 1))
 
 node_visited_by_all_responders = nodes_served_by_res_ids(res_visiting_all_nodes, CC_locs, PoI_locs)
-pickle.dump(node_visited_by_all_responders, open(data_directory + 'node_visited_by_all_responders.p','wb'))
+pickle.dump(node_visited_by_all_responders, open(directory + 'Data/node_visited_by_all_responders.p','wb'))
 print("Node_visting_res_dict", node_visited_by_all_responders.items()[1])
 
 #---------------------------------END: Initial Setup -----------------------------------------------------

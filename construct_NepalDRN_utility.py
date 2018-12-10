@@ -201,9 +201,10 @@ def responder_visiting_IDs(Res_paths, CC_locs, PoI_locs, num_of_nodes):
                 if loc == PoI_locs[j]:
                     Res_visiting_IDs.append(len(CC_locs) + j)
                     break
-        # print("Res locs", k, Res_paths[k])
-        # print("Res ", k, Res_visiting_IDs)
-        Res_visiting_IDs_dict[num_of_nodes + count] = Res_visiting_IDs
+        if k == 1:
+            print("Res locs", num_of_nodes + k, Res_paths[k])
+            print("Res ", num_of_nodes + k, Res_visiting_IDs)
+        Res_visiting_IDs_dict[num_of_nodes + k] = Res_visiting_IDs
         count = count + 1
     return Res_visiting_IDs_dict
 

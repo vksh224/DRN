@@ -1,15 +1,8 @@
-GRN_directory ="Yeast_Data/"
-directory = "Bhaktapur/"
-data_directory = "Bhaktapur/Data/"
-plot_directory = "Bhaktapur/Plots/"
-#loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/"
-loc_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
-setting_directory = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
-neigh_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
 
-#setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
 
-input_grn = "Yeast.gml"
+
+
+input_grn = "Yeast_Ordered.gml"
 
 X = 10000
 Y = 10000
@@ -24,28 +17,28 @@ snapshot_time_interval = 300
 total_simulation_time = 3600
 
 #15 minutes
-network_construction_interval = 1500
+network_construction_interval = 900
 
 no_of_CC = 1
-no_of_PoI = 5
 no_of_R = 30
 
-min_no_PoIs_for_R = 1
-max_no_PoI_for_R = 3
+min_no_PoIs_for_R = 2
+max_no_PoI_for_R = 5
 
 no_of_Towers = 5
 
-min_V_in_PoI = 2
-max_V_in_PoI = 5
+min_V_in_PoI = 1
+max_V_in_PoI = 4
 
-min_S_in_PoI = 10
-max_S_in_PoI = 20
+min_S_in_PoI = 15
+max_S_in_PoI = 25
 
 min_PoI_radius= 100
 max_PoI_radius = 300
 
-bt_range = 100
-tower_range = 500
+bt_range = 150
+vol_range = 300
+tower_range = 1000
 
 #----- related to volunteer path
 
@@ -68,3 +61,11 @@ max_S_speed = 0.15
 #In m/s
 min_V_speed = 1
 max_V_speed = 5
+
+
+root_directory = 'Bhaktapur_P7/'
+directory = 'Bhaktapur_P7/2/'
+loc_des_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/2/'
+neigh_des_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/2/'
+setting_directory = '/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/2/'
+no_of_PoI = 7

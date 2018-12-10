@@ -63,6 +63,7 @@ def spanning(R):
             S_D.add_edge(e[1], e[0])
     return S_D
 
+'''
 def main(O,B):
     # O: original DRN
     # B: bio-DRN
@@ -93,6 +94,7 @@ def main(O,B):
 
     return R, S, KR2, KR4, KR8
 
+
 folder = "kathmandu/"
 
 O = nx.read_gml(folder + 'labeled_DRN.gml')
@@ -119,3 +121,4 @@ nx.write_gml(KR2, folder + 'KR2.gml')
 nx.write_gml(KR4, folder + 'KR4.gml')
 nx.write_gml(KR8, folder + 'KR8.gml')
 
+'''

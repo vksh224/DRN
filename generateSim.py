@@ -133,6 +133,53 @@ def ref_GRN(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
     return G
 
+def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
+    # List of nodes in reference GRN
+    L1 = [t1_G, t2_G, t3_G]
+    # List of nodes in DRN
+    L2 = [t1_G2, t2_G2, t3_G2]
+    Y = np.array(blondelS(G, G2, 0.1))
+
+    # Nodes and edges in bio-DRN
+    NBD = []
+    EBD = []
+
+    # Corresponding mapped node of reference GRN
+    NRG = []
+
+    for i in range(len(L1)):
+
+        # print (i)
+        YM = Y[L1[i], :][:, L2[i]]
+        # print (YM)
+
+        YM = reverse(YM)
+
+        YM = YM.tolist()
+        m = Munkres()
+
+        indexes = m.compute(YM)
+        # print (indexes)
+
+        for each in indexes:
+            NBD.append(L2[i][each[1]])
+            NRG.append(L1[i][each[0]])
+
+    for u in NBD:
+        for v in NBD:
+
+            if (u, v) in G2.edges() and (NRG[NBD.index(u)], NRG[NBD.index(v)]) in G.edges():
+                EBD.append((u, v))
+
+    # print (len(NBD))
+    # print (len(NRG))
+    # print (len(EBD))
+
+    GBD = nx.DiGraph()
+    GBD.add_nodes_from(NBD)
+    GBD.add_edges_from(EBD)
+
+    return GBD
 
 def bioD(G2,t1_G2, t2_G2, t3_G2):
 
@@ -183,50 +230,7 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
     #print (len(t1_G), len(t2_G), len(t3_G))
     #print (len(t1_G2), len(t2_G2), len(t3_G2))
 
-    #List of nodes in reference GRN
-    L1 = [t1_G,t2_G,t3_G]
-    #List of nodes in DRN
-    L2 = [t1_G2,t2_G2,t3_G2]
-    Y = np.array(blondelS(G, G2, 0.1))
-
-    #Nodes and edges in bio-DRN
-    NBD = []
-    EBD = []
-
-    #Corresponding mapped node of reference GRN
-    NRG = []
-
-    for i in range(len(L1)):
-
-        # print (i)
-        YM = Y[L1[i], :][:, L2[i]]
-        #print (YM)
-
-        YM = reverse(YM)
-
-        YM = YM.tolist()
-        m = Munkres()
-
-        indexes = m.compute(YM)
-        # print (indexes)
-
-        for each in indexes:
-            NBD.append(L2[i][each[1]])
-            NRG.append(L1[i][each[0]])
-
-    for u in NBD:
-        for v in NBD:
-
-            if (u,v) in G2.edges() and (NRG[NBD.index(u)],NRG[NBD.index(v)]) in G.edges():
-                EBD.append((u,v))
-
-    #print (len(NBD))
-    #print (len(NRG))
-    #print (len(EBD))
-
-    GBD = nx.DiGraph()
-    GBD.add_nodes_from(NBD)
-    GBD.add_edges_from(EBD)
+    GBD = generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
 
     print ("***Number of nodes in GBD:",len(GBD))
     print ("***Number of edges in GBD:",len(GBD.edges()))
@@ -246,18 +250,18 @@ def bioD(G2,t1_G2, t2_G2, t3_G2):
 def generateSim(X,Y,VN,R):
 
     #Node set
-    N = [i for i in range(VN)]
-    N = sorted(N,reverse = False)
-    G = nx.DiGraph()
-    G.add_nodes_from(N)
-
-    # Coordinate of nodes
+    # N = [i for i in range(VN)]
+    # N = sorted(N,reverse = False)
+    # G = nx.DiGraph()
+    # G.add_nodes_from(N)
+    #
+    # # Coordinate of nodes
     C = [(random.randint(0,X),random.randint(0,Y)) for i in range(VN)]
-
-    # Number of hub, sub and non
-    HC = int(0.01 * VN)
-    SC = int(0.05 * VN)
-    NC = VN - HC - SC
+    #
+    # # Number of hub, sub and non
+    # HC = int(0.01 * VN)
+    # SC = int(0.05 * VN)
+    # NC = VN - HC - SC
 
     # Set of hub, sub and non-hubs
     # HCN = N[:HC]
@@ -366,7 +370,7 @@ for i in range(1):
     loc_o, nei_o, nei_b, nei_s, nei_r, nei_k2, nei_k4, nei_k8, HCN, SCN, NCN = generateSim(X, Y, s, R)
 
     os.chdir('simulation')
-    os.chdir(str(s))
+    #os.chdir(str(s))
 
     f = open('O_C' + str(s) + '.txt','w')
     f.write(loc_o)

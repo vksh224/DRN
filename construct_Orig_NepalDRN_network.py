@@ -1,3 +1,4 @@
+import os
 from construct_NepalDRN_utility import *
 from Centrality import motif
 from writeFile import *
@@ -78,6 +79,7 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
     sparseG = G.copy()
 
     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
+
     #Add edges between each pair of nodes for the given time interval
     with open(loc_des_folder + "ext_position_" + str(V) + ".txt", "r") as f:
         node_pos_lines = f.readlines()[1:]
@@ -90,41 +92,70 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
             line2_arr = line2.strip().split(" ")
             line2_arr = [int(ele) for ele in line2_arr]
 
+            does_exist_exists = False
+
             # u != v, and start_time < t(u), t(v) <= end_time, and t(u) == t(v) and dist(u, v) < range
             if line1_arr[1] != line2_arr[1] \
                 and line1_arr[0] >= start_time and line1_arr[0] <= end_time \
                 and line2_arr[0] >= start_time and line2_arr[0] <= end_time \
-                and line1_arr[0] == line2_arr[0] \
-                and euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= bt_range:
+                and line1_arr[0] == line2_arr[0]:
+
+                #CC - CC, CC - PoI, PoI-PoI, PoI-V, PoI-S
+                if ((line1_arr[1] in CC_IDs and line2_arr[1] in CC_IDs) or \
+                    (line1_arr[1] in CC_IDs and line2_arr[1] in PoI_IDs) or \
+                    (line1_arr[1] in PoI_IDs and line2_arr[1] in PoI_IDs) or \
+                    (line1_arr[1] in Vol_IDs and line2_arr[1] in S_IDs) or \
+                    (line1_arr[1] in PoI_IDs and line2_arr[1] in S_IDs)) and \
+                    euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= tower_range:
+                    does_exist_exists = True
+
+                # Vol - PoI, Vol - Vol, Vol - S
+                if ((line1_arr[1] in Vol_IDs and line2_arr[1] in PoI_IDs) or \
+                    (line1_arr[1] in Vol_IDs and line2_arr[1] in Vol_IDs) or \
+                    (line1_arr[1] in Vol_IDs and line2_arr[1] in S_IDs)) and \
+                    euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= vol_range:
+                    does_exist_exists = True
+
+                #S - PoI, S - Vol, S-S
+                if ((line1_arr[1] in S_IDs and line2_arr[1] in PoI_IDs) or \
+                    (line1_arr[1] in S_IDs and line2_arr[1] in Vol_IDs) or \
+                    (line1_arr[1] in S_IDs and line2_arr[1] in S_IDs)) and \
+                    euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= bt_range:
+                    does_exist_exists = True
 
                 #add edge between u and v
-                if line1_arr[1]!= line2_arr[1] and G.has_edge(line1_arr[1], line2_arr[1]) == False:
+                if does_exist_exists == True and G.has_edge(line1_arr[1], line2_arr[1]) == False:
                     G.add_edge(line1_arr[1], line2_arr[1])
                     real_world_G.add_edge(line1_arr[1], line2_arr[1])
 
                 # add edge between v and u
-                if line1_arr[1] != line2_arr[1] and G.has_edge(line2_arr[1], line1_arr[1]) == False:
-                    G.add_edge(line2_arr[1], line1_arr[1])
-                    real_world_G.add_edge(line2_arr[1], line1_arr[1])
+                # if does_exist_exists == True and G.has_edge(line2_arr[1], line1_arr[1]) == False:
+                #     G.add_edge(line2_arr[1], line1_arr[1])
+                #     real_world_G.add_edge(line2_arr[1], line1_arr[1])
 
-                if S_IDs.__contains__(line1_arr[1]) and S_IDs.__contains__(line2_arr[1]):
-                    continue
-                else:
-                    sparseG.add_edge(line1_arr[1], line2_arr[1])
-                    sparseG.add_edge(line2_arr[1], line1_arr[1])
+                    if S_IDs.__contains__(line1_arr[1]) and S_IDs.__contains__(line2_arr[1]):
+                        continue
+                    else:
+                        sparseG.add_edge(line1_arr[1], line2_arr[1])
+                        # sparseG.add_edge(line2_arr[1], line1_arr[1])
 
     print("G: # Nodes", len(G), len(sparseG))
     print("G: # Edges", len(G.edges()), len(sparseG.edges()))
-    print("G: Density:", float(len(G.edges()) * 2) / (len(G) * (len(G) - 1)))
+    print("G: Density:", float(len(G.edges())) / (len(G) * (len(G) - 1)))
     print("Is Orig-DRN connected: ", nx.is_connected(G.to_undirected()))
 
-    print("\nReal world G: # Nodes" + str(len(real_world_G)))
-    print("Real world G: # Edges", len(real_world_G.edges()))
-    print("Real world G: Density:", float(len(real_world_G.edges()) * 2) / (len(real_world_G) * (len(real_world_G) - 1)))
+    print("\nReal world G: # Nodes: " + str(len(real_world_G)))
+    print("Real world G: # Edges: ", len(real_world_G.edges()))
+    print("Real world G: Density: ", float(len(real_world_G.edges())) / (len(real_world_G) * (len(real_world_G) - 1)))
 
     return G, sparseG, real_world_G
 
 #Main Starts here
+data_directory = directory + "Data/"
+plot_directory = directory + "Plot/"
+
+if not os.path.exists(neigh_des_folder):
+    os.mkdir(neigh_des_folder)
 
 #Get CC, PoI, Vol, S, Res (in this order for node ID)
 CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
@@ -183,7 +214,7 @@ start_time = 0
 end_time = total_simulation_time + 60
 
 #TODO: temporary fix to run generate the network for 0th time slot only
-end_time = network_construction_interval
+#   end_time = network_construction_interval
 
 nei_o = '0 ' + str(end_time + 60) + '\n'
 orig_neighList_filename = 'O_N' + str(num_of_nodes + len(Res_IDs)) + ".txt"

@@ -2,6 +2,8 @@ import pickle
 import os
 from constants import *
 
+data_directory = directory + "Data/"
+
 CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
 PoI_locs = pickle.load(open(data_directory + "PoI_locs.p", "rb"))
 Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))

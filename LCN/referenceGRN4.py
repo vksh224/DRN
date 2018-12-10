@@ -521,7 +521,7 @@ sD = [(i + hCount) for i in range(sCount)]
 nD = [(i + hCount + sCount) for i in range(nCount)]
 '''
 
-gD = nx.read_gml('../Bhaktapur/Orig_NepalDRN.gml')
+gD = nx.read_gml('../Bhaktapur/Orig_NepalDRN_0.gml')
 coor = pickle.load(open('../Bhaktapur/Data/CC_locs.p', 'rb'))
 coor.append(pickle.load(open('../Bhaktapur/Data/PoI_locs.p', 'rb')))
 coor.append(pickle.load(open('../Bhaktapur/Data/Vol_locs.p', 'rb')))
@@ -532,7 +532,7 @@ plot_graph(gD, "Plots/Orig_NepalDRN")
 
 print("Number of nodes in DRN graph:", len(gD))
 print("Number of edges in DRN graph:", len(gD.edges()))
-print("Density: ", (2 * float(len(gD.edges()))/ (len(gD) * (len(gD) - 1))))
+print("Density: ", (float(len(gD.edges()))/ (len(gD) * (len(gD) - 1))))
 
 hD = pickle.load(open(data_directory + "HO.p", "rb" ))
 sD = pickle.load(open(data_directory + "SO.p", "rb" ))

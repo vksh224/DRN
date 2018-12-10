@@ -126,7 +126,7 @@ def blondelS(G1,G2,threshold):
         if iterate > 0:
             if check(Y,threshold) or iterate > 100:
                 print ("ITERATE:",iterate)
-                print (Y)
+                # print (Y)
                 return Y
                 break
 
