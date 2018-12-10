@@ -211,7 +211,7 @@ pickle.dump(t3, open(data_directory + 'NO.p','wb'))
 
 #Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
 start_time = 0
-end_time = total_simulation_time + 60
+end_time = total_simulation_time
 
 #TODO: temporary fix to run generate the network for 0th time slot only
 #   end_time = network_construction_interval
