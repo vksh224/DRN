@@ -401,7 +401,6 @@ Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
 #G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
-#G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
 G1 = nx.read_gml('this_grn.gml')
 #G1 = G1.reverse()
 
@@ -411,7 +410,7 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 
 # Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
 start_time = 0
-end_time = total_simulation_time + 60
+end_time = total_simulation_time
 
 
 #TODO: temporary fix to run generate the network for 0th time slot only
@@ -491,12 +490,12 @@ for t in range(start_time, end_time, network_construction_interval):
     nx.write_gml(GBD, data_directory + 'GBD_' + str(t) + '.gml')
     nx.write_gml(G, data_directory + 'refG.gml')
 
-    # if t == 0:
-    #     plot_deg_dist(GBD, plot_directory + 'GBD_deg_' + str(t))
-    #     plot_graph(GBD, plot_directory + "GBD_" + str(t))
-    #
-    #     plot_deg_dist(G, plot_directory + 'refG_deg_' + str(t))
-    #     plot_graph(G, plot_directory + "refG_" + str(t))
+    if t == 0:
+        plot_deg_dist(GBD, plot_directory + 'GBD_deg_' + str(t))
+        plot_graph(GBD, plot_directory + "GBD_" + str(t))
+
+        plot_deg_dist(G, plot_directory + 'refG_deg_' + str(t))
+        plot_graph(G, plot_directory + "refG_" + str(t))
 
 f.close()
 
