@@ -1,6 +1,7 @@
 import networkx as nx
 import os
 import numpy as np
+from constants import *
 
 curr = os.getcwd()
 os.chdir(curr)
@@ -15,9 +16,12 @@ s = ''
 r = []
 
 #Input Original DRN
-os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/')
+#os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/')
 
-G = nx.read_gml('Orig_NepalDRN_900.gml')
+if not os.path.exists(failed_node_folder):
+    os.mkdir(failed_node_folder)
+
+G = nx.read_gml(directory + 'Orig_NepalDRN_900.gml')
 
 N = G.nodes()
 n = len(N)
@@ -31,7 +35,7 @@ for i in range(timeslots):
 
 print (s)
 
-f = open('failed_nodelist.txt','w')
+f = open(failed_node_folder + 'failed_nodelist' + str(len(G.nodes())) + '.txt','w')
 f.write(s)
 f.close()
 
