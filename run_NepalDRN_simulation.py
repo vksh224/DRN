@@ -6,18 +6,17 @@ import pickle
 count_PoI = 3
 
 #option - high - More PoIs
-for option in range(0, 1):
-    for run in range(0, 5):
-
-        no_of_PoI = count_PoI + random.randint(option, (2*option))
-
+for option in range(6, 7):
+    # no_of_PoI = count_PoI + random.randint(option, (2*option))
+    no_of_PoI = count_PoI + random.randint(0, 1)
+    for run in range(0, 1):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
 
-        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(run) + "/"
-        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(run) + "/"
-        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(run) + "/"
-        failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/FailedNodeList/" + str(run) + "/"
+        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
 
         # loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
         # neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
@@ -35,7 +34,7 @@ for option in range(0, 1):
                     ("neigh_des_folder" not in line) and \
                     ("setting_directory" not in line) and \
                     ("failed_node_folder" not in line) and \
-                    ("no_of_PoI" not in line):
+                        ("no_of_PoI" not in line):
 
                     f.write(line)
 
@@ -48,11 +47,31 @@ for option in range(0, 1):
             f.write("no_of_PoI = " + str(no_of_PoI) + "\n")
             #f.write("max_S_in_PoI = " + str(max_S_in_PoI) + "\n")
 
-        #TODO: Run one python file at any given time - because of the python version issue
-        # os.system('python construct_Orig_NepalDRN.py')
-        # os.system('python construct_Orig_NepalDRN_network.py')
-        os.system('python create_ONE_setting_new.py ' + str(option) + " " + str(run))
-        # os.system('python3 construct_Bio_NepalDRN.py')
+        print("============ Option: " + str(option) + " Run: " + str(run) + " ============ ")
+
+        #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
+        os.system('python construct_Orig_NepalDRN.py')
+
+        #Create Original DRN at each "network_construction_interval" until "total_simulation_time"
+        os.system('python construct_Orig_NepalDRN_network.py')
+
+        #Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
+        os.system('python3 construct_Bio_NepalDRN.py')
+
+        # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
+        os.system('python3 genTop.py')
+
+        #Create failed node list
+        os.system('python3 failed_nodelist.py')
+
+        # Create ONE simulator setting file
+        os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
+
+
+
+
+
+
 
 '''
 def generate_GRN_edge_directions_reversed(input_grn):

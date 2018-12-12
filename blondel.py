@@ -72,7 +72,7 @@ def similarity(G1,G2,e):
         _S = [[float(_S[j][i])/float(sq) for i in range(len(G2))] for j in range(len(G1))]
 
         if checks(S,_S,e) or checks(oS,_S,e):
-            print ("Counter:",counter)
+            # print ("Counter:",counter)
             #print (S)
             return np.array(S)
 

@@ -1,3 +1,5 @@
+
+debug_mode = False
 input_grn = "Yeast_Ordered.gml"
 
 X = 10000
@@ -10,10 +12,10 @@ hY = 6000
 
 snapshot_time_interval = 300
 #in minutes (equivalent to 12 hours)
-total_simulation_time = 25200
+total_simulation_time = 3600
 
 #15 minutes
-network_construction_interval = 1800
+network_construction_interval = 900
 
 no_of_CC = 1
 no_of_R = 30
@@ -55,10 +57,13 @@ max_S_speed = 0.25
 min_V_speed = 1
 max_V_speed = 5
 
-root_directory = 'Bhaktapur_0/'
-directory = 'Bhaktapur_0/1/'
-loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/0_1/'
-neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/0_1/'
-setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/0_1/'
-failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/0_1/'
+#Percentage of nodes failed
+p = 0.02
+
+root_directory = 'Bhaktapur_6/'
+directory = 'Bhaktapur_6/0/'
+loc_des_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/6_0/'
+neigh_des_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/6_0/'
+setting_directory = '/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/6_0/'
+failed_node_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/6_0/'
 no_of_PoI = 3

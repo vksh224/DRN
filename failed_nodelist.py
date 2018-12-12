@@ -1,42 +1,40 @@
 import networkx as nx
+import pickle
 import os
 import numpy as np
 from constants import *
 
-curr = os.getcwd()
-os.chdir(curr)
-
-#Number of timeslots
-timeslots = 13
-
-#Percentage of nodes failed
-p = 0.02
+print("======== Failed node list: " + directory)
 
 s = '0 ' + str(total_simulation_time) + "\n"
 r = []
 
-#Input Original DRN
-#os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/')
-
 if not os.path.exists(failed_node_folder):
     os.mkdir(failed_node_folder)
 
-G = nx.read_gml(directory + 'Orig_NepalDRN_900.gml')
+data_directory = directory + "Data/"
 
-N = [i for i in range(1, len(G.nodes()))]
+CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
+PoI_locs = pickle.load(open(data_directory + "PoI_locs.p", "rb"))
+Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
+S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
+Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
+
+V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
+
+N = [i for i in range(len(CC_locs), V)]
 n = len(N)
-print ('Number of nodes:',n)
 
-for i in range(1, timeslots):
+for t in range(0, total_simulation_time, network_construction_interval):
 
     r.extend(np.random.choice(N,size = int(p * n),replace = False))
-    s = s + str(i * 900) + ' ' + " ".join(str(x) for x in r) + '\n'
+    s = s + str(t) + ' ' + " ".join(str(x) for x in r) + '\n'
     N = [u for u in N if u not in r]
 
-print (s)
-
-f = open(failed_node_folder + 'failed_nodelist' + str(len(G.nodes())) + '.txt','w')
+f = open(failed_node_folder + 'failed_nodelist' + str(V) + '.txt','w')
 f.write(s)
 f.close()
+print(s)
+
 
 

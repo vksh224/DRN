@@ -70,13 +70,15 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
 
     #Add edges
     get_tier1_tier2_indirect_links(real_world_G, node_visited_by_all_responders_dict)
-    print("all_nodes_visited_by_a_res_dict", node_visited_by_all_responders_dict.items()[1])
+
+    if debug_mode:
+        print("all_nodes_visited_by_a_res_dict", node_visited_by_all_responders_dict.items()[1])
 
     get_tier1_tier2_links(G, res_visiting_all_nodes_dict)
-    print("Res_locs", Res_paths[1])
-    print("Res_visiting_IDs_dict", res_visiting_all_nodes_dict.items()[1])
 
-    sparseG = G.copy()
+    if debug_mode:
+        print("Res_locs", Res_paths[1])
+        print("Res_visiting_IDs_dict", res_visiting_all_nodes_dict.items()[1])
 
     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
@@ -128,19 +130,11 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
                     G.add_edge(line1_arr[1], line2_arr[1])
                     real_world_G.add_edge(line1_arr[1], line2_arr[1])
 
-                # add edge between v and u
-                # if does_exist_exists == True and G.has_edge(line2_arr[1], line1_arr[1]) == False:
-                #     G.add_edge(line2_arr[1], line1_arr[1])
-                #     real_world_G.add_edge(line2_arr[1], line1_arr[1])
-
                     if S_IDs.__contains__(line1_arr[1]) and S_IDs.__contains__(line2_arr[1]):
                         continue
-                    else:
-                        sparseG.add_edge(line1_arr[1], line2_arr[1])
-                        # sparseG.add_edge(line2_arr[1], line1_arr[1])
 
-    print("G: # Nodes", len(G), len(sparseG))
-    print("G: # Edges", len(G.edges()), len(sparseG.edges()))
+    print("G: # Nodes", len(G))
+    print("G: # Edges", len(G.edges()))
     print("G: Density:", float(len(G.edges())) / (len(G) * (len(G) - 1)))
     print("Is Orig-DRN connected: ", nx.is_connected(G.to_undirected()))
 
@@ -148,11 +142,11 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
     print("Real world G: # Edges: ", len(real_world_G.edges()))
     print("Real world G: Density: ", float(len(real_world_G.edges())) / (len(real_world_G) * (len(real_world_G) - 1)))
 
-    return G, sparseG, real_world_G
+    return G, real_world_G
 
 #Main Starts here
 
-print("Directory", directory)
+print("\n ======== Construct Original_DRN_Network: " + directory)
 data_directory = directory + "Data/"
 plot_directory = directory + "Plot/"
 
@@ -180,11 +174,12 @@ S_IDs = [i for i in range(len(CC_locs) + len(PoI_locs) + len(Vol_locs), len(CC_l
 #only for real world network (i.e., ONE simulator)
 Res_IDs = [i for i in range(len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs), len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths))]
 
-print ("CC-count ", len(CC_locs), "s-id", CC_IDs[0], "e-id", CC_IDs[len(CC_IDs) - 1])
-print ("PoI-count ", len(PoI_locs), "s-id", PoI_IDs[0], "e-id", PoI_IDs[len(PoI_IDs) - 1])
-print ("Vol-count ", len(Vol_locs), "s-id", Vol_IDs[0], "e-id", Vol_IDs[len(Vol_IDs) - 1])
-print ("S-count ", len(S_locs), "s-id", S_IDs[0], "e-id", S_IDs[len(S_IDs) - 1])
-print ("Res-count ", len(Res_paths), "s-id", Res_IDs[0], "e-id", Res_IDs[len(Res_IDs) - 1])
+if debug_mode:
+    print ("CC-count ", len(CC_locs), "s-id", CC_IDs[0], "e-id", CC_IDs[len(CC_IDs) - 1])
+    print ("PoI-count ", len(PoI_locs), "s-id", PoI_IDs[0], "e-id", PoI_IDs[len(PoI_IDs) - 1])
+    print ("Vol-count ", len(Vol_locs), "s-id", Vol_IDs[0], "e-id", Vol_IDs[len(Vol_IDs) - 1])
+    print ("S-count ", len(S_locs), "s-id", S_IDs[0], "e-id", S_IDs[len(S_IDs) - 1])
+    print ("Res-count ", len(Res_paths), "s-id", Res_IDs[0], "e-id", Res_IDs[len(Res_IDs) - 1])
 
 #Non-increasing motif central nodes
 # MC_G = motif(sparseG)
@@ -212,32 +207,25 @@ pickle.dump(t2, open(data_directory + 'SO.p','wb'))
 pickle.dump(t3, open(data_directory + 'NO.p','wb'))
 
 #Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
-start_time = 0
-end_time = total_simulation_time
 
-#TODO: temporary fix to run generate the network for 0th time slot only
-#   end_time = network_construction_interval
-
-nei_o = '0 ' + str(end_time + 60) + '\n'
+nei_o = '0 ' + str(total_simulation_time) + '\n'
 orig_neighList_filename = 'O_N' + str(num_of_nodes + len(Res_IDs)) + ".txt"
-print("\nOrig - Neighbor list filename " + orig_neighList_filename + "\n")
+
+print("\nOrig - Neighbor list filename: " + orig_neighList_filename)
+
 f = open(neigh_des_folder + orig_neighList_filename, 'w')
 f.write(nei_o)
 
-#network_construction_interval = snapshot_time_interval
-
 #Create static original graph snapshots for given time interval
-for t in range(start_time, end_time, network_construction_interval):
+for t in range(0, total_simulation_time, network_construction_interval):
     print("\n======= Start Time : " + str(t) + " ======== ")
-    G, sparseG, real_world_G = create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, t, t + snapshot_time_interval)
+    G, real_world_G = create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, t, t + snapshot_time_interval)
 
     nei_o = writeF(real_world_G, t)
     f.write(nei_o)
 
     nx.write_gml(G, directory + "Orig_NepalDRN_" + str(t) + ".gml")
-    # nx.write_gml(sparseG, directory + "Sparse_Orig_NepalDRN_" + str(t) + ".gml")
     # if t == 0:
     #     plot_graph(G, plot_directory + "O_" + str(t) + "_")
-    #     plot_graph(sparseG, plot_directory + "SparseO_" + str(t)+ "_")
 
 f.close()

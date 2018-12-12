@@ -148,18 +148,19 @@ nx.write_gml(KR8, folder + 'KR8.gml')
 
 #-------------------------------------------------------------------------------
 
+print("\n ======== GenTop: " + directory)
 data_directory = directory + 'Data/'
-#Input Original DRN
+
 
 s_spanning = '0 ' + str(total_simulation_time) + "\n"
 s_random = '0 ' + str(total_simulation_time) + "\n"
 s_k2 = '0 ' + str(total_simulation_time) + "\n"
 s_k4 = '0 ' + str(total_simulation_time) + "\n"
-s_k8 = '0 ' + str(total_simulation_time) + "\n"
+# s_k8 = '0 ' + str(total_simulation_time) + "\n"
 
 naming = '_'
 once = False
-for t in range(0, total_simulation_time, snapshot_time_interval):
+for t in range(0, total_simulation_time, network_construction_interval):
 
     # O: original DRN
     # B: bio-DRN
@@ -173,38 +174,38 @@ for t in range(0, total_simulation_time, snapshot_time_interval):
         naming = naming + str(len(O))
         once = True
 
-    B = nx.read_gml(neigh_des_folder + 'GBD_' + str(t) + '.gml')
+    B = nx.read_gml(data_directory + 'GBD_' + str(t) + '.gml')
     B = rename_graph(B)
 
     R = randomDRN(O,B)
     S = spanning(R)
     K2 = kconnected(R, 2)
     K4 = kconnected(R, 4)
-    K8 = kconnected(R, 8)
+    # K8 = kconnected(R, 8)
 
     s_spanning = neighbor_list(S,s_spanning, t)
     s_random = neighbor_list(R,s_random, t)
     #s_bioDRN = neighbor_list(B,s_bioDRN, t)
     s_k2 = neighbor_list(K2, s_k2, t)
     s_k4 = neighbor_list(K4, s_k4, t)
-    s_k8 = neighbor_list(K4, s_k8, t)
+    # s_k8 = neighbor_list(K8, s_k8, t)
 
 f_spanning = open(neigh_des_folder + 'S' + naming + '.txt','w')
 f_random = open(neigh_des_folder + 'R' + naming + '.txt','w')
 #f_bioDRN = open('b' + naming + '.txt','w')
 f_k2 = open(neigh_des_folder + 'K2' + naming + '.txt','w')
 f_k4 = open(neigh_des_folder + 'K4' + naming + '.txt','w')
-f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
+# f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
 
 f_spanning.write(s_spanning)
 f_random.write(s_random)
 f_k2.write(s_k2)
 f_k4.write(s_k4)
-f_k8.write(s_k8)
+# f_k8.write(s_k8)
 
 f_spanning.close()
 f_random.close()
 f_k2.close()
 f_k4.close()
-f_k8.close()
+# f_k8.close()
 

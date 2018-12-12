@@ -28,21 +28,23 @@ if not os.path.exists(loc_des_folder):
 CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs = initial_setup()
 num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
-print("CC:", len(CC_locs), "Start-id ", 0, "End-id", len(CC_locs) - 1)
 pickle.dump(CC_locs, open(directory + "Data/" + 'CC_locs.p','wb'))
-
-print("PoI:", len(PoI_locs), "Start-id", len(CC_locs), "End-id", len(CC_locs) + len(PoI_locs) - 1)
-print("PoI locs:", [loc for loc in PoI_locs])
 pickle.dump(PoI_locs, open(directory + "Data/" + 'PoI_locs.p','wb'))
-
-print("Volunteers:", len(Vol_path_list), "Start-id", len(CC_locs) + len(PoI_locs) , "End-id", len(CC_locs) + len(PoI_locs) + len(Vol_path_list) - 1)
 pickle.dump(Vol_locs, open(directory + "Data/" + 'Vol_locs.p','wb'))
-
-print("Survivors:", len(S_locs), " Start-id", len(CC_locs) + len(PoI_locs) + len(Vol_path_list), "End-id", len(CC_locs) + len(PoI_locs) + len(Vol_path_list) + len(S_locs) - 1)
 pickle.dump(S_locs, open(directory + "Data/" + 'S_locs.p','wb'))
-
-print("Responders:", len(Res_path_list), "Start-id", len(CC_locs) + len(PoI_locs) + len(Vol_path_list) + len(S_locs), "End-id", len(CC_locs) + len(PoI_locs) + len(Vol_path_list) + len(S_locs) + len(Res_path_list) - 1)
 pickle.dump(Res_path_list, open(directory + "Data/" + 'Res_paths.p','wb'))
+
+if debug_mode:
+    print("CC:", len(CC_locs), "Start-id ", 0, "End-id", len(CC_locs) - 1)
+    print("PoI:", len(PoI_locs), "Start-id", len(CC_locs), "End-id", len(CC_locs) + len(PoI_locs) - 1)
+    print("PoI locs:", [loc for loc in PoI_locs])
+    print("Volunteers:", len(Vol_path_list), "Start-id", len(CC_locs) + len(PoI_locs), "End-id",
+          len(CC_locs) + len(PoI_locs) + len(Vol_path_list) - 1)
+    print("Survivors:", len(S_locs), " Start-id", len(CC_locs) + len(PoI_locs) + len(Vol_path_list), "End-id",
+          len(CC_locs) + len(PoI_locs) + len(Vol_path_list) + len(S_locs) - 1)
+    print("Responders:", len(Res_path_list), "Start-id",
+          len(CC_locs) + len(PoI_locs) + len(Vol_path_list) + len(S_locs), "End-id",
+          len(CC_locs) + len(PoI_locs) + len(Vol_path_list) + len(S_locs) + len(Res_path_list) - 1)
 
 #Write responder paths to a file
 write_paths_to_a_file (Res_path_list, "w")
@@ -57,28 +59,31 @@ num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
 res_visiting_all_nodes = responder_visiting_IDs(Res_path_list, CC_locs, PoI_locs, num_of_nodes)
 pickle.dump(res_visiting_all_nodes, open(directory + 'Data/res_visiting_all_nodes.p','wb'))
-print("Res_locs", num_of_nodes + 1, Res_path_list[1])
-print("Res_visiting_IDs_dict", num_of_nodes + 1, res_visiting_all_nodes.get(num_of_nodes + 1))
+
+if debug_mode:
+    print("Res_locs", num_of_nodes + 1, Res_path_list[1])
+    print("Res_visiting_IDs_dict", num_of_nodes + 1, res_visiting_all_nodes.get(num_of_nodes + 1))
 
 node_visited_by_all_responders = nodes_served_by_res_ids(res_visiting_all_nodes, CC_locs, PoI_locs)
 pickle.dump(node_visited_by_all_responders, open(directory + 'Data/node_visited_by_all_responders.p','wb'))
-print("Node_visting_res_dict", node_visited_by_all_responders.items()[1])
+
+if debug_mode:
+    print("Node_visting_res_dict", node_visited_by_all_responders.items()[1])
 
 #---------------------------------END: Initial Setup -----------------------------------------------------
 
-print("V ", num_of_nodes)
+if debug_mode:
+    print("V ", num_of_nodes)
+
 ext_filename = loc_des_folder + 'ext_position_' + str(num_of_nodes)+ '.txt'
 print("Ext file name: ", ext_filename)
+
 f = open(ext_filename,'w')
 
-
 #0 7200 0 10000 0 10000
-f.write("0 " + str(total_simulation_time + 600) + " 0 " + str(X) + " 0 " + str(Y) + "\n")
+f.write("0 " + str(total_simulation_time) + " 0 " + str(X) + " 0 " + str(Y) + "\n")
 
-start_time = 0
-end_time = total_simulation_time + 60
-
-for t in range (start_time, end_time, snapshot_time_interval):
+for t in range (0, total_simulation_time, snapshot_time_interval):
     #Get starting CC_id
     node_id = 0
 

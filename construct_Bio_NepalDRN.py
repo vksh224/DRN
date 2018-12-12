@@ -67,11 +67,12 @@ def ref_GRN_old(G1,G2,MC_G1,MC_G2,t1_G2, t2_G2, t3_G2):
     t1_G1, t2_G1, t3_G1 = tiers(G1, MC_G1,[],[],[])
     t1_G2, t2_G2, t3_G2 = tiers(G2, MC_G2, t1_G2, t2_G2, t3_G2)
 
-    print("Total tier 2 nodes in GRN ", len(t2_G1), " DRN", len(t2_G2))
+    if debug_mode:
+        print("Total tier 2 nodes in GRN ", len(t2_G1), " DRN", len(t2_G2))
+
     #Nodes participating in motifs with each node
     # NSM = pickle.load(open(GRN_directory + "NSM_Y.p", "rb"))
     NSM = pickle.load(open("NSM.p", "rb"))
-    print ('NSM:',len(NSM))
 
     # Node and edge set in reference GRN
     E = []
@@ -326,7 +327,7 @@ def generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 
             cnt += 1
 
-    print(m)
+    # print(m)
 
     GBD = nx.DiGraph()
     GBD.add_nodes_from(G2.nodes())
@@ -390,8 +391,7 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 '''
 
 #Main starts here
-#root_directory = "Bhaktapur_0/"
-#directory = "Bhaktapur_0/1/"
+print("\n ======== Construct Bio-DRN: " + directory)
 
 data_directory = directory + "Data/"
 plot_directory = directory + "Plot/"
@@ -412,26 +412,19 @@ t2_G2 = pickle.load(open(data_directory + "SO.p", "rb" ))
 t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 
 # Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
-start_time = 0
-end_time = total_simulation_time
 
-
-#TODO: temporary fix to run generate the network for 0th time slot only
-# end_time = network_construction_interval
-
-
-nei_o = '0 ' + str(end_time + 60) + '\n'
+nei_o = '0 ' + str(total_simulation_time) + '\n'
 bio_neighList_filename = 'B_N' + str(num_of_nodes  + len(Res_paths)) + ".txt"
 #bio_neighList_filename = "random_Orig_DRN.txt"
 
-print("\nBio - Neighbor list filename" + bio_neighList_filename + "\n")
+print("\nBio - Neighbor list filename: " + bio_neighList_filename )
 f = open(neigh_des_folder + bio_neighList_filename, 'w')
 f.write(nei_o)
 
 #network_construction_interval = snapshot_time_interval
 
 # Create static original graph snapshots for given time interval
-for t in range(start_time, end_time, network_construction_interval):
+for t in range(0, total_simulation_time, network_construction_interval):
     print("\n======= Start Time : " + str(t) + " ======== ")
 
     G2 = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
