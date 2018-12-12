@@ -3,6 +3,26 @@ import networkx as nx
 import os
 from read_graph import plot_graph
 
+def rename_graph(O):
+
+    m = {}
+    for u in O.nodes():
+        m[u] = int(u)
+
+    O = nx.relabel_nodes(O,m)
+    return O
+
+def neighbor_list(G,s,t):
+
+    #print (G.nodes())
+    for u in sorted(G.nodes()):
+        next = [u]
+        next.extend(G.successors(u))
+
+        s = s + str(t * 900) + ' ' + " ".join(str(x) for x in next) + '\n'
+
+    return s
+
 def kregular(G,k):
     #R = G.to_undirected()
     R = G.to_undirected()
@@ -20,12 +40,13 @@ def kregular(G,k):
     return R
 
 def kconnected(R,k):
+
     RG = R.copy()
-    RG = RG.to_undirected()
-    N = nx.k_components(RG)
+    #RG = RG.to_undirected()
+    N = nx.k_components(RG.to_undirected())
     N = list(N[k][0])
 
-    G = nx.Graph()
+    G = nx.DiGraph()
     G.add_nodes_from(N)
     for u in N:
         for v in N:
@@ -33,6 +54,7 @@ def kconnected(R,k):
                 G.add_edge(u,v)
 
     G = nx.convert_node_labels_to_integers(G,first_label = 0)
+
     return G
 
 def randomDRN(O,B):
@@ -122,3 +144,65 @@ nx.write_gml(KR4, folder + 'KR4.gml')
 nx.write_gml(KR8, folder + 'KR8.gml')
 
 '''
+
+#-------------------------------------------------------------------------------
+
+#Input Original DRN
+curr = os.getcwd()
+s_spanning = ''
+s_bioDRN = ''
+s_random = ''
+s_kconnected = ''
+
+timeslots = 4
+
+original_drn_path = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/'
+bio_drn_path = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/Data'
+
+naming = '_'
+once = False
+for i in range(timeslots):
+
+    # O: original DRN
+    # B: bio-DRN
+    # S: spanning tree
+    # R: random DRN
+
+    os.chdir(original_drn_path)
+    O = nx.read_gml('Orig_NepalDRN_' + str(i * 900) + '.gml')
+    O = rename_graph(O)
+
+    if not once:
+        naming = naming + str(len(O))
+        once = True
+
+    os.chdir(bio_drn_path)
+    B = nx.read_gml('GBD_' + str(i * 900) + '.gml')
+    B = rename_graph(B)
+
+    R = randomDRN(O,B)
+    S = spanning(R)
+    K = kconnected(R, 2)
+
+    s_spanning = neighbor_list(S,s_spanning,i)
+    s_random = neighbor_list(R,s_random,i)
+    s_bioDRN = neighbor_list(B,s_bioDRN,i)
+    s_kconnected = neighbor_list(K,s_kconnected,i)
+
+os.chdir(bio_drn_path)
+
+f_spanning = open('s' + naming + '.txt','w')
+f_random = open('r' + naming + '.txt','w')
+f_bioDRN = open('b' + naming + '.txt','w')
+f_kconnected = open('k2' + naming + '.txt','w')
+
+f_spanning.write(s_spanning)
+f_random.write(s_random)
+f_bioDRN.write(s_bioDRN)
+f_kconnected.write(s_kconnected)
+
+f_spanning.close()
+f_random.close()
+f_bioDRN.close()
+f_kconnected.close()
+
