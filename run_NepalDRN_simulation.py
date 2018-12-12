@@ -17,11 +17,13 @@ for option in range(6, 7):
         neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
         setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
         failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
 
         # loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
         # neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
         # setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
         # failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        # core_setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
 
         with open("constants.py", "r") as f:
             lines = f.readlines()
@@ -33,6 +35,7 @@ for option in range(6, 7):
                     ("loc_des_folder" not in line) and \
                     ("neigh_des_folder" not in line) and \
                     ("setting_directory" not in line) and \
+                    ("core_setting_directory" not in line) and \
                     ("failed_node_folder" not in line) and \
                         ("no_of_PoI" not in line):
 
@@ -43,6 +46,7 @@ for option in range(6, 7):
             f.write("loc_des_folder = '" + str(loc_des_folder) + "'\n")
             f.write("neigh_des_folder = '" + str(neigh_des_folder) + "'\n")
             f.write("setting_directory = '" + str(setting_directory) + "'\n")
+            f.write("core_setting_directory = '" + str(core_setting_directory) + "'\n")
             f.write("failed_node_folder = '" + str(failed_node_folder) + "'\n")
             f.write("no_of_PoI = " + str(no_of_PoI) + "\n")
             #f.write("max_S_in_PoI = " + str(max_S_in_PoI) + "\n")

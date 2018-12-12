@@ -66,4 +66,5 @@ loc_des_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/6_0/'
 neigh_des_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/6_0/'
 setting_directory = '/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/6_0/'
 failed_node_folder = '/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/6_0/'
+setting_directory = '/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/'
 no_of_PoI = 3

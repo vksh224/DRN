@@ -19,8 +19,6 @@ Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 print("CC PoI Vol S: ", len(CC_locs), len(PoI_locs), len(Vol_locs), len(S_locs))
 
-core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
-
 #setting_files = os.listdir(setting_directory)
 sample_setting_file = core_setting_directory + "bhaktapur_origDRN_200.txt"
 
