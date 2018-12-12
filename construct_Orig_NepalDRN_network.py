@@ -113,7 +113,7 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
                 if ((line1_arr[1] in Vol_IDs and line2_arr[1] in PoI_IDs) or \
                     (line1_arr[1] in Vol_IDs and line2_arr[1] in Vol_IDs) or \
                     (line1_arr[1] in Vol_IDs and line2_arr[1] in S_IDs)) and \
-                    euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= vol_range:
+                    euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= tower_range:
                     does_exist_exists = True
 
                 #S - PoI, S - Vol, S-S
@@ -151,6 +151,8 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
     return G, sparseG, real_world_G
 
 #Main Starts here
+
+print("Directory", directory)
 data_directory = directory + "Data/"
 plot_directory = directory + "Plot/"
 
@@ -234,8 +236,8 @@ for t in range(start_time, end_time, network_construction_interval):
 
     nx.write_gml(G, directory + "Orig_NepalDRN_" + str(t) + ".gml")
     # nx.write_gml(sparseG, directory + "Sparse_Orig_NepalDRN_" + str(t) + ".gml")
-    if t == 0:
-        plot_graph(G, plot_directory + "O_" + str(t) + "_")
-        plot_graph(sparseG, plot_directory + "SparseO_" + str(t)+ "_")
+    # if t == 0:
+    #     plot_graph(G, plot_directory + "O_" + str(t) + "_")
+    #     plot_graph(sparseG, plot_directory + "SparseO_" + str(t)+ "_")
 
 f.close()

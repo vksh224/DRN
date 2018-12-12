@@ -390,6 +390,9 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
 '''
 
 #Main starts here
+#root_directory = "Bhaktapur_0/"
+#directory = "Bhaktapur_0/1/"
+
 data_directory = directory + "Data/"
 plot_directory = directory + "Plot/"
 CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
@@ -490,12 +493,12 @@ for t in range(start_time, end_time, network_construction_interval):
     nx.write_gml(GBD, data_directory + 'GBD_' + str(t) + '.gml')
     nx.write_gml(G, data_directory + 'refG.gml')
 
-    if t == 0:
-        plot_deg_dist(GBD, plot_directory + 'GBD_deg_' + str(t))
-        plot_graph(GBD, plot_directory + "GBD_" + str(t))
-
-        plot_deg_dist(G, plot_directory + 'refG_deg_' + str(t))
-        plot_graph(G, plot_directory + "refG_" + str(t))
+    # if t == 0:
+    #     plot_deg_dist(GBD, plot_directory + 'GBD_deg_' + str(t))
+    #     plot_graph(GBD, plot_directory + "GBD_" + str(t))
+    #
+    #     plot_deg_dist(G, plot_directory + 'refG_deg_' + str(t))
+    #     plot_graph(G, plot_directory + "refG_" + str(t))
 
 f.close()
 

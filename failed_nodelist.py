@@ -12,7 +12,7 @@ timeslots = 13
 #Percentage of nodes failed
 p = 0.02
 
-s = ''
+s = '0 ' + str(total_simulation_time) + "\n"
 r = []
 
 #Input Original DRN
@@ -23,11 +23,11 @@ if not os.path.exists(failed_node_folder):
 
 G = nx.read_gml(directory + 'Orig_NepalDRN_900.gml')
 
-N = G.nodes()
+N = [i for i in range(1, len(G.nodes()))]
 n = len(N)
 print ('Number of nodes:',n)
 
-for i in range(timeslots):
+for i in range(1, timeslots):
 
     r.extend(np.random.choice(N,size = int(p * n),replace = False))
     s = s + str(i * 900) + ' ' + " ".join(str(x) for x in r) + '\n'

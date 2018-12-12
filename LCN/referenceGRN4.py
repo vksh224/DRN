@@ -527,8 +527,8 @@ coor.append(pickle.load(open('../Bhaktapur/Data/PoI_locs.p', 'rb')))
 coor.append(pickle.load(open('../Bhaktapur/Data/Vol_locs.p', 'rb')))
 coor.append(pickle.load(open('../Bhaktapur/Data/S_locs.p', 'rb')))
 
-plot_deg_dist(gD, 'Plots/Orig_NepalDRN_degree')
-plot_graph(gD, "Plots/Orig_NepalDRN")
+#plot_deg_dist(gD, 'Plots/Orig_NepalDRN_degree')
+#plot_graph(gD, "Plots/Orig_NepalDRN")
 
 print("Number of nodes in DRN graph:", len(gD))
 print("Number of edges in DRN graph:", len(gD.edges()))
@@ -569,8 +569,8 @@ print("Number of edges in BIO-DRN graph:", len(mgD.edges()))
 print("Is Bio-DRN connected?", nx.is_connected(mgD.to_undirected()))
 #print("Largest connected component", len(list(nx.connected_component_subgraphs(mgD.to_undirected()))))
 
-plot_deg_dist(mgD, 'Plots/notFinal_bio_degree')
-plot_graph(mgD, "Plots/notFinal_bio")
+#plot_deg_dist(mgD, 'Plots/notFinal_bio_degree')
+#plot_graph(mgD, "Plots/notFinal_bio")
 
 mgD = supplement(mgD, gD, hD)
 print ("FINAL NODE COUNT:", len(mgD))
@@ -579,8 +579,8 @@ print("Is Bio-DRN connected after supplementary step?", nx.is_connected(mgD.to_u
 
 #print(mgD.nodes())
 
-plot_deg_dist(mgD, 'Plots/bio_final_degree')
-plot_graph(mgD, "Plots/bio_final")
+#plot_deg_dist(mgD, 'Plots/bio_final_degree')
+#plot_graph(mgD, "Plots/bio_final")
 
 '''
 while(True):
