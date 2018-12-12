@@ -6,7 +6,7 @@ import pickle
 count_PoI = 3
 
 #option - high - More PoIs
-for option in range(0, 2):
+for option in range(0, 1):
     for run in range(0, 5):
 
         no_of_PoI = count_PoI + random.randint(option, (2*option))
@@ -14,15 +14,15 @@ for option in range(0, 2):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
 
-        # loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(run) + "/"
-        # neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(run) + "/"
-        # setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(run) + "/"
-        # failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/FailedNodeList/" + str(run) + "/"
+        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(run) + "/"
+        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(run) + "/"
+        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(run) + "/"
+        failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/FailedNodeList/" + str(run) + "/"
 
-        loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
-        neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
-        setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
-        failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        # loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        # neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        # setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        # failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
 
         with open("constants.py", "r") as f:
             lines = f.readlines()
@@ -51,8 +51,8 @@ for option in range(0, 2):
         #TODO: Run one python file at any given time - because of the python version issue
         # os.system('python construct_Orig_NepalDRN.py')
         # os.system('python construct_Orig_NepalDRN_network.py')
-        # os.system('python create_ONE_setting_file.py')
-        os.system('python3 construct_Bio_NepalDRN.py')
+        os.system('python create_ONE_setting_new.py ' + str(option) + " " + str(run))
+        # os.system('python3 construct_Bio_NepalDRN.py')
 
 '''
 def generate_GRN_edge_directions_reversed(input_grn):
