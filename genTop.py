@@ -191,7 +191,7 @@ for t in range(0, total_simulation_time, network_construction_interval):
     s_k4 = neighbor_list(K4, s_k4, t)
     # s_k8 = neighbor_list(K8, s_k8, t)
 
-    #TODO: These graphs need to be converted to ONE simulator aligned
+    #TODO: These graphs need to be converted to ONE simulator specific (See lines 450-455 in construct_Bio_NepalDRN.py)
     # For instance, there exists no direct link between CC 0 and PoI 1, but it is through multiple responders, say 9, 10, and 11
     # then, the link 0-1 in Orig-DRN/Bio-DRN, is equivalent to 0-9, 0-10, 0-11, 1-9, 1-10, 1-11 (if all all 9, 10 and 11 visit both 0 and 1)
     real_world_SG = convert_to_real_world_DRN(s_spanning)

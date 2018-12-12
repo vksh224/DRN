@@ -53,23 +53,23 @@ for option in range(6, 7):
 
         print("============ Option: " + str(option) + " Run: " + str(run) + " ============ ")
 
-        # #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
-        # os.system('python construct_Orig_NepalDRN.py')
-        #
-        # #Create Original DRN at each "network_construction_interval" until "total_simulation_time"
-        # os.system('python construct_Orig_NepalDRN_network.py')
-        #
-        # #Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
-        # os.system('python3 construct_Bio_NepalDRN.py')
+        #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
+        os.system('python construct_Orig_NepalDRN.py')
+
+        #Create Original DRN at each "network_construction_interval" until "total_simulation_time"
+        os.system('python construct_Orig_NepalDRN_network.py')
+
+        #Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
+        os.system('python3 construct_Bio_NepalDRN.py')
 
         # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
-        os.system('python3 genTop.py')
+        # os.system('python3 genTop.py')
 
-        # #Create failed node list
-        # os.system('python3 failed_nodelist.py')
-        #
-        # # Create ONE simulator setting file
-        # os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
+        #Create failed node list
+        os.system('python3 failed_nodelist.py')
+
+        # Create ONE simulator setting file
+        os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
 
 
 
