@@ -1,22 +1,28 @@
 import os
+import random
 import networkx as nx
 import pickle
 
 count_PoI = 3
-min_S_in_PoI = 15
 
 #option - high - More PoIs
-for option in range(1, 3):
-    for run in range(1, 3):
+for option in range(0, 2):
+    for run in range(0, 5):
 
-        no_of_PoI = count_PoI + 2 * option
-        #max_S_in_PoI = 30
+        no_of_PoI = count_PoI + random.randint(option, (2*option))
 
-        root_directory = "Bhaktapur_P" + str(no_of_PoI) +"/"
+        root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
-        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(run) + "/"
-        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(run) + "/"
-        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(run) + "/"
+
+        # loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(run) + "/"
+        # neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(run) + "/"
+        # setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(run) + "/"
+        # failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/FailedNodeList/" + str(run) + "/"
+
+        loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
 
         with open("constants.py", "r") as f:
             lines = f.readlines()
@@ -28,6 +34,7 @@ for option in range(1, 3):
                     ("loc_des_folder" not in line) and \
                     ("neigh_des_folder" not in line) and \
                     ("setting_directory" not in line) and \
+                    ("failed_node_folder" not in line) and \
                     ("no_of_PoI" not in line):
 
                     f.write(line)
@@ -37,11 +44,13 @@ for option in range(1, 3):
             f.write("loc_des_folder = '" + str(loc_des_folder) + "'\n")
             f.write("neigh_des_folder = '" + str(neigh_des_folder) + "'\n")
             f.write("setting_directory = '" + str(setting_directory) + "'\n")
+            f.write("failed_node_folder = '" + str(failed_node_folder) + "'\n")
             f.write("no_of_PoI = " + str(no_of_PoI) + "\n")
             #f.write("max_S_in_PoI = " + str(max_S_in_PoI) + "\n")
 
-        os.system('python construct_Orig_NepalDRN.py')
-        os.system('python construct_Orig_NepalDRN_network.py')
+        #TODO: Run one python file at any given time - because of the python version issue
+        # os.system('python construct_Orig_NepalDRN.py')
+        # os.system('python construct_Orig_NepalDRN_network.py')
         # os.system('python create_ONE_setting_file.py')
         os.system('python3 construct_Bio_NepalDRN.py')
 
