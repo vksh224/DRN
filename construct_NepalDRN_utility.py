@@ -236,3 +236,33 @@ def plot_graph(G, filename):
     plt.draw()
     plt.savefig(filename + "_" + str(len(G.nodes())) + ".png")
     plt.close()
+
+
+#For ONE simulator
+def convert_to_real_world_DRN(G):
+    data_directory = directory + "Data/"
+    res_visiting_all_nodes_dict = pickle.load(open(data_directory + "res_visiting_all_nodes.p", "rb"))
+    node_visited_by_all_responders_dict = pickle.load(open(data_directory + "node_visited_by_all_responders.p", "rb"))
+
+    #add edges corresponding to added responders
+    for _, node_list in res_visiting_all_nodes_dict.items():
+        for u in node_list:
+            for v in node_list:
+                if u != v and G.has_edge(u, v) == True:
+
+                    #add edge between u and visiting responders
+                    for res_id in node_visited_by_all_responders_dict.get(u):
+                        if G.has_edge(res_id, u) == False:
+                            G.add_edge(res_id, u)
+
+                        if G.has_edge(u, res_id) == False:
+                            G.add_edge(u, res_id)
+
+                    #add edges between v and visiting responders
+                    for res_id in node_visited_by_all_responders_dict.get(v):
+                        if G.has_edge(res_id, v) == False:
+                            G.add_edge(res_id, v)
+
+                        if G.has_edge(v, res_id) == False:
+                            G.add_edge(v, res_id)
+    return G

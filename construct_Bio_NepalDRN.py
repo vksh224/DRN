@@ -8,34 +8,7 @@ from construct_NepalDRN_utility import plot_graph
 from degree import plot_deg_dist
 import operator
 from writeFile import *
-
-#For ONE simulator
-def convert_to_real_world_DRN(G):
-    res_visiting_all_nodes_dict = pickle.load(open(data_directory + "res_visiting_all_nodes.p", "rb"))
-    node_visited_by_all_responders_dict = pickle.load(open(data_directory + "node_visited_by_all_responders.p", "rb"))
-
-    #add edges corresponding to added responders
-    for _, node_list in res_visiting_all_nodes_dict.items():
-        for u in node_list:
-            for v in node_list:
-                if u != v and G.has_edge(u, v) == True:
-
-                    #add edge between u and visiting responders
-                    for res_id in node_visited_by_all_responders_dict.get(u):
-                        if G.has_edge(res_id, u) == False:
-                            G.add_edge(res_id, u)
-
-                        if G.has_edge(u, res_id) == False:
-                            G.add_edge(u, res_id)
-
-                    #add edges between v and visiting responders
-                    for res_id in node_visited_by_all_responders_dict.get(v):
-                        if G.has_edge(res_id, v) == False:
-                            G.add_edge(res_id, v)
-
-                        if G.has_edge(v, res_id) == False:
-                            G.add_edge(v, res_id)
-    return G
+from construct_NepalDRN_utility import convert_to_real_world_DRN
 
 def supplement(GBD,G2,t1_G2):
     D = list(set(G2.nodes()) - set(GBD.nodes()))
@@ -326,8 +299,6 @@ def generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
             D = {key: D[key] for key in D if key not in remove_keys}
 
             cnt += 1
-
-    # print(m)
 
     GBD = nx.DiGraph()
     GBD.add_nodes_from(G2.nodes())

@@ -3,27 +3,27 @@ import random
 import networkx as nx
 import pickle
 
-count_PoI = 3
+count_PoI = 5
 
 #option - high - More PoIs
 for option in range(6, 7):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI = count_PoI + random.randint(0, 1)
-    for run in range(0, 1):
+    for run in range(0, 5):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
 
-        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
-        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
-        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
-        failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
-        core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
+        # loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        # neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        # setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        # failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        # core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
 
-        # loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
-        # neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
-        # setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
-        # failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
-        # core_setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
+        loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        core_setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
 
         with open("constants.py", "r") as f:
             lines = f.readlines()
@@ -53,23 +53,23 @@ for option in range(6, 7):
 
         print("============ Option: " + str(option) + " Run: " + str(run) + " ============ ")
 
-        #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
-        os.system('python construct_Orig_NepalDRN.py')
-
-        #Create Original DRN at each "network_construction_interval" until "total_simulation_time"
-        os.system('python construct_Orig_NepalDRN_network.py')
-
-        #Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
-        os.system('python3 construct_Bio_NepalDRN.py')
+        # #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
+        # os.system('python construct_Orig_NepalDRN.py')
+        #
+        # #Create Original DRN at each "network_construction_interval" until "total_simulation_time"
+        # os.system('python construct_Orig_NepalDRN_network.py')
+        #
+        # #Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
+        # os.system('python3 construct_Bio_NepalDRN.py')
 
         # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
         os.system('python3 genTop.py')
 
-        #Create failed node list
-        os.system('python3 failed_nodelist.py')
-
-        # Create ONE simulator setting file
-        os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
+        # #Create failed node list
+        # os.system('python3 failed_nodelist.py')
+        #
+        # # Create ONE simulator setting file
+        # os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
 
 
 

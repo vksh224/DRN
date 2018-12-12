@@ -3,6 +3,7 @@ import networkx as nx
 import os
 from read_graph import plot_graph
 from constants import *
+from construct_NepalDRN_utility import convert_to_real_world_DRN
 
 def rename_graph(O):
 
@@ -190,6 +191,11 @@ for t in range(0, total_simulation_time, network_construction_interval):
     s_k4 = neighbor_list(K4, s_k4, t)
     # s_k8 = neighbor_list(K8, s_k8, t)
 
+    real_world_SG = convert_to_real_world_DRN(s_spanning)
+    real_world_RG = convert_to_real_world_DRN(s_random)
+    real_world_K2 = convert_to_real_world_DRN(s_k2)
+    real_world_K4 = convert_to_real_world_DRN(s_k4)
+
 f_spanning = open(neigh_des_folder + 'S' + naming + '.txt','w')
 f_random = open(neigh_des_folder + 'R' + naming + '.txt','w')
 #f_bioDRN = open('b' + naming + '.txt','w')
@@ -197,10 +203,10 @@ f_k2 = open(neigh_des_folder + 'K2' + naming + '.txt','w')
 f_k4 = open(neigh_des_folder + 'K4' + naming + '.txt','w')
 # f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
 
-f_spanning.write(s_spanning)
-f_random.write(s_random)
-f_k2.write(s_k2)
-f_k4.write(s_k4)
+f_spanning.write(real_world_SG)
+f_random.write(real_world_RG)
+f_k2.write(real_world_K2)
+f_k4.write(real_world_K4)
 # f_k8.write(s_k8)
 
 f_spanning.close()
