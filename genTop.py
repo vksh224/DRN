@@ -171,45 +171,44 @@ for t in range(0, total_simulation_time, network_construction_interval):
     O = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
     O = rename_graph(O)
 
-    if not once:
-        naming = naming + str(len(O))
-        once = True
+    # if not once:
+    #     naming = naming + str(len(O))
+    #     once = True
 
     B = nx.read_gml(data_directory + 'GBD_' + str(t) + '.gml')
     B = rename_graph(B)
 
     R = randomDRN(O,B)
     S = spanning(R)
-    K2 = kconnected(R, 2)
-    K4 = kconnected(R, 4)
+    K2 = kregular(R, 2)
+    K4 = kregular(R, 4)
     # K8 = kconnected(R, 8)
 
-    s_spanning = neighbor_list(S,s_spanning, t)
-    s_random = neighbor_list(R,s_random, t)
-    #s_bioDRN = neighbor_list(B,s_bioDRN, t)
-    s_k2 = neighbor_list(K2, s_k2, t)
-    s_k4 = neighbor_list(K4, s_k4, t)
-    # s_k8 = neighbor_list(K8, s_k8, t)
 
     #TODO: These graphs need to be converted to ONE simulator specific (See lines 450-455 in construct_Bio_NepalDRN.py)
     # For instance, there exists no direct link between CC 0 and PoI 1, but it is through multiple responders, say 9, 10, and 11
     # then, the link 0-1 in Orig-DRN/Bio-DRN, is equivalent to 0-9, 0-10, 0-11, 1-9, 1-10, 1-11 (if all all 9, 10 and 11 visit both 0 and 1)
-    real_world_SG = convert_to_real_world_DRN(s_spanning)
+    real_world_SG = convert_to_real_world_DRN(S)
     real_world_RG = convert_to_real_world_DRN(s_random)
     real_world_K2 = convert_to_real_world_DRN(s_k2)
     real_world_K4 = convert_to_real_world_DRN(s_k4)
 
-f_spanning = open(neigh_des_folder + 'S' + naming + '.txt','w')
-f_random = open(neigh_des_folder + 'R' + naming + '.txt','w')
-#f_bioDRN = open('b' + naming + '.txt','w')
-f_k2 = open(neigh_des_folder + 'K2' + naming + '.txt','w')
-f_k4 = open(neigh_des_folder + 'K4' + naming + '.txt','w')
+    s_spanning = neighbor_list(real_world_SG, s_spanning, t)
+    s_random = neighbor_list(real_world_RG,s_random, t)
+    s_k2 = neighbor_list(real_world_K2, s_k2, t)
+    s_k4 = neighbor_list(real_world_K4, s_k4, t)
+    # s_k8 = neighbor_list(K8, s_k8, t)
+
+f_spanning = open(neigh_des_folder + 'S_' + str(len(real_world_SG.nodes())) + '.txt','w')
+f_random = open(neigh_des_folder + 'R' + str(len(real_world_RG.nodes())) +  + '.txt','w')
+f_k2 = open(neigh_des_folder + 'K2' + str(len(real_world_K2.nodes())) + '.txt','w')
+f_k4 = open(neigh_des_folder + 'K4' + str(len(real_world_K4.nodes())) + '.txt','w')
 # f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
 
-f_spanning.write(real_world_SG)
-f_random.write(real_world_RG)
-f_k2.write(real_world_K2)
-f_k4.write(real_world_K4)
+f_spanning.write(s_spanning)
+f_random.write(f_random)
+f_k2.write(f_k2)
+f_k4.write(f_k4)
 # f_k8.write(s_k8)
 
 f_spanning.close()
