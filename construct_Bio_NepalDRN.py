@@ -385,7 +385,7 @@ t3_G2 = pickle.load(open(data_directory + "NO.p", "rb" ))
 # Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
 
 nei_o = '0 ' + str(total_simulation_time) + '\n'
-bio_neighList_filename = 'B_N' + str(num_of_nodes  + len(Res_paths)) + ".txt"
+bio_neighList_filename = 'B_' + str(num_of_nodes  + len(Res_paths)) + ".txt"
 #bio_neighList_filename = "random_Orig_DRN.txt"
 
 print("\nBio - Neighbor list filename: " + bio_neighList_filename )

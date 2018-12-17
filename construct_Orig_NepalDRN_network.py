@@ -204,7 +204,7 @@ pickle.dump(t3, open(data_directory + 'NO.p','wb'))
 #Need to create these graphs for each time interval e.g., [0, 900; 900, 1800; 1800, 2700; 2700, 3600]
 
 nei_o = '0 ' + str(total_simulation_time) + '\n'
-orig_neighList_filename = 'O_N' + str(num_of_nodes + len(Res_IDs)) + ".txt"
+orig_neighList_filename = 'O_' + str(num_of_nodes + len(Res_IDs)) + ".txt"
 
 print("\nOrig - Neighbor list filename: " + orig_neighList_filename)
 

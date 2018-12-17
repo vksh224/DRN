@@ -75,7 +75,7 @@ if debug_mode:
 if debug_mode:
     print("V ", num_of_nodes)
 
-ext_filename = loc_des_folder + 'ext_position_' + str(num_of_nodes)+ '.txt'
+ext_filename = loc_des_folder + 'ext_position_' + str(num_of_nodes + len(Res_path_list))+ '.txt'
 print("Ext file name: ", ext_filename)
 
 f = open(ext_filename,'w')
