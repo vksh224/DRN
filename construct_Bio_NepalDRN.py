@@ -5,7 +5,6 @@ from blondel import *
 from find_tiers import *
 from constants import *
 from construct_NepalDRN_utility import plot_graph
-from degree import plot_deg_dist
 import operator
 from writeFile import *
 from construct_NepalDRN_utility import convert_to_real_world_DRN

@@ -83,7 +83,7 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 
     #Add edges between each pair of nodes for the given time interval
-    with open(loc_des_folder + "ext_position_" + str(V) + ".txt", "r") as f:
+    with open(loc_des_folder + "ext_position_" + str(V + len(Res_paths)) + ".txt", "r") as f:
         node_pos_lines = f.readlines()[1:]
 
     for line1 in node_pos_lines:
