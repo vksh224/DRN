@@ -2,8 +2,10 @@ import random
 import networkx as nx
 import os
 from read_graph import plot_graph
+import pickle
 from constants import *
 from construct_NepalDRN_utility import convert_to_real_world_DRN
+from writeFile import writeF
 
 def rename_graph(O):
 
@@ -14,16 +16,16 @@ def rename_graph(O):
     O = nx.relabel_nodes(O,m)
     return O
 
-def neighbor_list(G,s,t):
-
-    #print (G.nodes())
-    for u in sorted(G.nodes()):
-        next = [u]
-        next.extend(G.successors(u))
-
-        s = s + str(t) + ' ' + " ".join(str(x) for x in next) + '\n'
-
-    return s
+# def neighbor_list(G,s,t):
+#
+#     #print (G.nodes())
+#     for u in sorted(G.nodes()):
+#         next = [u]
+#         next.extend(G.successors(u))
+#
+#         s = s + str(t) + ' ' + " ".join(str(x) for x in next) + '\n'
+#
+#     return s
 
 def kregular(G,k):
     #R = G.to_undirected()
@@ -152,6 +154,20 @@ nx.write_gml(KR8, folder + 'KR8.gml')
 print("\n ======== GenTop: " + directory)
 data_directory = directory + 'Data/'
 
+CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
+PoI_locs = pickle.load(open(data_directory + "PoI_locs.p", "rb"))
+Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
+S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
+Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
+
+num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
+
+f_spanning = open(neigh_des_folder + 'S_' + str(num_of_nodes + len(Res_paths)) + ".txt",'w')
+f_random = open(neigh_des_folder + 'R_' + str(num_of_nodes + len(Res_paths)) + '.txt','w')
+f_k2 = open(neigh_des_folder + 'K2_' + str(num_of_nodes + len(Res_paths)) + '.txt','w')
+f_k4 = open(neigh_des_folder + 'K4_' + str(num_of_nodes + len(Res_paths)) + '.txt','w')
+# f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
+
 
 s_spanning = '0 ' + str(total_simulation_time) + "\n"
 s_random = '0 ' + str(total_simulation_time) + "\n"
@@ -189,27 +205,24 @@ for t in range(0, total_simulation_time, network_construction_interval):
     # For instance, there exists no direct link between CC 0 and PoI 1, but it is through multiple responders, say 9, 10, and 11
     # then, the link 0-1 in Orig-DRN/Bio-DRN, is equivalent to 0-9, 0-10, 0-11, 1-9, 1-10, 1-11 (if all all 9, 10 and 11 visit both 0 and 1)
     real_world_SG = convert_to_real_world_DRN(S)
-    real_world_RG = convert_to_real_world_DRN(s_random)
-    real_world_K2 = convert_to_real_world_DRN(s_k2)
-    real_world_K4 = convert_to_real_world_DRN(s_k4)
+    real_world_RG = convert_to_real_world_DRN(R)
+    real_world_K2 = convert_to_real_world_DRN(K2)
+    real_world_K4 = convert_to_real_world_DRN(K4)
 
-    s_spanning = neighbor_list(real_world_SG, s_spanning, t)
-    s_random = neighbor_list(real_world_RG,s_random, t)
-    s_k2 = neighbor_list(real_world_K2, s_k2, t)
-    s_k4 = neighbor_list(real_world_K4, s_k4, t)
+    s_spanning = writeF(real_world_SG, t)
+    f_spanning.write(s_spanning)
+
+    s_random = writeF(real_world_RG, t)
+    f_random.write(s_random)
+
+    s_k2 = writeF(real_world_K2, t)
+    f_k2.write(s_k2)
+
+    s_k4 = writeF(real_world_K4, t)
+    f_k4.write(s_k4)
+
     # s_k8 = neighbor_list(K8, s_k8, t)
-
-f_spanning = open(neigh_des_folder + 'S_' + str(len(real_world_SG.nodes())) + '.txt','w')
-f_random = open(neigh_des_folder + 'R' + str(len(real_world_RG.nodes())) +  + '.txt','w')
-f_k2 = open(neigh_des_folder + 'K2' + str(len(real_world_K2.nodes())) + '.txt','w')
-f_k4 = open(neigh_des_folder + 'K4' + str(len(real_world_K4.nodes())) + '.txt','w')
-# f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
-
-f_spanning.write(s_spanning)
-f_random.write(f_random)
-f_k2.write(f_k2)
-f_k4.write(f_k4)
-# f_k8.write(s_k8)
+    # f_k8.write(s_k8)
 
 f_spanning.close()
 f_random.close()
