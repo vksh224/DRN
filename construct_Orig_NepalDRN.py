@@ -17,13 +17,13 @@ data_directory = directory + "Data/"
 plot_directory = directory + "Plot/"
 
 if not os.path.exists(data_directory):
-    os.mkdir(data_directory)
+    os.makedirs(data_directory)
 
 if not os.path.exists(plot_directory):
-    os.mkdir(plot_directory)
+    os.makedirs(plot_directory)
 
 if not os.path.exists(loc_des_folder):
-    os.mkdir(loc_des_folder)
+    os.makedirs(loc_des_folder)
 
 CC_locs, PoI_locs, PoI_radii, Vol_count_In_PoI, Res_path_list, Vol_path_list, S_locs, S_count_in_PoI, Vol_locs = initial_setup()
 num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)

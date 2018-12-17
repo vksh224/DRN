@@ -22,11 +22,11 @@ print("CC PoI Vol S: ", len(CC_locs), len(PoI_locs), len(Vol_locs), len(S_locs))
 #setting_files = os.listdir(setting_directory)
 sample_setting_file = core_setting_directory + "bhaktapur_origDRN_200.txt"
 
-if not os.path.exists(setting_directory):
-    os.mkdir(setting_directory)
+# if not os.path.exists(setting_directory):
+#     os.mkdir(setting_directory)
 
 option_run = str(option) + "_" + str(run)
-file = open(setting_directory + "setting_" + option_run + ".txt", "w")
+file = open(core_setting_directory + "setting_" + option_run + ".txt", "w")
 
 index = 0
 f = open(sample_setting_file, "r")

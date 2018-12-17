@@ -3,13 +3,13 @@ import random
 import networkx as nx
 import pickle
 
-count_PoI = 5
+count_PoI = 4
 
 #option - high - More PoIs
 for option in range(6, 7):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI = count_PoI + random.randint(0, 1)
-    for run in range(0, 5):
+    for run in range(0, 2):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
 
@@ -63,13 +63,18 @@ for option in range(6, 7):
         os.system('python3 construct_Bio_NepalDRN.py')
 
         # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
-        # os.system('python3 genTop.py')
+        os.system('python3 genTop.py')
 
         #Create failed node list
         os.system('python3 failed_nodelist.py')
 
+        # Plot Orig and Bio-DRN degree distribution
+        os.system('python3 degree.py ')
+
         # Create ONE simulator setting file
         os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
+
+
 
 
 

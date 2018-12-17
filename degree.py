@@ -1,5 +1,9 @@
+import sys
+
 import matplotlib.pyplot as plt
 import networkx as nx
+import os
+from constants import *
 
 def deg(G):
 
@@ -33,12 +37,20 @@ def plot_deg_dist(G, filename):
     plt.savefig(filename + ".png")
     plt.close()
 
-# folder = "kathmandu/"
-# inputDRN = nx.read_gml(folder + 'inputDRN.gml')
-# plot_deg_dist(inputDRN, folder + "inputDRN")
-#
-# bioDRN = nx.read_gml(folder + 'GBD.gml')
-# plot_deg_dist(bioDRN, folder + "bioDRN")
+
+#Main starts here
+plot_directory = directory + "Plot/"
+data_directory = directory +"Data/"
+if not os.path.exists(plot_directory):
+    os.makedirs(plot_directory)
+
+for time in range(0, total_simulation_time, network_construction_interval):
+    inputDRN = nx.read_gml(directory + "Orig_NepalDRN_" + str(time) + ".gml")
+    plot_deg_dist(inputDRN, plot_directory + "Orig_deg_" + str(time))
+
+    bioDRN = nx.read_gml(data_directory + 'GBD_' + str(time) + '.gml')
+    plot_deg_dist(bioDRN, plot_directory + "GBD_deg_" + str(time))
+
 #
 # refG = nx.read_gml(folder + 'refG.gml')
 # plot_deg_dist(refG, folder + "refG")
