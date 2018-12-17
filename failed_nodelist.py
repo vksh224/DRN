@@ -10,7 +10,7 @@ s = '0 ' + str(total_simulation_time) + "\n"
 r = []
 
 if not os.path.exists(failed_node_folder):
-    os.mkdir(failed_node_folder)
+    os.makedirs(failed_node_folder)
 
 data_directory = directory + "Data/"
 
