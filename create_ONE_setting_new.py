@@ -16,6 +16,7 @@ Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
 S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
 Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 
+#This is not consistent with V from other files. Here, it includes the responders too
 V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
 print("CC PoI Vol S: ", len(CC_locs), len(PoI_locs), len(Vol_locs), len(S_locs))
 
