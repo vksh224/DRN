@@ -132,6 +132,7 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
     print("G: # Edges", (G.edges([0,1])))
     print("G: Density:", float(len(G.edges())) / (len(G) * (len(G) - 1)))
     print("Is Orig-DRN connected: ", nx.is_connected(G.to_undirected()))
+    # print("Is G undirected", G.is_directed())
 
     print("\nReal world G: # Nodes: " + str(len(real_world_G)))
     print("Real world G: # Edges: ", len(real_world_G.edges()))

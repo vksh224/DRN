@@ -113,8 +113,8 @@ for t in range (0, total_simulation_time, snapshot_time_interval):
         node_id += 1
 
     #Note: Responders get the last few IDS in the ONE simulator
-    S_locs = initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI)
-    #########S_locs = update_survivor_loc(PoI_locs, PoI_radii, S_locs, t, t + snapshot_time_interval)
+    # S_locs = initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI)
+    S_locs = update_survivor_loc (PoI_locs, PoI_radii, S_locs)
     Vol_locs = update_volunteer_loc(Vol_locs, Vol_path_list, t, t + snapshot_time_interval)
 
 f.close()

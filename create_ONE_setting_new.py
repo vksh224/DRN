@@ -16,7 +16,7 @@ Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
 S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
 Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 
-V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
+V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
 print("CC PoI Vol S: ", len(CC_locs), len(PoI_locs), len(Vol_locs), len(S_locs))
 
 #setting_files = os.listdir(setting_directory)
@@ -55,7 +55,12 @@ while len(lines) > index:
             file.write("ExternalMovement.file = NodePosition/ext_position_" + str(V) + '.txt\n')
 
         elif "Group.neighborListFile" in lines[index]:
-            file.write("Group.neighborListFile = [NeighborList/" + option_run + "/O_N" + str(V + len(Res_paths)) + ".txt; NeighborList/" + option_run + "/B_N" + str(V + len(Res_paths)) + '.txt] \n')
+            file.write("Group.neighborListFile = [NeighborList/" + option_run + "/O_" + str(
+                V) + ".txt; NeighborList/" + option_run + "/B_" + str(
+                V) + '.txt; NeighborList/' + option_run + "/S_" + str(
+                V) + '.txt; NeighborList/' + option_run + "/R_" + str(
+                V) + '.txt; NeighborList/' + option_run + "/K2_" + str(
+                V) + '.txt; NeighborList/' + option_run + "/K4_" + str(V) + '.txt] \n')
 
         elif "Group.failedNodeListFile" in lines[index]:
             file.write("Group.failedNodeListFile = FailedNodeList/" + option_run + "/failed_nodelist" + str(V) + '.txt\n')
