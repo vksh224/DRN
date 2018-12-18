@@ -64,7 +64,7 @@ while len(lines) > index:
                 V) + '.txt; NeighborList/' + option_run + "/K4_" + str(V) + '.txt] \n')
 
         elif "Group.failedNodeListFile" in lines[index]:
-            file.write("Group.failedNodeListFile = FailedNodeList/" + option_run + "/failed_nodelist" + str(V) + '.txt\n')
+            file.write("Group.failedNodeListFile = FailedNodeList/" + option_run + "/failed_nodelist_" + str(V) + '.txt\n')
 
         else:
             file.write(lines[index])
