@@ -15,7 +15,7 @@ snapshot_time_interval = 300
 total_simulation_time = 3600
 
 #15 minutes
-network_construction_interval = 900
+network_construction_interval = 1800
 
 no_of_CC = 1
 no_of_R = 30
@@ -23,14 +23,14 @@ no_of_R = 30
 min_no_PoIs_for_R = 2
 max_no_PoI_for_R = 5
 
-min_V_in_PoI = 2
-max_V_in_PoI = 4
+min_V_in_PoI = 0
+max_V_in_PoI = 3
 
 min_S_in_PoI = 20
-max_S_in_PoI = 30
+max_S_in_PoI = 50
 
-min_PoI_radius= 200
-max_PoI_radius = 300
+min_PoI_radius = 200
+max_PoI_radius = 350
 
 bt_range = 150
 tower_range = 500
@@ -50,8 +50,8 @@ max_side_angle = 360
 #------------------
 
 moving_S_prob = 0.5
-min_S_speed = 0.15
-max_S_speed = 0.25
+min_S_speed = 0.5
+max_S_speed = 1.5
 
 #In m/s
 min_V_speed = 1
@@ -60,11 +60,11 @@ max_V_speed = 5
 #Percentage of nodes failed
 p = 0.02
 
-root_directory = 'Bhaktapur_6/'
-directory = 'Bhaktapur_6/1/'
-loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/6_1/'
-neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/6_1/'
-setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/6_1/'
+root_directory = 'Bhaktapur_1/'
+directory = 'Bhaktapur_1/0/'
+loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/1_0/'
+neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/1_0/'
+setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/1_0/'
 core_setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/6_1/'
+failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/1_0/'
 no_of_PoI = 5
