@@ -53,9 +53,9 @@ index = 0 #for old file
 while len(lines) > index:
     if index < dms_index:
         if "ExternalMovement.file" in lines[index]:
-            file.write("ExternalMovement.file = NodePosition/ext_position_" + str(V) + '.txt\n')
+            file.write("ExternalMovement.file = NodePosition/" + option_run + "/ext_position_" + str(V) + '.txt\n')
 
-        elif "Group.neighborListFile" in lines[index]:
+        elif "Group.neighborListFile =" in lines[index]:
             file.write("Group.neighborListFile = [NeighborList/" + option_run + "/O_" + str(
                 V) + ".txt; NeighborList/" + option_run + "/B_" + str(
                 V) + '.txt; NeighborList/' + option_run + "/S_" + str(
@@ -65,6 +65,9 @@ while len(lines) > index:
 
         elif "Group.failedNodeListFile" in lines[index]:
             file.write("Group.failedNodeListFile = FailedNodeList/" + option_run + "/failed_nodelist_" + str(V) + '.txt\n')
+
+        elif "Group.samplingInterval" in lines[index]:
+            file.write("Group.samplingInterval = " + str(network_construction_interval) + "\n")
 
         else:
             file.write(lines[index])
