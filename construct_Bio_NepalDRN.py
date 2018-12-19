@@ -360,6 +360,8 @@ def generateBioDRN(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2):
     return GBD
 '''
 
+#Moved this code to genTop.py
+'''
 #Main starts here
 print("\n ======== Construct Bio-DRN: " + directory)
 
@@ -394,11 +396,12 @@ f.write(nei_o)
 #network_construction_interval = snapshot_time_interval
 
 # Create static original graph snapshots for given time interval
-for t in range(0, total_simulation_time, network_construction_interval):
+for t in range(network_construction_interval, total_simulation_time, network_construction_interval):
     print("\n======= Start Time : " + str(t) + " ======== ")
 
-    G2 = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
+    G2 = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t - network_construction_interval) + '.gml')
     G2 = nx.convert_node_labels_to_integers(G2, first_label = 0)
+
     #G2 = nx.erdos_renyi_graph(n = 100, p = 0.3, directed = True)
 
     # t1_G2 = [0]
@@ -464,7 +467,7 @@ for t in range(0, total_simulation_time, network_construction_interval):
     #     plot_graph(G, plot_directory + "refG_" + str(t))
 
 f.close()
-
+'''
 
 
 

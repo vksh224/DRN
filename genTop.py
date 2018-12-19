@@ -5,6 +5,8 @@ from read_graph import plot_graph
 import pickle
 from constants import *
 from construct_NepalDRN_utility import convert_to_real_world_DRN
+from construct_Bio_NepalDRN import *
+
 from writeFile import writeF
 
 def rename_graph(O):
@@ -16,16 +18,59 @@ def rename_graph(O):
     O = nx.relabel_nodes(O,m)
     return O
 
-# def neighbor_list(G,s,t):
-#
-#     #print (G.nodes())
-#     for u in sorted(G.nodes()):
-#         next = [u]
-#         next.extend(G.successors(u))
-#
-#         s = s + str(t) + ' ' + " ".join(str(x) for x in next) + '\n'
-#
-#     return s
+def bioDRN(G2, t1_G2, t2_G2, t3_G2, t):
+    # G1 = nx.read_gml(GRN_directory + 'Yeast_Ordered.gml')
+    G1 = nx.read_gml('this_grn.gml')
+    # G1 = G1.reverse()
+
+    print("\n======= Start Time : " + str(t) + " ======== ")
+
+    print("Number of nodes in DRN", len(G2))
+    print ("Number of edges in DRN", len(G2.edges()))
+    print("Density:", float(len(G2.edges())) / (len(G2) * (len(G2) - 1)))
+    print("Is Orig-DRN connected: ", nx.is_connected(G2.to_undirected()))
+
+    # Calculate node motif centralities of the two graphs
+    # MC_G1 = pickle.load(open(GRN_directory + "NMC_Y.p", "rb"))
+    MC_G1 = pickle.load(open("GRN_Centrality.p", "rb"))
+
+    # MC_G1 = motif(G1)
+    MC_G2 = motif(G2)
+    # print ("Node motif centrality for DRN", MC_G2)
+
+    G = ref_GRN_old(G1, G2, MC_G1, MC_G2, t1_G2, t2_G2, t3_G2)
+    # G = G1.copy()
+
+    # degree_dist(G,'ref')
+    print ("Ref GRN - Nodes:", len(G.nodes()))
+    print ("Ref GRN - Edges:", len(G.edges()))
+    # MC_G = motif(G)
+
+    t1_G, t2_G, t3_G = tiers(G, None, [], [], [])
+
+    print ("GRN tiers ", len(t1_G), len(t2_G), len(t3_G))
+    print ("DRN tiers ", len(t1_G2), len(t2_G2), len(t3_G2))
+
+    # G is reference GRN, and G2 is DRN
+    GBD = generateBioDRN_fast(G, G2, t1_G, t2_G, t3_G, t1_G2, t2_G2, t3_G2)
+
+    print ("NOT FINAL NODE COUNT:", len(GBD))
+    print ("NOT FINAL EDGE COUNT:", len(GBD.edges()))
+
+    # Address isolated or unmapped nodes
+    GBD = supplement(GBD, G2, t1_G2)
+
+    print ("FINAL NODE COUNT:", len(GBD))
+    print ("FINAL EDGE COUNT:", len(GBD.edges()))
+
+    print("Is Bio-DRN connected after supplementary step?", nx.is_connected(GBD.to_undirected()))
+
+    real_world_G = convert_to_real_world_DRN(GBD)
+    print ("Real world G: #nodes:", len(real_world_G))
+    print ("Real world G: #edges:", len(real_world_G.edges()))
+
+    return GBD
+
 
 def kregular(G,k):
     #R = G.to_undirected()
@@ -160,40 +205,45 @@ Vol_locs = pickle.load(open(data_directory + "Vol_locs.p", "rb"))
 S_locs = pickle.load(open(data_directory + "S_locs.p", "rb"))
 Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 
-num_of_nodes = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
+V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
 
-f_spanning = open(neigh_des_folder + 'S_' + str(num_of_nodes + len(Res_paths)) + ".txt",'w')
-f_random = open(neigh_des_folder + 'R_' + str(num_of_nodes + len(Res_paths)) + '.txt','w')
-f_k2 = open(neigh_des_folder + 'K2_' + str(num_of_nodes + len(Res_paths)) + '.txt','w')
-f_k4 = open(neigh_des_folder + 'K4_' + str(num_of_nodes + len(Res_paths)) + '.txt','w')
-# f_k8 = open(neigh_des_folder + 'K8' + naming + '.txt','w')
+f_bio = open(neigh_des_folder + 'B_' + str(V) + ".txt", 'w')
+f_spanning = open(neigh_des_folder + 'S_' + str(V) + ".txt",'w')
+f_random = open(neigh_des_folder + 'R_' + str(V) + '.txt','w')
+f_k2 = open(neigh_des_folder + 'K2_' + str(V) + '.txt','w')
+f_k4 = open(neigh_des_folder + 'K4_' + str(V) + '.txt','w')
+# f_k8 = open(neigh_des_folder + 'K8' + str(V) + '.txt','w')
 
-
+s_bio = '0 ' + str(total_simulation_time) + '\n'
 s_spanning = '0 ' + str(total_simulation_time) + "\n"
 s_random = '0 ' + str(total_simulation_time) + "\n"
 s_k2 = '0 ' + str(total_simulation_time) + "\n"
 s_k4 = '0 ' + str(total_simulation_time) + "\n"
 # s_k8 = '0 ' + str(total_simulation_time) + "\n"
 
-naming = '_'
+f_bio.write(s_bio)
+f_spanning.write(s_spanning)
+f_random.write(s_random)
+f_k2.write(s_k2)
+f_k4.write(s_k4)
+
+#Only for Bio-DRN
+t1_G2 = pickle.load(open(data_directory + "HO.p", "rb"))
+t2_G2 = pickle.load(open(data_directory + "SO.p", "rb"))
+t3_G2 = pickle.load(open(data_directory + "NO.p", "rb"))
+
 once = False
-for t in range(0, total_simulation_time, network_construction_interval):
+for t in range(network_construction_interval, total_simulation_time, network_construction_interval):
 
     # O: original DRN
     # B: bio-DRN
     # S: spanning tree
     # R: random DRN
 
-    O = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
+    O = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t - network_construction_interval) + '.gml')
     O = rename_graph(O)
 
-    # if not once:
-    #     naming = naming + str(len(O))
-    #     once = True
-
-    B = nx.read_gml(data_directory + 'GBD_' + str(t) + '.gml')
-    B = rename_graph(B)
-
+    B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
     R = randomDRN(O,B)
     S = spanning(R)
     K2 = kregular(R, 2)
@@ -204,10 +254,14 @@ for t in range(0, total_simulation_time, network_construction_interval):
     #TODO: These graphs need to be converted to ONE simulator specific (See lines 450-455 in construct_Bio_NepalDRN.py)
     # For instance, there exists no direct link between CC 0 and PoI 1, but it is through multiple responders, say 9, 10, and 11
     # then, the link 0-1 in Orig-DRN/Bio-DRN, is equivalent to 0-9, 0-10, 0-11, 1-9, 1-10, 1-11 (if all all 9, 10 and 11 visit both 0 and 1)
+    real_world_B = convert_to_real_world_DRN(B)
     real_world_SG = convert_to_real_world_DRN(S)
     real_world_RG = convert_to_real_world_DRN(R)
     real_world_K2 = convert_to_real_world_DRN(K2)
     real_world_K4 = convert_to_real_world_DRN(K4)
+
+    s_bio = writeF(real_world_B, t)
+    f_bio.write(s_bio)
 
     s_spanning = writeF(real_world_SG, t)
     f_spanning.write(s_spanning)
@@ -224,6 +278,7 @@ for t in range(0, total_simulation_time, network_construction_interval):
     # s_k8 = neighbor_list(K8, s_k8, t)
     # f_k8.write(s_k8)
 
+f_bio.close()
 f_spanning.close()
 f_random.close()
 f_k2.close()

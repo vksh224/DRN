@@ -66,6 +66,9 @@ while len(lines) > index:
         elif "Group.failedNodeListFile" in lines[index]:
             file.write("Group.failedNodeListFile = FailedNodeList/" + option_run + "/failed_nodelist_" + str(V) + '.txt\n')
 
+        elif "Group.failedNodesSamplingInterval" in lines[index]:
+            file.write("Group.failedNodesSamplingInterval = " + str(snapshot_time_interval) +"\n");
+
         elif "Group.samplingInterval" in lines[index]:
             file.write("Group.samplingInterval = " + str(network_construction_interval) + "\n")
 
