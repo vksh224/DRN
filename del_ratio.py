@@ -94,7 +94,7 @@ for option in range(1,2):
                 available_energy_list = []
                 alive_nodes_list = []
                 for run in range(0,1):
-                    data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/"
+                    data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/Data/"
 
                     CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
                     PoI_locs = pickle.load(open(data_directory + "PoI_locs.p", "rb"))
