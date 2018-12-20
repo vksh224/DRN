@@ -3,9 +3,9 @@ import os
 import sys
 from constants import *
 
-
 option = sys.argv[1]
 run = sys.argv[2]
+directory = sys.argv[3]
 
 print("======== Create ONE setting files: " + directory)
 data_directory = directory + "Data/"
@@ -67,7 +67,7 @@ while len(lines) > index:
             file.write("Group.failedNodeListFile = FailedNodeList/" + option_run + "/failed_nodelist_" + str(V) + '.txt\n')
 
         elif "Group.failedNodesSamplingInterval" in lines[index]:
-            file.write("Group.failedNodesSamplingInterval = " + str(snapshot_time_interval) +"\n");
+            file.write("Group.failedNodesSamplingInterval = " + str(failed_node_time_interval) +"\n");
 
         elif "Group.samplingInterval" in lines[index]:
             file.write("Group.samplingInterval = " + str(network_construction_interval) + "\n")

@@ -13,11 +13,15 @@ hY = 6000
 snapshot_time_interval = 300
 
 #in minutes (equivalent to 12 hours)
-total_simulation_time = 3600
+total_simulation_time = 21600
 
-#15 minutes
+#we only run two intervals (0 and 1800)
+network_generation_time = 3600
+
+#30 minutes
 network_construction_interval = 1800
-failed_node_time_interval = 900
+failed_node_time_interval = 1800
+
 
 no_of_CC = 1
 no_of_R = 30
@@ -28,14 +32,14 @@ max_no_PoI_for_R = 5
 min_V_in_PoI = 0
 max_V_in_PoI = 3
 
-min_S_in_PoI = 20
+min_S_in_PoI = 30
 max_S_in_PoI = 50
 
 min_PoI_radius = 300
 max_PoI_radius = 500
 
-bt_range = 150
-tower_range = 500
+bt_range = 100
+tower_range = 200
 
 #----- related to volunteer path
 
@@ -63,10 +67,10 @@ max_V_speed = 5
 p = 0.02
 
 root_directory = 'Bhaktapur_1/'
-directory = 'Bhaktapur_1/2/'
-loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/1_2/'
-neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/1_2/'
-setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/1_2/'
+directory = 'Bhaktapur_1/3/'
+loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/1_3/'
+neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/1_3/'
+setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/1_3/'
 core_setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/1_2/'
+failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/1_3/'
 no_of_PoI = 5

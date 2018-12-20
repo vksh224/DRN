@@ -70,7 +70,7 @@ def get_energy_stat(file_name, time):
 ONE_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/"
 
 routers = ('BioDRNRouter',)
-endTimes = ('3600', '7200')
+endTimes = ('1800', '2700', '3600', '4500', '5400', '6300', '7200', '8100', '9000', '9900', '10800', '11700', '12600')
 topologies = ('O', 'B', 'R', 'S', 'K2', 'K4')
 
 
@@ -93,7 +93,7 @@ for option in range(1,2):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(0,1):
+                for run in range(0,3):
                     data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/Data/"
 
                     CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
@@ -112,8 +112,8 @@ for option in range(1,2):
                         hop_count.append(get_stat(fname, "hopcount_avg"))
                         overhead.append(get_stat(fname, "overhead_ratio"))
 
-                    else:
-                        print("Stat file not found", fname)
+                    # else:
+                    #     print("Stat file not found", fname)
 
                     energyfname = ONE_directory + "reports/%s_%s_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (
                     router, time, option, run, top, V)
@@ -123,8 +123,8 @@ for option in range(1,2):
                         available_energy_list.append(available_energy)
                         alive_nodes_list.append(alive_nodes)
 
-                    else:
-                        print("Energy file not found", energyfname)
+                    # else:
+                    #     print("Energy file not found", energyfname)
 
                 # print("PDR", del_ratio)
                 # print("Lat", latency)

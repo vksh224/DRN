@@ -232,8 +232,8 @@ t1_G2 = pickle.load(open(data_directory + "HO.p", "rb"))
 t2_G2 = pickle.load(open(data_directory + "SO.p", "rb"))
 t3_G2 = pickle.load(open(data_directory + "NO.p", "rb"))
 
-once = False
-for t in range(network_construction_interval, total_simulation_time, network_construction_interval):
+
+for t in range(network_construction_interval, network_generation_time, network_construction_interval):
 
     # O: original DRN
     # B: bio-DRN

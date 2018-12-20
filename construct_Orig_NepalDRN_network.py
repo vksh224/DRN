@@ -212,8 +212,9 @@ print("\nOrig - Neighbor list filename: " + orig_neighList_filename)
 f = open(neigh_des_folder + orig_neighList_filename, 'w')
 f.write(nei_o)
 
+network_generation_time = 3600
 #Create static original graph snapshots for given time interval
-for t in range(0, total_simulation_time, network_construction_interval):
+for t in range(0, network_generation_time, network_construction_interval):
     print("\n======= Start Time : " + str(t) + " ======== ")
     G, real_world_G = create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, t, t + snapshot_time_interval)
 

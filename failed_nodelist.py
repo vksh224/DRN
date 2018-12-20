@@ -1,8 +1,11 @@
 import networkx as nx
 import pickle
 import os
+import sys
 import numpy as np
 from constants import *
+
+directory = sys.argv[1]
 
 print("======== Failed node list: " + directory)
 
@@ -25,6 +28,7 @@ V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs)
 N = [i for i in range(len(CC_locs), V)]
 n = len(N)
 
+total_simulation_time = 21600
 for t in range(network_construction_interval, total_simulation_time, failed_node_time_interval):
 
     r.extend(np.random.choice(N,size = int(p * n),replace = False))
