@@ -253,19 +253,21 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t - network_construction_interval) + '.gml')
     O = rename_graph(O)
 
-
     B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
     R = randomDRN(O,B)
     S = spanning(R)
     K2 = kregular(R, 2)
     K4 = kregular(R, 4)
 
+    O = O.to_undirected()
+    B = B.to_undirected()
+
     #------------------Writing the topology in Data folder----------
     curr = os.getcwd()
     os.chdir(directory + 'Data/')
 
-    nx.write_gml(O.to_undirected(),'Original.gml')
-    nx.write_gml(B.to_undirected(),'Bio.gml')
+    nx.write_gml(O,'Original.gml')
+    nx.write_gml(B,'Bio.gml')
     nx.write_gml(R,'Random.gml')
     nx.write_gml(S,'Spanning.gml')
     nx.write_gml(K2,'K2.gml')
