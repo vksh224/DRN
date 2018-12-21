@@ -6,10 +6,10 @@ import pickle
 no_of_PoI = 3
 
 #option - high - More PoIs
-for option in range(1, 2):
+for option in range(0, 1):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
-    for run in range(3, 5):
+    for run in range(0, 3):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
 
@@ -19,11 +19,17 @@ for option in range(1, 2):
         # failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
         # core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
 
-        loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
-        neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
-        setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
-        failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
-        core_setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
+        #loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        #neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        #setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        #failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        #core_setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
+
+        loc_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/simulation/'
+        neigh_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/simulation/'
+        setting_directory = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/simulation/'
+        core_setting_directory = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/'
+        failed_node_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/simulation/'
 
         with open("constants.py", "r") as f:
             lines = f.readlines()
@@ -53,28 +59,26 @@ for option in range(1, 2):
 
         print("============ Option: " + str(option) + " Run: " + str(run) + " ============ ")
 
-        # Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
-        os.system('python construct_Orig_NepalDRN.py')
+        # #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
+        # os.system('python construct_Orig_NepalDRN.py')
+        #
+        #Create Original DRN at each "network_construction_interval" until "total_simulation_time"
+        #os.system('python construct_Orig_NepalDRN_network.py')
 
-        # Create Original DRN at each "network_construction_interval" until "total_simulation_time"
-        os.system('python construct_Orig_NepalDRN_network.py')
-
-        #TODO: Remove this command from here. Now it is getting handled in genTop itself
         #Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
         # os.system('python3 construct_Bio_NepalDRN.py')
 
         # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
-        os.system('python3 genTop.py')
+        os.system('python genTop.py')
 
         #Create failed node list
-        os.system('python3 failed_nodelist.py' + " " + directory)
+        #os.system('python3 failed_nodelist.py')
 
         # Plot Orig and Bio-DRN degree distribution
-        # os.system('python3 degree.py ')
+        #os.system('python3 degree.py ')
 
-        print("Curr directory", directory)
         # Create ONE simulator setting file
-        os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run) + " " + directory)
+        #os.system('python3 create_ONE_setting_new.py ' + str(option) + " " + str(run))
 
 
 
