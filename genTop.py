@@ -222,20 +222,21 @@ f_spanning = open(neigh_des_folder + 'S_' + str(V) + ".txt",'w')
 f_random = open(neigh_des_folder + 'R_' + str(V) + '.txt','w')
 f_k2 = open(neigh_des_folder + 'K2_' + str(V) + '.txt','w')
 f_k4 = open(neigh_des_folder + 'K4_' + str(V) + '.txt','w')
-# f_k8 = open(neigh_des_folder + 'K8' + str(V) + '.txt','w')
+f_k8 = open(neigh_des_folder + 'K8' + str(V) + '.txt','w')
 
 s_bio = '0 ' + str(total_simulation_time) + '\n'
 s_spanning = '0 ' + str(total_simulation_time) + "\n"
 s_random = '0 ' + str(total_simulation_time) + "\n"
 s_k2 = '0 ' + str(total_simulation_time) + "\n"
 s_k4 = '0 ' + str(total_simulation_time) + "\n"
-# s_k8 = '0 ' + str(total_simulation_time) + "\n"
+s_k8 = '0 ' + str(total_simulation_time) + "\n"
 
 f_bio.write(s_bio)
 f_spanning.write(s_spanning)
 f_random.write(s_random)
 f_k2.write(s_k2)
 f_k4.write(s_k4)
+f_k8.write(s_k8)
 
 #Only for Bio-DRN
 t1_G2 = pickle.load(open(data_directory + "HO.p", "rb"))
@@ -258,6 +259,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     S = spanning(R)
     K2 = kregular(R, 2)
     K4 = kregular(R, 4)
+    K8 = kregular(R, 8)
 
     O = O.to_undirected()
     B = B.to_undirected()
@@ -274,6 +276,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     nx.write_gml(S,'Spanning.gml')
     nx.write_gml(K2,'K2.gml')
     nx.write_gml(K4,'k4.gml')
+    nx.write_gml(K8,'k8.gml')
 
     print ('See here:',len(B.nodes()))
 
@@ -290,6 +293,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     real_world_RG = convert_to_real_world_DRN(R)
     real_world_K2 = convert_to_real_world_DRN(K2)
     real_world_K4 = convert_to_real_world_DRN(K4)
+    real_world_K8 = convert_to_real_world_DRN(K8)
 
     s_bio = writeF(real_world_B, t)
     f_bio.write(s_bio)
@@ -306,13 +310,13 @@ for t in range(network_construction_interval, network_generation_time, network_c
     s_k4 = writeF(real_world_K4, t)
     f_k4.write(s_k4)
 
-    # s_k8 = neighbor_list(K8, s_k8, t)
-    # f_k8.write(s_k8)
+    s_k8 = writeF(real_world_K8, t)
+    f_k8.write(s_k8)
 
 f_bio.close()
 f_spanning.close()
 f_random.close()
 f_k2.close()
 f_k4.close()
-# f_k8.close()
+f_k8.close()
 
