@@ -35,11 +35,11 @@ max_V_in_PoI = 3
 min_S_in_PoI = 30
 max_S_in_PoI = 50
 
-min_PoI_radius = 300
+min_PoI_radius = 200
 max_PoI_radius = 500
 
-bt_range = 100
-tower_range = 200
+bt_range = 150
+tower_range = 500
 
 #----- related to volunteer path
 
@@ -67,10 +67,10 @@ max_V_speed = 5
 p = 0.02
 
 root_directory = 'Bhaktapur_1/'
-directory = 'Bhaktapur_1/3/'
-loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/1_3/'
-neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/1_3/'
-setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/1_3/'
+directory = 'Bhaktapur_1/5/'
+loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/1_5/'
+neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/1_5/'
+setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/1_5/'
 core_setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/1_3/'
+failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/1_5/'
 no_of_PoI = 5
