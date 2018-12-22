@@ -65,9 +65,9 @@ def bioDRN(G2, t1_G2, t2_G2, t3_G2, t):
 
     print("Is Bio-DRN connected after supplementary step?", nx.is_connected(GBD.to_undirected()))
 
-    real_world_G = convert_to_real_world_DRN(GBD)
-    print ("Real world G: #nodes:", len(real_world_G))
-    print ("Real world G: #edges:", len(real_world_G.edges()))
+    #real_world_G = convert_to_real_world_DRN(GBD)
+    #print ("Real world G: #nodes:", len(real_world_G))
+    #print ("Real world G: #edges:", len(real_world_G.edges()))
 
     return GBD
 
@@ -262,6 +262,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = O.to_undirected()
     B = B.to_undirected()
 
+    print (O.nodes())
+
     #------------------Writing the topology in Data folder----------
     curr = os.getcwd()
     os.chdir(directory + 'Data/')
@@ -272,6 +274,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     nx.write_gml(S,'Spanning.gml')
     nx.write_gml(K2,'K2.gml')
     nx.write_gml(K4,'k4.gml')
+
+    print ('See here:',len(B.nodes()))
 
     os.chdir(curr)
 
