@@ -9,7 +9,7 @@ no_of_PoI = 3
 for option in range(1, 2):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
-    for run in range(0, 3):
+    for run in range(3, 6):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
 
@@ -72,7 +72,7 @@ for option in range(1, 2):
         os.system('python3 genTop.py')
 
         #Create failed node list
-        os.system('python3 failed_nodelist.py' + directory)
+        os.system('python3 failed_nodelist.py' + " " +  directory)
 
         # Plot Orig and Bio-DRN degree distribution
         #os.system('python3 degree.py ')
