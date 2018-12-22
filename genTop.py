@@ -262,6 +262,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = O.to_undirected()
     B = B.to_undirected()
 
+    print (O.nodes())
+
     #------------------Writing the topology in Data folder----------
     curr = os.getcwd()
     os.chdir(directory + 'Data/')
