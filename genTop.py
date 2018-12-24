@@ -121,8 +121,8 @@ def randomDRN(O,B):
         R.remove_edge(re[0],re[1])
         L.remove(re)
 
-        if (not nx.is_weakly_connected(R)):
-            R.add_edge(re[0], re[1])
+        # if (not nx.is_weakly_connected(R)):
+        #     R.add_edge(re[0], re[1])
 
     #print("Rand DRN: Is weakly connected", nx.is_weakly_connected(R))
 
@@ -218,13 +218,15 @@ Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
 
 f_bio = open(neigh_des_folder + 'B_' + str(V) + ".txt", 'w')
+f_bio_ideal = open(neigh_des_folder + 'B_ideal_' + str(V) + ".txt", 'w')
 f_spanning = open(neigh_des_folder + 'S_' + str(V) + ".txt",'w')
 f_random = open(neigh_des_folder + 'R_' + str(V) + '.txt','w')
 f_k2 = open(neigh_des_folder + 'K2_' + str(V) + '.txt','w')
 f_k4 = open(neigh_des_folder + 'K4_' + str(V) + '.txt','w')
-f_k8 = open(neigh_des_folder + 'K8' + str(V) + '.txt','w')
+f_k8 = open(neigh_des_folder + 'K8_' + str(V) + '.txt','w')
 
 s_bio = '0 ' + str(total_simulation_time) + '\n'
+s_bio_ideal = '0 ' + str(total_simulation_time) + '\n'
 s_spanning = '0 ' + str(total_simulation_time) + "\n"
 s_random = '0 ' + str(total_simulation_time) + "\n"
 s_k2 = '0 ' + str(total_simulation_time) + "\n"
@@ -232,6 +234,7 @@ s_k4 = '0 ' + str(total_simulation_time) + "\n"
 s_k8 = '0 ' + str(total_simulation_time) + "\n"
 
 f_bio.write(s_bio)
+f_bio_ideal.write(s_bio_ideal)
 f_spanning.write(s_spanning)
 f_random.write(s_random)
 f_k2.write(s_k2)
@@ -254,7 +257,11 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t - network_construction_interval) + '.gml')
     O = rename_graph(O)
 
+    O_ideal = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
+    O_ideal = rename_graph(O_ideal)
+
     B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
+    B_ideal = bioDRN(O_ideal, t1_G2, t2_G2, t3_G2, t)
     R = randomDRN(O,B)
     S = spanning(R)
     K2 = kregular(R, 2)
@@ -289,6 +296,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     # For instance, there exists no direct link between CC 0 and PoI 1, but it is through multiple responders, say 9, 10, and 11
     # then, the link 0-1 in Orig-DRN/Bio-DRN, is equivalent to 0-9, 0-10, 0-11, 1-9, 1-10, 1-11 (if all all 9, 10 and 11 visit both 0 and 1)
     real_world_B = convert_to_real_world_DRN(B)
+    real_world_B_ideal = convert_to_real_world_DRN(B_ideal)
     real_world_SG = convert_to_real_world_DRN(S)
     real_world_RG = convert_to_real_world_DRN(R)
     real_world_K2 = convert_to_real_world_DRN(K2)
@@ -297,6 +305,9 @@ for t in range(network_construction_interval, network_generation_time, network_c
 
     s_bio = writeF(real_world_B, t)
     f_bio.write(s_bio)
+
+    s_bio_ideal = writeF(real_world_B_ideal, t)
+    f_bio_ideal.write(s_bio_ideal)
 
     s_spanning = writeF(real_world_SG, t)
     f_spanning.write(s_spanning)
@@ -314,6 +325,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     f_k8.write(s_k8)
 
 f_bio.close()
+f_bio_ideal.close()
 f_spanning.close()
 f_random.close()
 f_k2.close()
