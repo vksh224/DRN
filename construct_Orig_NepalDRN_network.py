@@ -109,11 +109,11 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
                     euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= tower_range:
                     is_in_range = True
 
-                # PoI - Vol, Vol - Vol
-                elif ((line1_arr[1] in PoI_IDs and line2_arr[1] in Vol_IDs) or \
-                    (line1_arr[1] in Vol_IDs and line2_arr[1] in Vol_IDs)) and \
-                    euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= tower_range:
-                    is_in_range = True
+                # # PoI - Vol, Vol - Vol
+                # elif((line1_arr[1] in PoI_IDs and line2_arr[1] in Vol_IDs) or \
+                #     (line1_arr[1] in Vol_IDs and line2_arr[1] in Vol_IDs)) and \
+                #     euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= vol_range:
+                #     is_in_range = True
 
                 #for everything else, (i.e., S-CC, S-PoI, S-Vol, S-S)
                 elif euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= bt_range:
@@ -212,9 +212,8 @@ print("\nOrig - Neighbor list filename: " + orig_neighList_filename)
 f = open(neigh_des_folder + orig_neighList_filename, 'w')
 f.write(nei_o)
 
-network_generation_time = 3600
 #Create static original graph snapshots for given time interval
-for t in range(0, network_generation_time, network_construction_interval):
+for t in range(0, total_simulation_time, network_construction_interval):
     print("\n======= Start Time : " + str(t) + " ======== ")
     G, real_world_G = create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_responders_dict, t, t + snapshot_time_interval)
 

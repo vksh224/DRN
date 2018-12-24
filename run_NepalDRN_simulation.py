@@ -3,27 +3,27 @@ import random
 import networkx as nx
 import pickle
 
-no_of_PoI = 1
+no_of_PoI = 3
 
 #option - high - More PoIs
-for option in range(0, 1):
+for option in range(1, 2):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
-    for run in range(1, 2):
+    for run in range(7, 8):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
+        #
+        # loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        # neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        # setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        # failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        # core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
 
-        loc_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
-        neigh_des_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
-        setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
-        failed_node_folder = "/Users/vijay/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
-        core_setting_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/Nepal/"
-
-        # loc_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
-        # neigh_des_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
-        # setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
-        # failed_node_folder = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
-        # core_setting_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/"
+        loc_des_folder = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/" + str(option) + "_" + str(run) + "/"
+        neigh_des_folder = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/" + str(option) + "_" + str(run) + "/"
+        setting_directory = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/" + str(option) + "_" + str(run) + "/"
+        failed_node_folder = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/" + str(option) + "_" + str(run) + "/"
+        core_setting_directory = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/"
 
         # loc_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/simulation/'
         # neigh_des_folder = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur/simulation/'
@@ -64,13 +64,13 @@ for option in range(0, 1):
 
         # Create Original DRN at each "network_construction_interval" until "total_simulation_time"
         os.system('python construct_Orig_NepalDRN_network.py')
-        #
-        # # Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
-        # # os.system('python3 construct_Bio_NepalDRN.py')
-        #
+
+        # Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
+        # os.system('python3 construct_Bio_NepalDRN.py')
+
         # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
         os.system('python3 genTop.py')
-        #
+        # #
         #Create failed node list
         os.system('python failed_nodelist.py' + " " + directory)
         #

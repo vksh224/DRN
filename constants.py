@@ -13,15 +13,14 @@ hY = 6000
 snapshot_time_interval = 300
 
 #in minutes (equivalent to 12 hours)
-total_simulation_time = 21600
+total_simulation_time = 10800
 
 #we only run two intervals (0 and 1800)
 network_generation_time = 3600
 
-#30 minutes
+#30 minutes (this is the samplingInterval in the ONE simulator)
 network_construction_interval = 1800
-failed_node_time_interval = 1800
-
+failed_node_time_interval = 900
 
 no_of_CC = 1
 no_of_R = 30
@@ -36,9 +35,10 @@ min_S_in_PoI = 30
 max_S_in_PoI = 50
 
 min_PoI_radius = 200
-max_PoI_radius = 500
+max_PoI_radius = 300
 
 bt_range = 150
+vol_range = 300
 tower_range = 500
 
 #----- related to volunteer path
@@ -64,13 +64,13 @@ min_V_speed = 1
 max_V_speed = 5
 
 #Percentage of nodes failed
-p = 0.02
+p = 0.03
 
 root_directory = 'Bhaktapur_1/'
-directory = 'Bhaktapur_1/5/'
-loc_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NodePosition/1_5/'
-neigh_des_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/NeighborList/1_5/'
-setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/1_5/'
-core_setting_directory = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/FailedNodeList/1_5/'
+directory = 'Bhaktapur_1/7/'
+loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/1_7/'
+neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/1_7/'
+setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/1_7/'
+core_setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/'
+failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_7/'
 no_of_PoI = 5
