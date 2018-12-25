@@ -58,7 +58,8 @@ while len(lines) > index:
         elif "Group.neighborListFile =" in lines[index]:
             file.write("Group.neighborListFile = [NeighborList/" + option_run + "/O_" + str(
                 V) + ".txt; NeighborList/" + option_run + "/B_" + str(
-                V) + '.txt; NeighborList/' + option_run + "/S_" + str(
+                V) + ".txt;NeighborList/" + option_run + "/B_ideal_" + str(
+                V) + '.txt;NeighborList/' + option_run + "/S_" + str(
                 V) + '.txt; NeighborList/' + option_run + "/R_" + str(
                 V) + '.txt; NeighborList/' + option_run + "/K2_" + str(
                 V) + '.txt; NeighborList/' + option_run + "/K4_" + str(V) + '.txt] \n')

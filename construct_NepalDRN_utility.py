@@ -58,50 +58,77 @@ def initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI):
             # calculating coordinates
             x = r * math.cos(alpha) + PoI_locs[i][0]
             y = r * math.sin(alpha) + PoI_locs[i][1]
-            # print("Check: initial PoI loc ", PoI_locs[i], " S-loc ", (int(x), int(y)), " poi-S dist",
-            #       int(euclideanDistance(PoI_locs[i][0], PoI_locs[i][1], x, y)),
-            #       " rad: ", int(PoI_radii[i]))
+
+            while 1:
+                if euclideanDistance(x, y, PoI_locs[i][0], PoI_locs[i][1]) <= PoI_radii[i]:
+                    break
+
+                print("Check: initial PoI loc ", "S-id", len(S_locs), "Poi_id", i, PoI_locs[i], " S-loc ", (int(x), int(y)), " poi-S dist",
+                  int(euclideanDistance(PoI_locs[i][0], PoI_locs[i][1], x, y)),
+                  " rad: ", int(PoI_radii[i]))
+
+
+                alpha = 2 * math.pi * random.random()
+                r = random.randint(0, PoI_radii[i]) * math.sqrt(random.random())
+                # calculating coordinates
+                x = r * math.cos(alpha) + PoI_locs[i][0]
+                y = r * math.sin(alpha) + PoI_locs[i][1]
+
             S_locs.append((int(x), int(y)))
+            
     return S_locs
 
-def update_survivor_loc (PoI_locs, PoI_radii, S_locs, curr_time):
-    S_init_locs = pickle.load(open(directory + "Data/S_locs.p", "rb"))
-
-    for i in range(len(S_locs)):
+def update_survivor_loc (PoI_locs, PoI_radii, S_locs_prev, curr_time):
+    S_locs_init = pickle.load(open(directory + "Data/S_locs.p", "rb"))
+    S_locs_curr = [(-1, -1) for i in S_locs_prev]
+    for i in range(len(S_locs_prev)):
+        # print(i, S_locs_init[i], S_locs_prev[i])
         moving_prob = random.uniform(0, 1)
-        if moving_prob > moving_S_prob:
+        S_locs_curr[i] = S_locs_prev[i]
 
-            #Check if a survivor belong to the current PoI
+        if moving_prob > moving_S_prob:
             for poi_ind in range(len(PoI_locs)):
-                if euclideanDistance(S_init_locs[i][0], S_init_locs[i][1], PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) <= PoI_radii[poi_ind]:
+
+                # Check if a survivor belong to the current PoI
+                if euclideanDistance(S_locs_init[i][0], S_locs_init[i][1], PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) <= PoI_radii[poi_ind]:
 
                     # random angle
                     alpha = 2 * math.pi * random.random()
                     curr_speed = random.uniform(min_S_speed, max_S_speed)
-                    r = curr_speed * snapshot_time_interval
+                    r = random.randint(0, int(curr_speed * snapshot_time_interval))
 
-                    x = S_locs[i][0] + r * math.cos(alpha)
-                    y = S_locs[i][1] + r * math.sin(alpha)
+                    x = S_locs_prev[i][0] + r * math.cos(alpha)
+                    y = S_locs_prev[i][1] + r * math.sin(alpha)
 
-                    while euclideanDistance(x, y, PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) > PoI_radii[poi_ind]:
+                    no_of_iterations = 0
+                    valid_pos_found = False
+                    while no_of_iterations < 10:
+
+                        if euclideanDistance(x, y, PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) <= PoI_radii[poi_ind]:
+                            valid_pos_found = True
+                            break
+
                         # random angle
                         alpha = 2 * math.pi * random.random()
                         curr_speed = random.uniform(min_S_speed, max_S_speed)
-                        r = curr_speed * snapshot_time_interval
+                        r = random.randint(0, int(curr_speed * snapshot_time_interval))
 
-                        x = S_locs[i][0] + r * math.cos(alpha)
-                        y = S_locs[i][1] + r * math.sin(alpha)
+                        x = S_locs_prev[i][0] + r * math.cos(alpha)
+                        y = S_locs_prev[i][1] + r * math.sin(alpha)
 
-                    if i == 55:
-                        print("Time", curr_time, "Check: diff between ", "prev-curr dist",
-                              int(euclideanDistance(S_locs[i][0], S_locs[i][1], x, y)), " poi-curr dist",
-                              int(euclideanDistance(PoI_locs[poi_ind][0], PoI_locs[poi_ind][1], x, y)),
-                              " rad: ", int(PoI_radii[poi_ind]))
-                    S_locs[i] = (int(x), int(y))
+                        no_of_iterations += 1
 
-                    break
+                    if valid_pos_found == True:
+                        S_locs_curr[i] = (int(x), int(y))
 
-    return S_locs
+                    # print("Time", curr_time, "Check: diff", "S_id", i,
+                    #        "poi-prev dist", int(euclideanDistance(PoI_locs[poi_ind][0], PoI_locs[poi_ind][1], S_locs_prev[i][0], S_locs_prev[i][1])),
+                    #       "poi-curr dist", int(euclideanDistance(PoI_locs[poi_ind][0], PoI_locs[poi_ind][1], S_locs_curr[i][0], S_locs_curr[i][1])),
+                    #       "prev-curr dist", int(euclideanDistance(S_locs_prev[i][0], S_locs_prev[i][1], S_locs_curr[i][0], S_locs_curr[i][1])),
+                    #       "rad: ", int(PoI_radii[poi_ind]))
+
+    #pickle.dump(S_locs,  open(directory + 'Data/S_locs' + str(curr_time) + '.p','wb'))
+    return S_locs_curr
 #-------------------End: Survivor related -------------------------------------
 
 
