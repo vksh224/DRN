@@ -2,6 +2,7 @@ import networkx as nx
 import pickle
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 def failed_gen(r):
 
@@ -81,10 +82,20 @@ def motif(G):
     #return len(nx.triangles(G))
     return m
 
+#modes: 0: efficiency, 1:pathcount, 2: motif
+mode = 0
+
 how_many_instances = 1
 
 path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0'
 os.chdir(path_source_files)
+
+O_List = []
+B_List = []
+R_List = []
+K2_List = []
+K4_List = []
+s_List = []
 
 for i in range(how_many_instances):
 
@@ -114,6 +125,9 @@ for i in range(how_many_instances):
     B = nx.read_gml('Bio.gml')
     B = rename_graph(B)
 
+    R = nx.read_gml('Random.gml')
+    R = rename_graph(R)
+
     K2 = nx.read_gml('K2.gml')
     K2 = rename_graph(K2)
 
@@ -132,6 +146,7 @@ for i in range(how_many_instances):
 
         O.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         B.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        R.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K2.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K4.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         s.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
@@ -142,12 +157,43 @@ for i in range(how_many_instances):
         #print motif(K4)
         #print motif(s)
 
-        print pathcount(O,CC_IDs,S_IDs)
-        print pathcount(B,CC_IDs,S_IDs)
-        print pathcount(K2,CC_IDs,S_IDs)
-        print pathcount(K4,CC_IDs,S_IDs)
-        print pathcount(s,CC_IDs,S_IDs)
+        if mode == 0:
+            O_List.append(efficiency(O, CC_IDs, S_IDs))
+            B_List.append(efficiency(B, CC_IDs, S_IDs))
+            R_List.append(efficiency(R, CC_IDs, S_IDs))
+            K2_List.append(efficiency(K2, CC_IDs, S_IDs))
+            K4_List.append(efficiency(K4, CC_IDs, S_IDs))
+            s_List.append(efficiency(s, CC_IDs, S_IDs))
 
-        input('')
+        elif mode == 1:
+            O_List.append(pathcount(O,CC_IDs,S_IDs))
+            B_List.append(pathcount(B,CC_IDs,S_IDs))
+            R_List.append(pathcount(R,CC_IDs,S_IDs))
+            K2_List.append(pathcount(K2,CC_IDs,S_IDs))
+            K4_List.append(pathcount(K4,CC_IDs,S_IDs))
+            s_List.append(pathcount(s,CC_IDs,S_IDs))
+        else:
+            O_List.append(motif(O))
+            B_List.append(motif(B))
+            R_List.append(motif(R))
+            K2_List.append(motif(K2))
+            K4_List.append(motif(K4))
+            s_List.append(motif(s))
+
+
+        #input('')
 
     os.chdir(path_source_files)
+
+timeslot_duration = 1800.0
+L = [O_List,B_List,R_List,K2_List,K4_List,s_List]
+print L
+
+#Visualization
+colorlist = ['r','g','b','black','magenta','purple']
+
+for i in range(len(L)):
+    plt.plot([j for j in range(len(L[i]))],L[i],marker = 'o',color = colorlist[i])
+
+plt.xticks([j for j in range(len(L[i]))],[j * timeslot_duration for j in range(len(L[i]))])
+plt.show()
