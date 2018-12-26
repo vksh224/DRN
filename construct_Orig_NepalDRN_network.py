@@ -112,7 +112,7 @@ def create_static_network(res_visiting_all_nodes_dict, node_visited_by_all_respo
                 # # PoI - Vol, Vol - Vol
                 # elif((line1_arr[1] in PoI_IDs and line2_arr[1] in Vol_IDs) or \
                 #     (line1_arr[1] in Vol_IDs and line2_arr[1] in Vol_IDs)) and \
-                #     euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= vol_range:
+                #     euclideanDistance(line1_arr[2], line1_arr[3], line2_arr[2], line2_arr[3]) <= tower_range:
                 #     is_in_range = True
 
                 #for everything else, (i.e., S-CC, S-PoI, S-Vol, S-S)
