@@ -78,6 +78,33 @@ def initial_survivor_loc(PoI_locs, PoI_radii, S_count_in_PoI):
             
     return S_locs
 
+def update_survivor_loc2 (PoI_locs, PoI_radii, S_locs, curr_time):
+    S_locs_init = pickle.load(open(directory + "Data/S_locs.p", "rb"))
+
+    for i in range(len(S_locs_init)):
+        # print(i, S_locs_init[i], S_locs_prev[i])
+        moving_prob = random.uniform(0, 1)
+        S_locs[i] = S_locs_init[i]
+
+        if moving_prob < moving_S_prob:
+            for poi_ind in range(len(PoI_locs)):
+
+                # Check if a survivor belong to the current PoI
+                if euclideanDistance(S_locs_init[i][0], S_locs_init[i][1], PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) <= PoI_radii[poi_ind]:
+
+                    alpha = 2 * math.pi * random.random()
+                    curr_speed = random.uniform(min_S_speed, max_S_speed)
+                    r = random.randint(0, int(curr_speed * snapshot_time_interval))
+
+                    x = S_locs_init[i][0] + r * math.cos(alpha)
+                    y = S_locs_init[i][1] + r * math.sin(alpha)
+
+                    if euclideanDistance(x, y, PoI_locs[poi_ind][0], PoI_locs[poi_ind][1]) <= PoI_radii[poi_ind]:
+                        S_locs[i] = (int(x), int(y))
+
+    return S_locs
+
+
 def update_survivor_loc (PoI_locs, PoI_radii, S_locs_prev, curr_time):
     S_locs_init = pickle.load(open(directory + "Data/S_locs.p", "rb"))
     S_locs_curr = [(-1, -1) for i in S_locs_prev]
@@ -86,7 +113,7 @@ def update_survivor_loc (PoI_locs, PoI_radii, S_locs_prev, curr_time):
         moving_prob = random.uniform(0, 1)
         S_locs_curr[i] = S_locs_prev[i]
 
-        if moving_prob > moving_S_prob:
+        if moving_prob < moving_S_prob:
             for poi_ind in range(len(PoI_locs)):
 
                 # Check if a survivor belong to the current PoI

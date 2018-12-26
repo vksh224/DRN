@@ -9,7 +9,7 @@ no_of_PoI = 3
 for option in range(1, 2):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
-    for run in range(7, 8):
+    for run in range(6, 7):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
         #
@@ -59,26 +59,26 @@ for option in range(1, 2):
 
         print("============ Option: " + str(option) + " Run: " + str(run) + " ============ ")
 
-        #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
-        os.system('python construct_Orig_NepalDRN.py')
-
-        # Create Original DRN at each "network_construction_interval" until "total_simulation_time"
-        os.system('python construct_Orig_NepalDRN_network.py')
-
-        # Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
-        # os.system('python3 construct_Bio_NepalDRN.py')
-
-        # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
+        # #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
+        # os.system('python construct_Orig_NepalDRN.py')
+        #
+        # # Create Original DRN at each "network_construction_interval" until "total_simulation_time"
+        # os.system('python construct_Orig_NepalDRN_network.py')
+        #
+        # # Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
+        # # os.system('python3 construct_Bio_NepalDRN.py')
+        #
+        # # Create other graph topologies, i.e., ST-DRN, Rand-DRN, K-DRN
         os.system('python3 genTop.py')
         # #
-        #Create failed node list
-        os.system('python failed_nodelist.py' + " " + directory)
-        #
-        # # Plot Orig and Bio-DRN degree distribution
-        # #os.system('python3 degree.py ')
-        #
-        # Create ONE simulator setting file
-        os.system('python create_ONE_setting_new.py ' + str(option) + " " + str(run) + " " + directory)
+        # #Create failed node list
+        # os.system('python failed_nodelist.py' + " " + directory)
+        # #
+        # # # Plot Orig and Bio-DRN degree distribution
+        # # #os.system('python3 degree.py ')
+        # #
+        # # Create ONE simulator setting file
+        # os.system('python create_ONE_setting_new.py ' + str(option) + " " + str(run) + " " + directory)
 
 
 
