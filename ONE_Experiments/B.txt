@@ -1,0 +1,3 @@
+#time	avg_pdr	avg_lat	avg_hop	avg_overhead	avg_alive_nodes 
+2	0.7444	2.32567	6.4776	609.9851	238.0
+6	0.5952	3.4678	6.78	737.155	210.0

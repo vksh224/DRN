@@ -67,17 +67,18 @@ def get_energy_stat(file_name, time):
 
 
 # Main starts here
-ONE_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/"
+ONE_directory = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/"
 #ONE_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/"
 
 routers = ('BioDRNRouter',)
+#endTimes = ('3600', '5400', '7200', '9000', '10800', '12600', '14400', '16200', '18000', '19800', '21600')
 endTimes = ('3600', '10800')
-topologies = ('O', 'B', 'R', 'S', 'K2', 'K4')
+topologies = ('O', 'B', 'B_ideal', 'R', 'S', 'K8')
 
 
 # Scenario.name = %%Group.router%%_%%Scenario.endTime%%_%%Group.neighborListFile%%
 
-ONE_Experiments = "ONE_Experiments"
+ONE_Experiments = "/localdisk2/SCRATCH/DRN_Project/ONE_Experiments"
 
 if not os.path.exists(ONE_Experiments):
     os.mkdir(ONE_Experiments)
@@ -87,6 +88,9 @@ for option in range(1,2):
         print("\nRouter " + router)
         for top in topologies:
             print("Top", top)
+            f_top = open(ONE_Experiments + "/" + top + ".txt", "w")
+            f_top.write("#time" + "\t" + "avg_pdr" + "\t" + "avg_lat"+ "\t" + "avg_hop" + "\t" + "avg_overhead" + "\t" + "avg_alive_nodes \n")
+
             for time in endTimes:
                 del_ratio = []
                 latency = []
@@ -94,7 +98,7 @@ for option in range(1,2):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(10,11):
+                for run in range(11,12):
                     data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/Data/"
 
                     CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
@@ -106,7 +110,12 @@ for option in range(1,2):
                     # This is not consistent with V from other files. Here, it includes the responders too
                     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
                             #reports/BioDRNRouter_3600_NeighList/1_0/B_214.txt_MessageStatsReport.txt
-                    fname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
+                    fname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
+
+                    if top == "B_ideal" or top == "O" or run != 10:
+                        fname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (
+                        router, time, option, run, top, V)
+
                     if os.path.isfile(fname):
                         del_ratio.append(get_stat(fname, 'delivery_prob'))
                         latency.append(get_stat(fname, "latency_avg"))
@@ -116,8 +125,12 @@ for option in range(1,2):
                     else:
                         print("Stat file not found", fname)
 
-                    energyfname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (
-                    router, time, option, run, top, V)
+                    energyfname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (router, time, option, run, top, V)
+
+                    if top == "B_ideal" or top == "O" or run != 10:
+                        energyfname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (router, time, option, run, top, V)
+
+
 
                     if os.path.isfile(fname):
                         available_energy, alive_nodes = get_energy_stat(energyfname, time)
@@ -141,6 +154,10 @@ for option in range(1,2):
                 avg_available_energy = get_average(available_energy_list)
                 avg_alive_nodes = get_average(alive_nodes_list)
 
+                line_str = str(int(time) / 1800) + "\t" + str(avg_del) + "\t" + str(avg_latency / 30) + "\t" + str(
+                    avg_hop) + "\t" + str(avg_overhead) + "\t" + str(avg_alive_nodes) + "\n"
+
+                f_top.write(line_str)
                 # sd = get_std_dev(del_ratio)
                 # ci = gs.confidence_interval_mean(rng_max, sd)
 

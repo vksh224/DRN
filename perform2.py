@@ -83,11 +83,13 @@ def motif(G):
     return m
 
 #modes: 0: efficiency, 1:pathcount, 2: motif
-mode = 0
+mode = 2
 
 how_many_instances = 1
 
-path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0'
+#path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0'
+path_source_files = '/localdisk2/SCRATCH/DRN_Project/Bhaktapur_1/'
+failed_node_list = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_10/'
 os.chdir(path_source_files)
 
 O_List = []
@@ -97,7 +99,7 @@ K2_List = []
 K4_List = []
 s_List = []
 
-for i in range(how_many_instances):
+for i in range(10, 11):
 
     os.chdir(str(i) + '/Data/')
 
@@ -113,28 +115,29 @@ for i in range(how_many_instances):
     Vol_IDs = range(len(CC) + len(PoI), len(CC) + len(PoI) + len(Vol))
     S_IDs = range(len(CC) + len(PoI) + len(Vol),len(CC) + len(PoI) + len(Vol) + len(S))
 
+
     #Failed nodelist
-    F = open('Failed_nodelist.txt')
+    F = open(failed_node_list + "failed_nodelist_268.txt")
     r = F.readlines()
     f = failed_gen(r)
 
     #Read topologies
-    O = nx.read_gml('Original.gml')
+    O = nx.read_gml('../Orig_NepalDRN_0.gml')
     O = rename_graph(O)
 
-    B = nx.read_gml('Bio.gml')
+    B = nx.read_gml('Bio_0.gml')
     B = rename_graph(B)
 
-    R = nx.read_gml('Random.gml')
+    R = nx.read_gml('Random_0.gml')
     R = rename_graph(R)
 
-    K2 = nx.read_gml('K2.gml')
+    K2 = nx.read_gml('K2_0.gml')
     K2 = rename_graph(K2)
 
-    K4 = nx.read_gml('K4.gml')
+    K4 = nx.read_gml('k4_0.gml')
     K4 = rename_graph(K4)
 
-    s = nx.read_gml('Spanning.gml')
+    s = nx.read_gml('Spanning_0.gml')
     s = rename_graph(s)
 
     #print (O.nodes())
@@ -151,6 +154,13 @@ for i in range(how_many_instances):
         K4.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         s.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
 
+        O.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        B.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        R.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K2.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K4.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        s.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+
         #print motif(O)
         #print motif(B)
         #print motif(K2)
@@ -166,14 +176,14 @@ for i in range(how_many_instances):
             s_List.append(efficiency(s, CC_IDs, S_IDs))
 
         elif mode == 1:
-            O_List.append(pathcount(O,CC_IDs,S_IDs))
+            #O_List.append(pathcount(O,CC_IDs,S_IDs))
             B_List.append(pathcount(B,CC_IDs,S_IDs))
             R_List.append(pathcount(R,CC_IDs,S_IDs))
             K2_List.append(pathcount(K2,CC_IDs,S_IDs))
             K4_List.append(pathcount(K4,CC_IDs,S_IDs))
             s_List.append(pathcount(s,CC_IDs,S_IDs))
         else:
-            O_List.append(motif(O))
+            #O_List.append(motif(O))
             B_List.append(motif(B))
             R_List.append(motif(R))
             K2_List.append(motif(K2))

@@ -69,11 +69,12 @@ def bioDRN(G2, t1_G2, t2_G2, t3_G2, t):
     #real_world_G = convert_to_real_world_DRN(GBD)
     #print ("Real world G: #nodes:", len(real_world_G))
     #print ("Real world G: #edges:", len(real_world_G.edges()))
+    GBD.add_edges_from([e for e in G2.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
 
     return GBD
 
 
-def kregular(G,k):
+def kregular(O, G, k, S_IDs):
 
     R = G.to_undirected()
     L = list(R.edges())
@@ -87,6 +88,7 @@ def kregular(G,k):
             #     L.append(e[0], e[1])
             #     R.add_edge(e[0], e[1])
 
+    R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
     return R
 
 def kconnected(R,k):
@@ -107,7 +109,7 @@ def kconnected(R,k):
 
     return G
 
-def randomDRN(O,B):
+def randomDRN(O,B, S_IDs):
 
     R = O.copy()
     # Number of edges to be preserved from original DRN
@@ -127,9 +129,12 @@ def randomDRN(O,B):
 
     #print("Rand DRN: Is weakly connected", nx.is_weakly_connected(R))
 
-    return R.to_undirected()
+    R = R.to_undirected()
+    R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
+    return R
 
-def spanning(R):
+
+def spanning(O, R, S_IDs):
     O_U = R.to_undirected()
     S = nx.minimum_spanning_tree(O_U)
 
@@ -142,6 +147,7 @@ def spanning(R):
         else:
             S_D.add_edge(e[1], e[0])
     '''
+    S.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
 
     return S
 
@@ -218,6 +224,12 @@ Res_paths = pickle.load(open(data_directory + "Res_paths.p", "rb"))
 
 V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
 
+# Find source destination nodes
+CC_IDs = range(len(CC_locs))
+PoI_IDs = range(len(CC_locs), len(CC_locs) + len(PoI_locs))
+Vol_IDs = range(len(CC_locs) + len(PoI_locs), len(CC_locs) + len(PoI_locs) + len(Vol_locs))
+S_IDs = range(len(CC_locs) + len(PoI_locs) + len(Vol_locs), len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs))
+
 f_bio = open(neigh_des_folder + 'B_' + str(V) + ".txt", 'w')
 f_bio_ideal = open(neigh_des_folder + 'B_ideal_' + str(V) + ".txt", 'w')
 f_spanning = open(neigh_des_folder + 'S_' + str(V) + ".txt",'w')
@@ -259,11 +271,11 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = rename_graph(O)
 
     B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
-    R = randomDRN(O,B)
-    S = spanning(R)
-    K2 = kregular(R, 2)
-    K4 = kregular(R, 4)
-    K8 = kregular(R, 8)
+    R = randomDRN(O, B, S_IDs)
+    S = spanning(O, R, S_IDs)
+    K2 = kregular(O, R, 2, S_IDs)
+    K4 = kregular(O, R, 4, S_IDs)
+    K8 = kregular(O, R, 8, S_IDs)
 
     O = O.to_undirected()
     B = B.to_undirected()
@@ -274,13 +286,13 @@ for t in range(network_construction_interval, network_generation_time, network_c
     curr = os.getcwd()
     os.chdir(directory + 'Data/')
 
-    nx.write_gml(O,'Original.gml')
-    nx.write_gml(B,'Bio.gml')
-    nx.write_gml(R,'Random.gml')
-    nx.write_gml(S,'Spanning.gml')
-    nx.write_gml(K2,'K2.gml')
-    nx.write_gml(K4,'k4.gml')
-    nx.write_gml(K8,'k8.gml')
+    #nx.write_gml(O,'Original'+ '.gml')
+    nx.write_gml(B,'Bio_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(R,'Random_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(S,'Spanning_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(K2,'K2_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(K4,'k4_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(K8,'k8_' + str(t - network_construction_interval) + '.gml')
 
     print ('See here:',len(B.nodes()))
 
