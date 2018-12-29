@@ -6,6 +6,7 @@ import pickle
 from constants import *
 from construct_NepalDRN_utility import convert_to_real_world_DRN
 from construct_Bio_NepalDRN import *
+import shutil
 
 from writeFile import writeF
 
@@ -298,23 +299,29 @@ for t in range(network_construction_interval, network_generation_time, network_c
     real_world_K4 = convert_to_real_world_DRN(K4)
     real_world_K8 = convert_to_real_world_DRN(K8)
 
-    s_bio = writeF(real_world_B, t)
+    s_bio = writeF(real_world_B, t - network_construction_interval)
     f_bio.write(s_bio)
 
-    s_spanning = writeF(real_world_SG, t)
+    s_spanning = writeF(real_world_SG, t - network_construction_interval)
     f_spanning.write(s_spanning)
 
-    s_random = writeF(real_world_RG, t)
+    s_random = writeF(real_world_RG, t - network_construction_interval)
     f_random.write(s_random)
 
-    s_k2 = writeF(real_world_K2, t)
+    s_k2 = writeF(real_world_K2, t - network_construction_interval)
     f_k2.write(s_k2)
 
-    s_k4 = writeF(real_world_K4, t)
+    s_k4 = writeF(real_world_K4, t - network_construction_interval)
     f_k4.write(s_k4)
 
-    s_k8 = writeF(real_world_K8, t)
+    s_k8 = writeF(real_world_K8, t - network_construction_interval)
     f_k8.write(s_k8)
+
+    if t == network_construction_interval:
+        f_bio_s = open(neigh_des_folder + 'B_' + str(V) + "_s.txt", "w")
+        f_bio_s.write('0 ' + str(total_simulation_time) + '\n')
+        f_bio_s.write(s_bio)
+        f_bio_s.close()
 
     if generate_B_ideal == True:
         O_ideal = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t) + '.gml')
