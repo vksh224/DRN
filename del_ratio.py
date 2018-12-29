@@ -68,9 +68,10 @@ def get_energy_stat(file_name, time):
 
 # Main starts here
 ONE_directory = "/mounts/u-spa-d2/grad/vksh224/BioDRN_ONE/BioDRN/src/"
+#ONE_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/"
 
 routers = ('BioDRNRouter',)
-endTimes = ('3600', '10800', '18000')
+endTimes = ('3600', '10800')
 topologies = ('O', 'B', 'R', 'S', 'K2', 'K4')
 
 
@@ -93,7 +94,7 @@ for option in range(1,2):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(1,2):
+                for run in range(10,11):
                     data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/Data/"
 
                     CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
@@ -105,7 +106,7 @@ for option in range(1,2):
                     # This is not consistent with V from other files. Here, it includes the responders too
                     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
                             #reports/BioDRNRouter_3600_NeighList/1_0/B_214.txt_MessageStatsReport.txt
-                    fname = ONE_directory + "reports/%s_%s_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
+                    fname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
                     if os.path.isfile(fname):
                         del_ratio.append(get_stat(fname, 'delivery_prob'))
                         latency.append(get_stat(fname, "latency_avg"))
@@ -115,7 +116,7 @@ for option in range(1,2):
                     else:
                         print("Stat file not found", fname)
 
-                    energyfname = ONE_directory + "reports/%s_%s_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (
+                    energyfname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (
                     router, time, option, run, top, V)
 
                     if os.path.isfile(fname):
