@@ -25,11 +25,11 @@ failed_node_time_interval = 1800
 no_of_CC = 1
 no_of_R = 30
 
-min_no_PoIs_for_R = 2
-max_no_PoI_for_R = 5
+min_no_PoIs_for_R = 1
+max_no_PoI_for_R = 3
 
 min_V_in_PoI = 1
-max_V_in_PoI = 5
+max_V_in_PoI = 3
 
 min_S_in_PoI = 30
 max_S_in_PoI = 50
@@ -66,10 +66,10 @@ max_V_speed = 1.5
 p = 0.02
 
 root_directory = 'Bhaktapur_1/'
-directory = 'Bhaktapur_1/10/'
-loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/1_10/'
-neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/1_10/'
-setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/1_10/'
+directory = 'Bhaktapur_1/4/'
+loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/1_4/'
+neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/1_4/'
+setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/1_4/'
 core_setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_10/'
+failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_4/'
 no_of_PoI = 5

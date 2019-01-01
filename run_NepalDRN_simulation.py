@@ -9,7 +9,7 @@ no_of_PoI = 3
 for option in range(1, 2):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
-    for run in range(10, 11):
+    for run in range(4, 5):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
         #
@@ -60,10 +60,10 @@ for option in range(1, 2):
         print("============ Option: " + str(option) + " Run: " + str(run) + " ============ ")
 
         # #Place CC, Responders, and PoIs (and its survivors and volunteers) in the disaster area
-        os.system('python construct_Orig_NepalDRN.py')
+        # os.system('python construct_Orig_NepalDRN.py')
         #
         # # Create Original DRN at each "network_construction_interval" until "total_simulation_time"
-        os.system('python construct_Orig_NepalDRN_network.py')
+        # os.system('python construct_Orig_NepalDRN_network.py')
         #
         # # Create Bio-DRN corresponding to each "network_construction_interval" of Original DRN
         # # os.system('python3 construct_Bio_NepalDRN.py')

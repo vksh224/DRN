@@ -71,10 +71,11 @@ ONE_directory = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/"
 #ONE_directory = "/Users/vijay/BioDRN_ONE/BioDRN/src/"
 
 routers = ('BioDRNRouter',)
-#endTimes = ('3600', '5400', '7200', '9000', '10800', '12600', '14400', '16200', '18000', '19800', '21600')
-endTimes = ('3600', '10800')
-topologies = ('O', 'B', 'B_ideal', 'R', 'S', 'K8')
+endTimes = ('3600', '7200','10800','14400', '18000', '21600')
+#endTimes = ('3600', '10800', '18000')
+topologies = ('O', 'B', 'B_ideal', 'S', 'R', 'K8')
 
+runs = [0, 1]
 
 # Scenario.name = %%Group.router%%_%%Scenario.endTime%%_%%Group.neighborListFile%%
 
@@ -88,8 +89,12 @@ for option in range(1,2):
         print("\nRouter " + router)
         for top in topologies:
             print("Top", top)
-            f_top = open(ONE_Experiments + "/" + top + ".txt", "w")
-            f_top.write("#time" + "\t" + "avg_pdr" + "\t" + "avg_lat"+ "\t" + "avg_hop" + "\t" + "avg_overhead" + "\t" + "avg_alive_nodes \n")
+            if not os.path.exists(ONE_Experiments + "/" + str(option)):
+                os.mkdir(ONE_Experiments + "/" + str(option))
+
+            f_top = open(ONE_Experiments + "/" + str(option) + "/" + top + ".txt", "w")
+            f_top.write(
+                "#time" + "\t" + "avg_pdr" + "\t" + "avg_lat" + "\t" + "avg_hop" + "\t" + "avg_overhead" + "\t" + "avg_alive_nodes \n")
 
             for time in endTimes:
                 del_ratio = []
@@ -98,7 +103,8 @@ for option in range(1,2):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(11,12):
+                for run in range(4, 5):
+
                     data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/Data/"
 
                     CC_locs = pickle.load(open(data_directory + "CC_locs.p", "rb"))
@@ -110,11 +116,11 @@ for option in range(1,2):
                     # This is not consistent with V from other files. Here, it includes the responders too
                     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
                             #reports/BioDRNRouter_3600_NeighList/1_0/B_214.txt_MessageStatsReport.txt
-                    fname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
+                    fname = ONE_directory + "reports/25_35_%s_%s_MessageBurstGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
 
-                    if top == "B_ideal" or top == "O" or run != 10:
-                        fname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (
-                        router, time, option, run, top, V)
+                    # if top == "B_ideal" or top == "O" :
+                    #     fname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s_backup/%s_%s.txt_MessageStatsReport.txt" % (
+                    #     router, time, option, run, top, V)
 
                     if os.path.isfile(fname):
                         del_ratio.append(get_stat(fname, 'delivery_prob'))
@@ -122,13 +128,13 @@ for option in range(1,2):
                         hop_count.append(get_stat(fname, "hopcount_avg"))
                         overhead.append(get_stat(fname, "overhead_ratio"))
 
-                    else:
-                        print("Stat file not found", fname)
+                    # else:
+                    #     print("Stat file not found", fname)
 
-                    energyfname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (router, time, option, run, top, V)
+                    energyfname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (router, time, option, run, top, V)
 
-                    if top == "B_ideal" or top == "O" or run != 10:
-                        energyfname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_EnergyLevelReport.txt" % (router, time, option, run, top, V)
+                    # if top == "B_ideal" or top == "O" :
+                    #     energyfname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s_backup/%s_%s.txt_EnergyLevelReport.txt" % (router, time, option, run, top, V)
 
 
 

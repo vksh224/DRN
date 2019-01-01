@@ -69,7 +69,7 @@ def bioDRN(G2, t1_G2, t2_G2, t3_G2, t):
     #real_world_G = convert_to_real_world_DRN(GBD)
     #print ("Real world G: #nodes:", len(real_world_G))
     #print ("Real world G: #edges:", len(real_world_G.edges()))
-    GBD.add_edges_from([e for e in G2.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
+    #GBD.add_edges_from([e for e in G2.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
 
     return GBD
 
@@ -88,7 +88,7 @@ def kregular(O, G, k, S_IDs):
             #     L.append(e[0], e[1])
             #     R.add_edge(e[0], e[1])
 
-    R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
+    #R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
     return R
 
 def kconnected(R,k):
@@ -130,7 +130,7 @@ def randomDRN(O,B, S_IDs):
     #print("Rand DRN: Is weakly connected", nx.is_weakly_connected(R))
 
     R = R.to_undirected()
-    R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
+    #R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
     return R
 
 
@@ -147,7 +147,7 @@ def spanning(O, R, S_IDs):
         else:
             S_D.add_edge(e[1], e[0])
     '''
-    S.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
+    #S.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
 
     return S
 

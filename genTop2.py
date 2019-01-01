@@ -68,6 +68,7 @@ def bioDRN(G2, t1_G2, t2_G2, t3_G2, t):
     #real_world_G = convert_to_real_world_DRN(GBD)
     #print ("Real world G: #nodes:", len(real_world_G))
     #print ("Real world G: #edges:", len(real_world_G.edges()))
+    GBD.add_edges_from([e for e in G2.edges() if (e[0] not in S_IDs or e[1] not in S_IDs)])
 
     return GBD
 
