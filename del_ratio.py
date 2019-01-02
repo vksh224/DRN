@@ -73,7 +73,7 @@ ONE_directory = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/"
 routers = ('BioDRNRouter',)
 endTimes = ('3600', '7200','10800','14400', '18000', '21600')
 #endTimes = ('3600', '10800', '18000')
-topologies = ('O', 'B', 'B_ideal', 'S', 'R', 'K8')
+topologies = ('O', 'B', 'B_ideal', 'S', 'R', 'K8', 'K4', 'K2')
 
 runs = [0, 1]
 
@@ -103,7 +103,7 @@ for option in range(1,2):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(4, 5):
+                for run in range(4,5 ):
 
                     data_directory = "Bhaktapur_" + str(option) + "/" + str(run) + "/Data/"
 
@@ -116,7 +116,7 @@ for option in range(1,2):
                     # This is not consistent with V from other files. Here, it includes the responders too
                     V = len(CC_locs) + len(PoI_locs) + len(Vol_locs) + len(S_locs) + len(Res_paths)
                             #reports/BioDRNRouter_3600_NeighList/1_0/B_214.txt_MessageStatsReport.txt
-                    fname = ONE_directory + "reports/25_35_%s_%s_MessageBurstGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
+                    fname = ONE_directory + "reports/25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s/%s_%s.txt_MessageStatsReport.txt" % (router, time, option, run, top, V)
 
                     # if top == "B_ideal" or top == "O" :
                     #     fname = ONE_directory + "reports/s_25_35_%s_%s_MessageEventGenerator_NeighborList/%s_%s_backup/%s_%s.txt_MessageStatsReport.txt" % (
