@@ -1,5 +1,11 @@
 (lp0
-I14
+I8
+aI9
+aI10
+aI11
+aI12
+aI13
+aI14
 aI15
 aI16
 aI17
@@ -114,14 +120,4 @@ aI125
 aI126
 aI127
 aI128
-aI129
-aI130
-aI131
-aI132
-aI133
-aI134
-aI135
-aI136
-aI137
-aI138
 a.

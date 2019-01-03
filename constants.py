@@ -66,10 +66,10 @@ max_V_speed = 1.5
 p = 0.02
 
 root_directory = 'Bhaktapur_1/'
-directory = 'Bhaktapur_1/4/'
-loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/1_4/'
-neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/1_4/'
-setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/1_4/'
+directory = 'Bhaktapur_1/1/'
+loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/1_1/'
+neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/1_1/'
+setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/1_1/'
 core_setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_4/'
+failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_1/'
 no_of_PoI = 5

@@ -797,10 +797,6 @@ graph [
   ]
   edge [
     source 2
-    target 54
-  ]
-  edge [
-    source 2
     target 4
   ]
   edge [
@@ -826,6 +822,10 @@ graph [
   edge [
     source 2
     target 10
+  ]
+  edge [
+    source 2
+    target 54
   ]
   edge [
     source 2
