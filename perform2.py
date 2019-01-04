@@ -36,7 +36,7 @@ def pathcount(G,CC,S):
                 continue
 
             if nx.has_path(G,s,c):
-                paths = nx.all_simple_paths(G, source = s, target = c,cutoff = 4)
+                paths = nx.all_simple_paths(G, source = s, target = c,cutoff = 6)
                 p += len(list(paths))
     return p
 
@@ -83,7 +83,7 @@ def motif(G):
     return m
 
 #modes: 0: efficiency, 1:pathcount, 2: motif
-mode = 2
+mode = 0
 
 how_many_instances = 1
 
@@ -109,6 +109,11 @@ for i in range(10, 11):
     Vol = pickle.load(open('Vol_locs.p','r'))
     S = pickle.load(open('S_locs.p','r'))
 
+    Res_paths = pickle.load(open("Res_paths.p", "rb"))
+
+    # This is not consistent with V from other files. Here, it includes the responders too
+    V = len(CC) + len(PoI) + len(Vol) + len(S) + len(Res_paths)
+
     # Find source destination nodes
     CC_IDs = range(len(CC))
     PoI_IDs = range(len(CC), len(CC) + len(PoI))
@@ -117,28 +122,35 @@ for i in range(10, 11):
 
 
     #Failed nodelist
-    F = open(failed_node_list + "failed_nodelist_268.txt")
+    F = open(failed_node_list + "failed_nodelist_" + str(V) + ".txt")
     r = F.readlines()
     f = failed_gen(r)
 
+    t = 0
+
     #Read topologies
-    O = nx.read_gml('../Orig_NepalDRN_0.gml')
+    O = nx.read_gml('../Orig_NepalDRN_' + str(t) + '.gml')
     O = rename_graph(O)
 
-    B = nx.read_gml('Bio_0.gml')
+    B = nx.read_gml('Bio_' + str(t) + '.gml')
     B = rename_graph(B)
+    print("B: Nodes and edges:", len(B.nodes()), len(B.edges()), "is_connected", nx.is_connected(B))
 
-    R = nx.read_gml('Random_0.gml')
+    R = nx.read_gml('Random_' + str(t) + '.gml')
     R = rename_graph(R)
+    print("R: Nodes and edges:", len(R.nodes()), len(R.edges()), "is_connected", nx.is_connected(R))
 
-    K2 = nx.read_gml('K2_0.gml')
+    K2 = nx.read_gml('K2_' + str(t) + '.gml')
     K2 = rename_graph(K2)
+    print("K2: Nodes and edges:", len(K2.nodes()), len(K2.edges()), "is_connected", nx.is_connected(K2))
 
-    K4 = nx.read_gml('k4_0.gml')
+    K4 = nx.read_gml('k8_' + str(t) + '.gml')
     K4 = rename_graph(K4)
+    print("K8: Nodes and edges:", len(K4.nodes()), len(K4.edges()), "is_connected", nx.is_connected(K4))
 
-    s = nx.read_gml('Spanning_0.gml')
+    s = nx.read_gml('Spanning_' + str(t) + '.gml')
     s = rename_graph(s)
+    print("ST: Nodes and edges:", len(s.nodes()), len(s.edges()), "is_connected", nx.is_connected(s))
 
     #print (O.nodes())
     #print PoI_IDs
@@ -168,7 +180,7 @@ for i in range(10, 11):
         #print motif(s)
 
         if mode == 0:
-            O_List.append(efficiency(O, CC_IDs, S_IDs))
+            #O_List.append(efficiency(O, CC_IDs, S_IDs))
             B_List.append(efficiency(B, CC_IDs, S_IDs))
             R_List.append(efficiency(R, CC_IDs, S_IDs))
             K2_List.append(efficiency(K2, CC_IDs, S_IDs))
