@@ -84,7 +84,7 @@ ONE_Experiments = "/localdisk2/SCRATCH/DRN_Project/ONE_Experiments"
 if not os.path.exists(ONE_Experiments):
     os.mkdir(ONE_Experiments)
 
-for option in range(0,1):
+for option in range(2,3):
     for router in routers:
         print("\nRouter " + router)
         for top in topologies:
