@@ -65,11 +65,11 @@ max_V_speed = 1.5
 #Percentage of nodes failed
 p = 0.02
 
-root_directory = 'Bhaktapur_2/'
-directory = 'Bhaktapur_2/2/'
-loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/2_2/'
-neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/2_2/'
-setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/2_2/'
+root_directory = 'Bhaktapur_1/'
+directory = 'Bhaktapur_1/0/'
+loc_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NodePosition/1_0/'
+neigh_des_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/NeighborList/1_0/'
+setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/1_0/'
 core_setting_directory = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/Nepal/'
-failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/2_2/'
-no_of_PoI = 7
+failed_node_folder = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_0/'
+no_of_PoI = 5

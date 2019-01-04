@@ -3,13 +3,13 @@ import random
 import networkx as nx
 import pickle
 
-no_of_PoI = 1
+no_of_PoI = 3
 
 #option - high - More PoIs
-for option in range(0, 3):
+for option in range(1, 2):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
-    for run in range(1, 3):
+    for run in range(0, 1):
         root_directory = "Bhaktapur_" + str(option) + "/"
         directory = root_directory + str(run) + "/"
         #
