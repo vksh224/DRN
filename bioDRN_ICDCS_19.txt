@@ -1,46 +1,6 @@
 
-#======== Alive Nodes =============
-
-reset
-set terminal postscript eps enhanced color 
-set style line 1 lc rgb "red" lt 3 lw 2 ps 2
-set style line 2 lc rgb "black" lt 5 lw 2 ps 2
-set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
-set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
-
-
-set xlabel 'Time (hours)'
-set ylabel 'No. of Alive Nodes'
-set ytics font "Times-Roman,35" 
-set xtics font "Times-Roman,35"
-set xlabel font "Times-Roman,40"
-set ylabel font "Times-Roman,40" 
-set key font "Times-Roman, 25"
-set key horizontal outside maxrows 4
-set bmargin 6
-set ytics offset 1,0
-set xlabel offset 0,-2
-set ylabel offset -3 ,0
-set lmargin at screen 0.15
-set xtics offset -1.2,-0.5
-
-set style data histogram
-set style histogram cluster gap 1
-set style fill solid border -1
-set boxwidth 0.9
-set xtic scale 0
-set xtics 0,1,12
-#set yrange[0:1]
-
-set output 'PlotsICDCS19/1/bioDRN_AliveNodes.eps'
-plot  '/Users/vijay/DRN_Project/ONE_Experiments/1/B.txt' u 6:xtic(1) fc rgb "red" t'Bio-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/O.txt' u 6:xtic(1) fc rgb "black" t'Original DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/R.txt' u 6:xtic(1) fc rgb "blue" t'Rand-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 6:xtic(1) fc rgb "green" t'ST-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K2.txt' u 6:xtic(1) w lp ls 5 t'K2-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 6:xtic(1) w lp ls 6 t'K4-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 6:xtic(1) w lp ls 7 t'K8-DRN'
-
-#plot  '/Users/vijay/DRN_Project/ONE_Experiments/2/B.txt' u 6:xtic(1) fc rgb "red" t'Bio-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/2/O.txt' u 6:xtic(1) fc rgb "black" t'Original DRN', '/Users/vijay/DRN_Project/ONE_Experiments/2/R.txt' u 6:xtic(1) fc rgb "blue" t'Rand-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/2/S.txt' u 6:xtic(1) fc rgb "green" t'ST-DRN'
-
-
+home_directory = "./ONE_Experiments/1/"
+plot_directory = "./ONE_Plots/1/"
 #====== alive nodes - line
 
 reset
@@ -49,13 +9,12 @@ set style line 1 lc rgb "red" lt 3 lw 2 ps 2
 set style line 2 lc rgb "black" lt 5 lw 2 ps 2
 set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
 set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
-
+set style line 5 lc rgb "orange" lt 9 lw 2 ps 2
+set style line 6 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 7 lc rgb "yellow" lt 8 lw 2 ps 2
 
 set xlabel 'Time (hours)'
-set ylabel 'No. of Alive Nodes'
+set ylabel 'Perc. of Alive Nodes'
 set ytics font "Times-Roman,35" 
 set xtics font "Times-Roman,35"
 set xlabel font "Times-Roman,40"
@@ -74,28 +33,29 @@ set xtics 0,1,12
 #set yrange[0:200]
 #set ytics 0,25, 150
 
-set output 'PlotsICDCS19/1/bioDRN_AliveNodes_line.eps'
+set output plot_directory.'bioDRN_AliveNodes_line.eps'
 
-plot  '/Users/vijay/DRN_Project/ONE_Experiments/1/B.txt' u 6:xtic(1) w lp ls 1 t'Bio-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/O.txt' u 6:xtic(1) w lp ls 2 t'Orig-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/R.txt' u 6:xtic(1) w lp ls 3 t'Rand-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 6:xtic(1) w lp ls 4 t'ST-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K2.txt' u 6:xtic(1) w lp ls 5 t'K2-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 6:xtic(1) w lp ls 6 t'K4-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K8.txt' u 6:xtic(1) w lp ls 7 t'K8-DRN'
+plot  home_directory.'B.txt' u 6:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 6:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 6:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 6:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 6:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 6:xtic(1) w lp ls 6 t'K8-DRN'
+#, home_directory.'K8.txt' u 6:xtic(1) w lp ls 7 t'K8-DRN'
 
 
 #================ Packet Loss Rate ========================
 reset
-set terminal postscript eps enhanced color 
+set terminal postscript eps enhanced color
 set style line 1 lc rgb "red" lt 3 lw 2 ps 2
 set style line 2 lc rgb "black" lt 5 lw 2 ps 2
 set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
 set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 5 lc rgb "orange" lt 9 lw 2 ps 2
+set style line 6 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 7 lc rgb "yellow" lt 8 lw 2 ps 2
 
 set ylabel 'Packet Delivery Ratio' rotate by 90
 set xlabel 'Time (in hours)'
-set ytics font "Times-Roman,35" 
+set ytics font "Times-Roman,35"
 set xtics font "Times-Roman,35"
 set xlabel font "Times-Roman,40"
-set ylabel font "Times-Roman,40" 
+set ylabel font "Times-Roman,40"
 set key font "Times-Roman, 25"
 set bmargin 6
 set ytics offset 1,0
@@ -109,29 +69,30 @@ set xtics 1,1, 12
 #set key bottom right
 set key horizontal outside maxrows 4
 
-set output 'PlotsICDCS19/1/bioDRN_PDR.eps'
+set output plot_directory.'bioDRN_PDR.eps'
 
-plot  '/Users/vijay/DRN_Project/ONE_Experiments/1/B.txt' u 2:xtic(1) w lp ls 1 t'Bio-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/O.txt' u 2:xtic(1) w lp ls 2 t'Orig-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/R.txt' u 2:xtic(1) w lp ls 3 t'Rand-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 2:xtic(1) w lp ls 4 t'ST-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K2.txt' u 2:xtic(1) w lp ls 5 t'K2-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K4.txt' u 2:xtic(1) w lp ls 6 t'K4-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K8.txt' u 2:xtic(1) w lp ls 7 t'K8-DRN'
+plot  home_directory.'B.txt' u 2:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 2:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 2:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 2:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 2:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 2:xtic(1) w lp ls 6 t'K8-DRN'
+#, home_directory.'/K8.txt' u 2:xtic(1) w lp ls 7 t'K8-DRN'
 
 
 #================ Packet Overhead ===========================
 
 reset
-set terminal postscript eps enhanced color 
+set terminal postscript eps enhanced color
 set style line 1 lc rgb "red" lt 3 lw 2 ps 2
 set style line 2 lc rgb "black" lt 5 lw 2 ps 2
 set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
 set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 5 lc rgb "orange" lt 9 lw 2 ps 2
+set style line 6 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 7 lc rgb "yellow" lt 8 lw 2 ps 2
 
 set ylabel 'Packet Overhead' rotate by 90
 set xlabel 'Time (hours)'
 set ytics font "Times-Roman,35" offset 1
-set xtics font "Times-Roman,35" 
+set xtics font "Times-Roman,35"
 set xlabel font "Times-Roman,40"
-set ylabel font "Times-Roman,40" 
+set ylabel font "Times-Roman,40"
 set key font "Times-Roman, 25"
 #set key center left
 set key horizontal outside maxrows 4
@@ -143,27 +104,30 @@ set lmargin at screen 0.15
 set xtics 0, 1, 12
 #set yrange[0:250]
 
-set output 'PlotsICDCS19/1/bioDRN_overhead.eps'
-plot  '/Users/vijay/DRN_Project/ONE_Experiments/1/B.txt' u 5:xtic(1) w lp ls 1 t'Bio-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/O.txt' u 5:xtic(1) w lp ls 2 t'Orig-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/R.txt' u 5:xtic(1) w lp ls 3 t'Rand-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 5:xtic(1) w lp ls 4 t'ST-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K2.txt' u 5:xtic(1) w lp ls 5 t'K2-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K4.txt' u 5:xtic(1) w lp ls 6 t'K4-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K8.txt' u 5:xtic(1) w lp ls 7 t'K8-DRN'
+set output plot_directory.'bioDRN_overhead.eps'
+
+plot  home_directory.'B.txt' u 5:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 5:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 5:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 5:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 5:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 5:xtic(1) w lp ls 6 t'K8-DRN'
+#, home_directory.'K8.txt' u 5:xtic(1) w lp ls 7 t'K8-DRN'
 
 #=============== Latency =======
 
 reset
-set terminal postscript eps enhanced color 
+set terminal postscript eps enhanced color
 set style line 1 lc rgb "red" lt 3 lw 2 ps 2
 set style line 2 lc rgb "black" lt 5 lw 2 ps 2
 set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
 set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 5 lc rgb "orange" lt 9 lw 2 ps 2
+set style line 6 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 7 lc rgb "yellow" lt 8 lw 2 ps 2
+
 
 set xlabel 'Time (hours)'
 set ylabel 'Network Latency (hours)'
-set ytics font "Times-Roman,35" 
+set ytics font "Times-Roman,35"
 set xtics font "Times-Roman,35"
 set xlabel font "Times-Roman,40"
-set ylabel font "Times-Roman,40" 
+set ylabel font "Times-Roman,40"
 set key font "Times-Roman, 25"
 set key horizontal outside maxrows 4
 set bmargin 6
@@ -177,5 +141,6 @@ set xtics offset -6.0,-0.5
 #set ytics 0,0.2, 2
 set xtics 1,1,12
 
-set output 'PlotsICDCS19/1/bioDRN_latency.eps'
-plot  '/Users/vijay/DRN_Project/ONE_Experiments/1/B.txt' u 3:xtic(1) w lp ls 1 t'Bio-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/O.txt' u 3:xtic(1) w lp ls 2 t'Orig-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/R.txt' u 3:xtic(1) w lp ls 3 t'Rand-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/S.txt' u 3:xtic(1) w lp ls 4 t'ST-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K2.txt' u 3:xtic(1) w lp ls 5 t'K2-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K4.txt' u 3:xtic(1) w lp ls 6 t'K4-DRN', '/Users/vijay/DRN_Project/ONE_Experiments/1/K8.txt' u 3:xtic(1) w lp ls 7 t'K8-DRN'
+set output plot_directory.'bioDRN_latency.eps'
+plot  home_directory.'B.txt' u 3:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 3:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 3:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 3:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 3:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 3:xtic(1) w lp ls 6 t'K8-DRN'
+#, home_directory.'K8.txt' u 3:xtic(1) w lp ls 7 t'K8-DRN'
