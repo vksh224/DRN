@@ -141,7 +141,7 @@ for option in range(2,3):
                     if os.path.isfile(fname):
                         available_energy, alive_nodes = get_energy_stat(energyfname, time)
                         available_energy_list.append(available_energy)
-                        alive_nodes_list.append(alive_nodes)
+                        alive_nodes_list.append(alive_nodes/V)
 
                     # else:
                     #     print("Energy file not found", energyfname)
