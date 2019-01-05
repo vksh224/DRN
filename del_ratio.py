@@ -103,7 +103,7 @@ for option in range(2,3):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(0, 2):
+                for run in range(1, 3):
 
                     data_directory = "Bhaktapur_" + str(option ) + "/" + str(run) + "/Data/"
 
