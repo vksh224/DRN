@@ -3,10 +3,10 @@ import random
 import networkx as nx
 import pickle
 
-no_of_PoI = 3
+no_of_PoI = 2
 
 #option - high - More PoIs
-for option in range(1, 2):
+for option in range(4, 9, 2):
     # no_of_PoI = count_PoI + random.randint(option, (2*option))
     no_of_PoI += 2
     for run in range(0, 1):
