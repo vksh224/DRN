@@ -13,7 +13,7 @@ def convert_to_string(l):
 
 def write_to_file(L,fname):
 
-    s = 'time #perc. #Orig #Bio #R #K2 #K4 #S \n'
+    s = 'time #perc. #Orig #Bio #R #K2 #K8 #S \n'
     f = open(fname,'w')
     f.write(s)
 
@@ -126,8 +126,9 @@ mode = 1
 how_many_instances = 1
 how_many_timeslots = 10
 
-path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0/'
+#path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0/'
 #path_source_files = '/localdisk2/SCRATCH/DRN_Project/Bhaktapur_1/'
+path_source_files = '/Users/vijay/DRN_Project/Bhaktapur_0/'
 
 #failed_node_list = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_10/'
 os.chdir(path_source_files)
@@ -144,10 +145,10 @@ for i in [0,1,2]:
     os.chdir(str(i) + '/Data/')
 
     # Read files
-    CC = pickle.load(open('CC_locs.p','r'))
-    PoI = pickle.load(open('PoI_locs.p','r'))
-    Vol = pickle.load(open('Vol_locs.p','r'))
-    S = pickle.load(open('S_locs.p','r'))
+    CC = pickle.load(open('CC_locs.p','rb'))
+    PoI = pickle.load(open('PoI_locs.p','rb'))
+    Vol = pickle.load(open('Vol_locs.p','rb'))
+    S = pickle.load(open('S_locs.p','rb'))
 
     Res_paths = pickle.load(open("Res_paths.p", "rb"))
 
@@ -160,7 +161,8 @@ for i in [0,1,2]:
     Vol_IDs = range(len(CC) + len(PoI), len(CC) + len(PoI) + len(Vol))
     S_IDs = range(len(CC) + len(PoI) + len(Vol),len(CC) + len(PoI) + len(Vol) + len(S))
 
-    failed_node_list = '/Users/satyakiroy/PycharmProjects/DRN_Project/FailedNodeList/0_' + str(i) + '/'
+    #failed_node_list = '/Users/satyakiroy/PycharmProjects/DRN_Project/FailedNodeList/0_' + str(i) + '/'
+    failed_node_list = '/Users/vijay/DRN_Project/FailedNodeList/0_' + str(i) + '/'
 
     #Failed nodelist
     F = open(failed_node_list + 'failed_nodelist_' + str(V) + '.txt','r')
@@ -185,9 +187,9 @@ for i in [0,1,2]:
     K2 = rename_graph(K2)
     print("K2: Nodes and edges:", len(K2.nodes()), len(K2.edges()), "is_connected", nx.is_connected(K2))
 
-    K4 = nx.read_gml('k8_' + str(t) + '.gml')
-    K4 = rename_graph(K4)
-    print("K8: Nodes and edges:", len(K4.nodes()), len(K4.edges()), "is_connected", nx.is_connected(K4))
+    K8 = nx.read_gml('k8_' + str(t) + '.gml')
+    K8 = rename_graph(K8)
+    print("K8: Nodes and edges:", len(K4.nodes()), len(K4.edges()), "is_connected", nx.is_connected(K8))
 
     s = nx.read_gml('Spanning_' + str(t) + '.gml')
     s = rename_graph(s)
@@ -265,10 +267,17 @@ s_List = aggregate(s_List)
 
 timeslot_duration = 1800.0
 L = [O_List,B_List,R_List,K2_List,K4_List,s_List]
-os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project')
+#os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project')
+os.chdir('/Users/vijay/DRN_Project')
 
-write_to_file(L,'motif_graph.txt')
+if mode == 0:
+    write_to_file(L,'NE.txt')
 
+elif mode == 1:
+    write_to_file(L, 'path.txt')
+
+else:
+    write_to_file(L, 'motif.txt')
 
 '''
 #Visualization
