@@ -4,6 +4,44 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
+def convert_to_string(l):
+    s = ''
+    for i in range(len(l)):
+        s = s + str(l[i]) + ' '
+
+    return s
+
+def write_to_file(L,fname):
+
+    s = 'time #perc. #Orig #Bio #R #K2 #K4 #S \n'
+    f = open(fname,'w')
+    f.write(s)
+
+    L = np.array(L)
+    t = 1
+    p = 2
+
+    for i in range(L.shape[1]):
+        l = list(L[:,i])
+        print (l)
+
+        s = convert_to_string(l)
+        s = str(t) + ' ' + str(p * t) + ' ' + s + '\n'
+        f.write(s)
+
+        t = t + 1
+
+    f.close()
+
+
+def aggregate(L):
+
+    M = []
+    for i in range(len(L)):
+        M.append(np.average(L[i]))
+
+    return M
+
 def failed_gen(r):
 
     f = [[]]
@@ -36,7 +74,7 @@ def pathcount(G,CC,S):
                 continue
 
             if nx.has_path(G,s,c):
-                paths = nx.all_simple_paths(G, source = s, target = c,cutoff = 6)
+                paths = nx.all_simple_paths(G, source = s, target = c,cutoff = 4)
                 p += len(list(paths))
     return p
 
@@ -83,23 +121,25 @@ def motif(G):
     return m
 
 #modes: 0: efficiency, 1:pathcount, 2: motif
-mode = 0
+mode = 1
 
 how_many_instances = 1
+how_many_timeslots = 10
 
-#path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0'
-path_source_files = '/localdisk2/SCRATCH/DRN_Project/Bhaktapur_1/'
-failed_node_list = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_10/'
+path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0/'
+#path_source_files = '/localdisk2/SCRATCH/DRN_Project/Bhaktapur_1/'
+
+#failed_node_list = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_10/'
 os.chdir(path_source_files)
 
-O_List = []
-B_List = []
-R_List = []
-K2_List = []
-K4_List = []
-s_List = []
+O_List = [[] for _ in range(how_many_timeslots)]
+B_List = [[] for _ in range(how_many_timeslots)]
+R_List = [[] for _ in range(how_many_timeslots)]
+K2_List = [[] for _ in range(how_many_timeslots)]
+K4_List = [[] for _ in range(how_many_timeslots)]
+s_List = [[] for _ in range(how_many_timeslots)]
 
-for i in range(10, 11):
+for i in [0,1,2]:
 
     os.chdir(str(i) + '/Data/')
 
@@ -120,9 +160,10 @@ for i in range(10, 11):
     Vol_IDs = range(len(CC) + len(PoI), len(CC) + len(PoI) + len(Vol))
     S_IDs = range(len(CC) + len(PoI) + len(Vol),len(CC) + len(PoI) + len(Vol) + len(S))
 
+    failed_node_list = '/Users/satyakiroy/PycharmProjects/DRN_Project/FailedNodeList/0_' + str(i) + '/'
 
     #Failed nodelist
-    F = open(failed_node_list + "failed_nodelist_" + str(V) + ".txt")
+    F = open(failed_node_list + 'failed_nodelist_' + str(V) + '.txt','r')
     r = F.readlines()
     f = failed_gen(r)
 
@@ -180,37 +221,56 @@ for i in range(10, 11):
         #print motif(s)
 
         if mode == 0:
-            #O_List.append(efficiency(O, CC_IDs, S_IDs))
-            B_List.append(efficiency(B, CC_IDs, S_IDs))
-            R_List.append(efficiency(R, CC_IDs, S_IDs))
-            K2_List.append(efficiency(K2, CC_IDs, S_IDs))
-            K4_List.append(efficiency(K4, CC_IDs, S_IDs))
-            s_List.append(efficiency(s, CC_IDs, S_IDs))
+            O_List[j - 1].append(efficiency(O, CC_IDs, S_IDs))
+            B_List[j - 1].append(efficiency(B, CC_IDs, S_IDs))
+            R_List[j - 1].append(efficiency(R, CC_IDs, S_IDs))
+            K2_List[j - 1].append(efficiency(K2, CC_IDs, S_IDs))
+            K4_List[j - 1].append(efficiency(K4, CC_IDs, S_IDs))
+            s_List[j - 1].append(efficiency(s, CC_IDs, S_IDs))
 
         elif mode == 1:
-            #O_List.append(pathcount(O,CC_IDs,S_IDs))
-            B_List.append(pathcount(B,CC_IDs,S_IDs))
-            R_List.append(pathcount(R,CC_IDs,S_IDs))
-            K2_List.append(pathcount(K2,CC_IDs,S_IDs))
-            K4_List.append(pathcount(K4,CC_IDs,S_IDs))
-            s_List.append(pathcount(s,CC_IDs,S_IDs))
+            O_List[j - 1].append(pathcount(O,CC_IDs,S_IDs))
+            B_List[j - 1].append(pathcount(B,CC_IDs,S_IDs))
+            R_List[j - 1].append(pathcount(R,CC_IDs,S_IDs))
+            K2_List[j - 1].append(pathcount(K2,CC_IDs,S_IDs))
+            K4_List[j - 1].append(pathcount(K4,CC_IDs,S_IDs))
+            s_List[j - 1].append(pathcount(s,CC_IDs,S_IDs))
         else:
-            #O_List.append(motif(O))
-            B_List.append(motif(B))
-            R_List.append(motif(R))
-            K2_List.append(motif(K2))
-            K4_List.append(motif(K4))
-            s_List.append(motif(s))
+            O_List[j - 1].append(motif(O))
+            B_List[j - 1].append(motif(B))
+            R_List[j - 1].append(motif(R))
+            K2_List[j - 1].append(motif(K2))
+            K4_List[j - 1].append(motif(K4))
+            s_List[j - 1].append(motif(s))
 
 
         #input('')
 
     os.chdir(path_source_files)
 
+O_List = aggregate(O_List)
+B_List = aggregate(B_List)
+R_List = aggregate(R_List)
+K2_List = aggregate(K2_List)
+K4_List = aggregate(K4_List)
+s_List = aggregate(s_List)
+
+#print (O_List)
+#print (B_List)
+#print (R_List)
+#print (K2_List)
+#print (K4_List)
+#print (s_List)
+
+
 timeslot_duration = 1800.0
 L = [O_List,B_List,R_List,K2_List,K4_List,s_List]
-print L
+os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project')
 
+write_to_file(L,'motif_graph.txt')
+
+
+'''
 #Visualization
 colorlist = ['r','g','b','black','magenta','purple']
 
@@ -219,3 +279,4 @@ for i in range(len(L)):
 
 plt.xticks([j for j in range(len(L[i]))],[j * timeslot_duration for j in range(len(L[i]))])
 plt.show()
+'''
