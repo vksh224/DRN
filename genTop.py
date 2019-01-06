@@ -278,12 +278,13 @@ for t in range(network_construction_interval, network_generation_time, network_c
     #B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
     B = nx.read_gml(data_directory + 'Bio_' + str(t - network_construction_interval) + '.gml')
     R = randomDRN(O, B, S_IDs)
-    S = spanning(O, R, S_IDs)
+
     K2 = kregular(O, R, 2, S_IDs)
     K4 = kregular(O, R, 4, S_IDs)
     K8 = kregular(O, R, 8, S_IDs)
     K3 = kregular(O, R, 3, S_IDs)
     K5 = kregular(O, R, 5, S_IDs)
+    S = spanning(K3, R, S_IDs)
 
     O = O.to_undirected()
     B = B.to_undirected()
