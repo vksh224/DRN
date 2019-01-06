@@ -13,7 +13,7 @@ def convert_to_string(l):
 
 def write_to_file(L,fname):
 
-    s = 'time #perc. #Orig #Bio #R #K2 #K8 #S \n'
+    s = 'time #perc. #Orig #Bio #R #K2 #K4 #K8 #S #K3 #K5 \n'
     f = open(fname,'w')
     f.write(s)
 
@@ -121,7 +121,7 @@ def motif(G):
     return m
 
 #modes: 0: efficiency, 1:pathcount, 2: motif
-mode = 2
+mode = 0
 option = 1 #which 0 - for 3 Pois, 1 - for 5 pois, 2 for 7 pois
 how_many_instances = 1
 how_many_timeslots = 10
@@ -141,6 +141,9 @@ K2_List = [[] for _ in range(how_many_timeslots)]
 K4_List = [[] for _ in range(how_many_timeslots)]
 K8_List = [[] for _ in range(how_many_timeslots)]
 s_List = [[] for _ in range(how_many_timeslots)]
+
+K3_List = [[] for _ in range(how_many_timeslots)]
+K5_List = [[] for _ in range(how_many_timeslots)]
 
 for i in [0,1,2]:
 
@@ -193,9 +196,17 @@ for i in [0,1,2]:
     K4 = rename_graph(K4)
     print("K4: Nodes and edges:", len(K4.nodes()), len(K4.edges()), "is_connected", nx.is_connected(K4))
 
-    K8 = nx.read_gml('k8_' + str(t) + '.gml')
+    K8 = nx.read_gml('K8_' + str(t) + '.gml')
     K8 = rename_graph(K8)
     print("K8: Nodes and edges:", len(K8.nodes()), len(K8.edges()), "is_connected", nx.is_connected(K8))
+
+    K3 = nx.read_gml('K3_' + str(t) + '.gml')
+    K3 = rename_graph(K3)
+    print("K3: Nodes and edges:", len(K3.nodes()), len(K3.edges()), "is_connected", nx.is_connected(K3))
+
+    K5 = nx.read_gml('K5_' + str(t) + '.gml')
+    K5 = rename_graph(K5)
+    print("K5: Nodes and edges:", len(K5.nodes()), len(K5.edges()), "is_connected", nx.is_connected(K5))
 
     s = nx.read_gml('Spanning_' + str(t) + '.gml')
     s = rename_graph(s)
@@ -215,6 +226,8 @@ for i in [0,1,2]:
         K4.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K8.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         s.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K3.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K5.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
 
         O.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
         B.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
@@ -223,6 +236,8 @@ for i in [0,1,2]:
         K4.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K8.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
         s.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K3.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K5.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
 
         #print motif(O)
         #print motif(B)
@@ -238,6 +253,9 @@ for i in [0,1,2]:
             K4_List[j - 1].append(efficiency(K4, CC_IDs, S_IDs))
             K8_List[j - 1].append(efficiency(K8, CC_IDs, S_IDs))
             s_List[j - 1].append(efficiency(s, CC_IDs, S_IDs))
+            K3_List[j - 1].append(efficiency(K3, CC_IDs, S_IDs))
+            K5_List[j - 1].append(efficiency(K5, CC_IDs, S_IDs))
+
 
         elif mode == 1:
             O_List[j - 1].append(pathcount(O,CC_IDs,S_IDs))
@@ -247,6 +265,9 @@ for i in [0,1,2]:
             K4_List[j - 1].append(pathcount(K4, CC_IDs, S_IDs))
             K8_List[j - 1].append(pathcount(K8,CC_IDs,S_IDs))
             s_List[j - 1].append(pathcount(s,CC_IDs,S_IDs))
+            K3_List[j - 1].append(pathcount(K3, CC_IDs, S_IDs))
+            K5_List[j - 1].append(pathcount(K5, CC_IDs, S_IDs))
+
         else:
             O_List[j - 1].append(motif(O))
             B_List[j - 1].append(motif(B))
@@ -255,9 +276,9 @@ for i in [0,1,2]:
             K4_List[j - 1].append(motif(K4))
             K8_List[j - 1].append(motif(K8))
             s_List[j - 1].append(motif(s))
+            K3_List[j - 1].append(motif(K3))
+            K5_List[j - 1].append(motif(K5))
 
-
-        #input('')
 
     os.chdir(path_source_files)
 
@@ -268,6 +289,8 @@ K2_List = aggregate(K2_List)
 K4_List = aggregate(K4_List)
 K8_List = aggregate(K8_List)
 s_List = aggregate(s_List)
+K3_List = aggregate(K3_List)
+K5_List = aggregate(K5_List)
 
 #print (O_List)
 #print (B_List)
@@ -278,7 +301,7 @@ s_List = aggregate(s_List)
 
 
 timeslot_duration = 1800.0
-L = [O_List,B_List,R_List,K2_List,K8_List,s_List]
+L = [O_List,B_List,R_List, K2_List, K4_List, K8_List, s_List, K3_List, K5_List]
 #os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project')
 os.chdir(root_directory)
 

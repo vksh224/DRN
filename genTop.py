@@ -236,6 +236,8 @@ f_random = open(neigh_des_folder + 'R_' + str(V) + '.txt','w')
 f_k2 = open(neigh_des_folder + 'K2_' + str(V) + '.txt','w')
 f_k4 = open(neigh_des_folder + 'K4_' + str(V) + '.txt','w')
 f_k8 = open(neigh_des_folder + 'K8_' + str(V) + '.txt','w')
+f_k3 = open(neigh_des_folder + 'K3_' + str(V) + '.txt','w')
+f_k5 = open(neigh_des_folder + 'K5_' + str(V) + '.txt','w')
 
 s_bio = '0 ' + str(total_simulation_time) + '\n'
 s_bio_ideal = '0 ' + str(total_simulation_time) + '\n'
@@ -244,6 +246,8 @@ s_random = '0 ' + str(total_simulation_time) + "\n"
 s_k2 = '0 ' + str(total_simulation_time) + "\n"
 s_k4 = '0 ' + str(total_simulation_time) + "\n"
 s_k8 = '0 ' + str(total_simulation_time) + "\n"
+s_k3 = '0 ' + str(total_simulation_time) + "\n"
+s_k5 = '0 ' + str(total_simulation_time) + "\n"
 
 f_bio.write(s_bio)
 f_bio_ideal.write(s_bio_ideal)
@@ -252,6 +256,8 @@ f_random.write(s_random)
 f_k2.write(s_k2)
 f_k4.write(s_k4)
 f_k8.write(s_k8)
+f_k3.write(s_k3)
+f_k5.write(s_k5)
 
 #Only for Bio-DRN
 t1_G2 = pickle.load(open(data_directory + "HO.p", "rb"))
@@ -276,6 +282,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     K2 = kregular(O, R, 2, S_IDs)
     K4 = kregular(O, R, 4, S_IDs)
     K8 = kregular(O, R, 8, S_IDs)
+    K3 = kregular(O, R, 3, S_IDs)
+    K5 = kregular(O, R, 5, S_IDs)
 
     O = O.to_undirected()
     B = B.to_undirected()
@@ -293,6 +301,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     nx.write_gml(K2,'K2_' + str(t - network_construction_interval) + '.gml')
     nx.write_gml(K4,'k4_' + str(t - network_construction_interval) + '.gml')
     nx.write_gml(K8,'k8_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(K3, 'k3_' + str(t - network_construction_interval) + '.gml')
+    nx.write_gml(K5, 'k5_' + str(t - network_construction_interval) + '.gml')
 
     #print ('See here:', t, len(B.nodes()))
 
@@ -310,6 +320,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     real_world_K2 = convert_to_real_world_DRN(K2)
     real_world_K4 = convert_to_real_world_DRN(K4)
     real_world_K8 = convert_to_real_world_DRN(K8)
+    real_world_K3 = convert_to_real_world_DRN(K3)
+    real_world_K5 = convert_to_real_world_DRN(K5)
 
     s_bio = writeF(real_world_B, t - network_construction_interval)
     f_bio.write(s_bio)
@@ -328,6 +340,12 @@ for t in range(network_construction_interval, network_generation_time, network_c
 
     s_k8 = writeF(real_world_K8, t - network_construction_interval)
     f_k8.write(s_k8)
+
+    s_k3 = writeF(real_world_K3, t - network_construction_interval)
+    f_k3.write(s_k3)
+
+    s_k5 = writeF(real_world_K5, t - network_construction_interval)
+    f_k5.write(s_k5)
 
     if t == network_construction_interval:
         f_bio_s = open(neigh_des_folder + 'B_' + str(V) + "_s.txt", "w")
@@ -350,6 +368,8 @@ f_random.close()
 f_k2.close()
 f_k4.close()
 f_k8.close()
+f_k3.close()
+f_k5.close()
 
 if generate_B_ideal == True:
     f_bio_ideal.close()
