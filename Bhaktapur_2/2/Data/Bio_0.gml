@@ -2417,10 +2417,6 @@ graph [
   ]
   edge [
     source 15
-    target 79
-  ]
-  edge [
-    source 15
     target 157
   ]
   edge [
@@ -2441,6 +2437,10 @@ graph [
   ]
   edge [
     source 15
+    target 147
+  ]
+  edge [
+    source 15
     target 144
   ]
   edge [
@@ -2449,7 +2449,7 @@ graph [
   ]
   edge [
     source 15
-    target 147
+    target 79
   ]
   edge [
     source 15
@@ -2490,6 +2490,10 @@ graph [
   edge [
     source 16
     target 67
+  ]
+  edge [
+    source 16
+    target 147
   ]
   edge [
     source 16
@@ -2573,10 +2577,6 @@ graph [
   ]
   edge [
     source 16
-    target 79
-  ]
-  edge [
-    source 16
     target 157
   ]
   edge [
@@ -2605,7 +2605,7 @@ graph [
   ]
   edge [
     source 16
-    target 147
+    target 79
   ]
   edge [
     source 16

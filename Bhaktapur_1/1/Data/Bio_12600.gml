@@ -2553,11 +2553,11 @@ graph [
   ]
   edge [
     source 17
-    target 54
+    target 62
   ]
   edge [
     source 17
-    target 62
+    target 54
   ]
   edge [
     source 32
@@ -2589,7 +2589,7 @@ graph [
   ]
   edge [
     source 69
-    target 72
+    target 88
   ]
   edge [
     source 69
@@ -2597,7 +2597,7 @@ graph [
   ]
   edge [
     source 69
-    target 88
+    target 72
   ]
   edge [
     source 69
