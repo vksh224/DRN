@@ -76,7 +76,7 @@ def bioDRN(G2, t1_G2, t2_G2, t3_G2, t):
 
 def kregular(O, G, k, S_IDs):
 
-    R = G.to_undirected()
+    R = O.to_undirected()
     L = list(R.edges())
 
     while(len(L) > 0):
@@ -110,8 +110,7 @@ def kconnected(R,k):
     return G
 
 def randomDRN(O,B, S_IDs):
-
-    R = O.copy()
+    R = O.to_undirected()
     # Number of edges to be preserved from original DRN
     r = len(B.edges())
     L = list(R.edges())
@@ -129,13 +128,13 @@ def randomDRN(O,B, S_IDs):
 
     #print("Rand DRN: Is weakly connected", nx.is_weakly_connected(R))
 
-    R = R.to_undirected()
+    # R = R.to_undirected()
     #R.add_edges_from([e for e in O.edges() if (e[0] not in S_IDs and e[1] not in S_IDs)])
     return R
 
 
 def spanning(O, R, S_IDs):
-    O_U = R.to_undirected()
+    O_U = O.to_undirected()
     S = nx.minimum_spanning_tree(O_U)
 
     '''
@@ -270,7 +269,8 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = nx.read_gml(directory + 'Orig_NepalDRN_' + str(t - network_construction_interval) + '.gml')
     O = rename_graph(O)
 
-    B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
+    #B = bioDRN(O, t1_G2, t2_G2, t3_G2, t)
+    B = nx.read_gml(data_directory + 'Bio_' + str(t - network_construction_interval) + '.gml')
     R = randomDRN(O, B, S_IDs)
     S = spanning(O, R, S_IDs)
     K2 = kregular(O, R, 2, S_IDs)
@@ -280,7 +280,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     O = O.to_undirected()
     B = B.to_undirected()
 
-    print (O.nodes())
+    #print (O.nodes())
 
     #------------------Writing the topology in Data folder----------
     curr = os.getcwd()
@@ -294,7 +294,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     nx.write_gml(K4,'k4_' + str(t - network_construction_interval) + '.gml')
     nx.write_gml(K8,'k8_' + str(t - network_construction_interval) + '.gml')
 
-    print ('See here:',len(B.nodes()))
+    #print ('See here:', t, len(B.nodes()))
 
     os.chdir(curr)
 
