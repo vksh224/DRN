@@ -121,14 +121,15 @@ def motif(G):
     return m
 
 #modes: 0: efficiency, 1:pathcount, 2: motif
-mode = 1
-
+mode = 2
+option = 1 #which 0 - for 3 Pois, 1 - for 5 pois, 2 for 7 pois
 how_many_instances = 1
 how_many_timeslots = 10
 
+root_directory = '/Users/vijay/DRN_Project/'
 #path_source_files = '/Users/satyakiroy/PycharmProjects/DRN_Project/Bhaktapur_0/'
 #path_source_files = '/localdisk2/SCRATCH/DRN_Project/Bhaktapur_1/'
-path_source_files = '/Users/vijay/DRN_Project/Bhaktapur_0/'
+path_source_files = root_directory + 'Bhaktapur_' + str(option) + '/'
 
 #failed_node_list = '/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/FailedNodeList/1_10/'
 os.chdir(path_source_files)
@@ -138,6 +139,7 @@ B_List = [[] for _ in range(how_many_timeslots)]
 R_List = [[] for _ in range(how_many_timeslots)]
 K2_List = [[] for _ in range(how_many_timeslots)]
 K4_List = [[] for _ in range(how_many_timeslots)]
+K8_List = [[] for _ in range(how_many_timeslots)]
 s_List = [[] for _ in range(how_many_timeslots)]
 
 for i in [0,1,2]:
@@ -162,7 +164,7 @@ for i in [0,1,2]:
     S_IDs = range(len(CC) + len(PoI) + len(Vol),len(CC) + len(PoI) + len(Vol) + len(S))
 
     #failed_node_list = '/Users/satyakiroy/PycharmProjects/DRN_Project/FailedNodeList/0_' + str(i) + '/'
-    failed_node_list = '/Users/vijay/DRN_Project/FailedNodeList/0_' + str(i) + '/'
+    failed_node_list = root_directory + 'FailedNodeList/' + str(option) + '_' + str(i) + '/'
 
     #Failed nodelist
     F = open(failed_node_list + 'failed_nodelist_' + str(V) + '.txt','r')
@@ -187,9 +189,13 @@ for i in [0,1,2]:
     K2 = rename_graph(K2)
     print("K2: Nodes and edges:", len(K2.nodes()), len(K2.edges()), "is_connected", nx.is_connected(K2))
 
+    K4 = nx.read_gml('K4_' + str(t) + '.gml')
+    K4 = rename_graph(K4)
+    print("K4: Nodes and edges:", len(K4.nodes()), len(K4.edges()), "is_connected", nx.is_connected(K4))
+
     K8 = nx.read_gml('k8_' + str(t) + '.gml')
     K8 = rename_graph(K8)
-    print("K8: Nodes and edges:", len(K4.nodes()), len(K4.edges()), "is_connected", nx.is_connected(K8))
+    print("K8: Nodes and edges:", len(K8.nodes()), len(K8.edges()), "is_connected", nx.is_connected(K8))
 
     s = nx.read_gml('Spanning_' + str(t) + '.gml')
     s = rename_graph(s)
@@ -207,6 +213,7 @@ for i in [0,1,2]:
         R.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K2.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K4.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K8.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
         s.remove_nodes_from(list(set(f[j]) - set(f[j - 1])))
 
         O.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
@@ -214,6 +221,7 @@ for i in [0,1,2]:
         R.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K2.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
         K4.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
+        K8.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
         s.add_nodes_from(list(set(f[j]) - set(f[j - 1])))
 
         #print motif(O)
@@ -228,6 +236,7 @@ for i in [0,1,2]:
             R_List[j - 1].append(efficiency(R, CC_IDs, S_IDs))
             K2_List[j - 1].append(efficiency(K2, CC_IDs, S_IDs))
             K4_List[j - 1].append(efficiency(K4, CC_IDs, S_IDs))
+            K8_List[j - 1].append(efficiency(K8, CC_IDs, S_IDs))
             s_List[j - 1].append(efficiency(s, CC_IDs, S_IDs))
 
         elif mode == 1:
@@ -235,7 +244,8 @@ for i in [0,1,2]:
             B_List[j - 1].append(pathcount(B,CC_IDs,S_IDs))
             R_List[j - 1].append(pathcount(R,CC_IDs,S_IDs))
             K2_List[j - 1].append(pathcount(K2,CC_IDs,S_IDs))
-            K4_List[j - 1].append(pathcount(K4,CC_IDs,S_IDs))
+            K4_List[j - 1].append(pathcount(K4, CC_IDs, S_IDs))
+            K8_List[j - 1].append(pathcount(K8,CC_IDs,S_IDs))
             s_List[j - 1].append(pathcount(s,CC_IDs,S_IDs))
         else:
             O_List[j - 1].append(motif(O))
@@ -243,6 +253,7 @@ for i in [0,1,2]:
             R_List[j - 1].append(motif(R))
             K2_List[j - 1].append(motif(K2))
             K4_List[j - 1].append(motif(K4))
+            K8_List[j - 1].append(motif(K8))
             s_List[j - 1].append(motif(s))
 
 
@@ -255,6 +266,7 @@ B_List = aggregate(B_List)
 R_List = aggregate(R_List)
 K2_List = aggregate(K2_List)
 K4_List = aggregate(K4_List)
+K8_List = aggregate(K8_List)
 s_List = aggregate(s_List)
 
 #print (O_List)
@@ -266,18 +278,18 @@ s_List = aggregate(s_List)
 
 
 timeslot_duration = 1800.0
-L = [O_List,B_List,R_List,K2_List,K4_List,s_List]
+L = [O_List,B_List,R_List,K2_List,K8_List,s_List]
 #os.chdir('/Users/satyakiroy/PycharmProjects/DRN_Project')
-os.chdir('/Users/vijay/DRN_Project')
+os.chdir(root_directory)
 
 if mode == 0:
-    write_to_file(L,'NE.txt')
+    write_to_file(L, root_directory + 'Graph_Experiments/' + str(option) + '/NE.txt')
 
 elif mode == 1:
-    write_to_file(L, 'path.txt')
+    write_to_file(L, root_directory + 'Graph_Experiments/' + str(option) +  '/path.txt')
 
 else:
-    write_to_file(L, 'motif.txt')
+    write_to_file(L, root_directory + 'Graph_Experiments/' + str(option) + '/motif.txt')
 
 '''
 #Visualization
