@@ -296,7 +296,7 @@ for t in range(network_construction_interval, network_generation_time, network_c
     os.chdir(directory + 'Data/')
 
     #nx.write_gml(O,'Original'+ '.gml')
-    nx.write_gml(B,'Bio_' + str(t - network_construction_interval) + '.gml')
+    # nx.write_gml(B,'Bio_' + str(t - network_construction_interval) + '.gml')
     nx.write_gml(R,'Random_' + str(t - network_construction_interval) + '.gml')
     nx.write_gml(S,'Spanning_' + str(t - network_construction_interval) + '.gml')
     nx.write_gml(K2,'K2_' + str(t - network_construction_interval) + '.gml')

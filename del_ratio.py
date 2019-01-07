@@ -73,7 +73,7 @@ ONE_directory = "/localdisk2/SCRATCH/BioDRN_ONE/BioDRN/src/"
 routers = ('BioDRNRouter',)
 endTimes = ('3600', '7200','10800','14400', '18000', '21600')
 #endTimes = ('3600', '10800', '18000')
-topologies = ('O', 'B', 'B_ideal', 'S', 'R', 'K8', 'K4', 'K2')
+topologies = ('O', 'B', 'B_ideal', 'S', 'R', 'K3', 'K5')
 
 runs = [0, 1]
 
@@ -103,7 +103,7 @@ for option in range(2,3):
                 overhead = []
                 available_energy_list = []
                 alive_nodes_list = []
-                for run in range(1, 3):
+                for run in range(2, 3):
 
                     data_directory = "Bhaktapur_" + str(option ) + "/" + str(run) + "/Data/"
 
