@@ -13,14 +13,4 @@ aI11
 aI12
 aI13
 aI14
-aI15
-aI16
-aI17
-aI18
-aI19
-aI20
-aI21
-aI22
-aI23
-aI24
 a.

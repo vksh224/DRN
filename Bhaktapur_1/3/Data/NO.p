@@ -1,5 +1,9 @@
 (lp0
-I16
+I12
+aI13
+aI14
+aI15
+aI16
 aI17
 aI18
 aI19
@@ -197,14 +201,4 @@ aI210
 aI211
 aI212
 aI213
-aI214
-aI215
-aI216
-aI217
-aI218
-aI219
-aI220
-aI221
-aI222
-aI223
 a.
