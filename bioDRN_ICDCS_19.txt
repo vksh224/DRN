@@ -35,8 +35,8 @@ set xtics 0,1,12
 
 set output plot_directory.'bioDRN_AliveNodes_line.eps'
 
-plot  home_directory.'B.txt' u 6:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 6:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 6:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 6:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 6:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 6:xtic(1) w lp ls 6 t'K8-DRN'
-#, home_directory.'K8.txt' u 6:xtic(1) w lp ls 7 t'K8-DRN'
+plot  home_directory.'B.txt' u 6:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 6:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 6:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 6:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K3.txt' u 6:xtic(1) w lp ls 5 t'K3-DRN', home_directory.'K5.txt' u 6:xtic(1) w lp ls 6 t'K5-DRN'
+#, home_directory.'K5.txt' u 6:xtic(1) w lp ls 7 t'K5-DRN'
 
 
 #================ Packet Loss Rate ========================
@@ -71,8 +71,8 @@ set key horizontal outside maxrows 4
 
 set output plot_directory.'bioDRN_PDR.eps'
 
-plot  home_directory.'B.txt' u 2:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 2:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 2:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 2:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 2:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 2:xtic(1) w lp ls 6 t'K8-DRN'
-#, home_directory.'/K8.txt' u 2:xtic(1) w lp ls 7 t'K8-DRN'
+plot  home_directory.'B.txt' u 2:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 2:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 2:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 2:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K3.txt' u 2:xtic(1) w lp ls 5 t'K3-DRN', home_directory.'K5.txt' u 2:xtic(1) w lp ls 6 t'K5-DRN'
+#, home_directory.'/K5.txt' u 2:xtic(1) w lp ls 7 t'K5-DRN'
 
 
 #================ Packet Overhead ===========================
@@ -106,8 +106,8 @@ set xtics 0, 1, 12
 
 set output plot_directory.'bioDRN_overhead.eps'
 
-plot  home_directory.'B.txt' u 5:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 5:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 5:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 5:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 5:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 5:xtic(1) w lp ls 6 t'K8-DRN'
-#, home_directory.'K8.txt' u 5:xtic(1) w lp ls 7 t'K8-DRN'
+plot  home_directory.'B.txt' u 5:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 5:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 5:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 5:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K3.txt' u 5:xtic(1) w lp ls 5 t'K3-DRN', home_directory.'K5.txt' u 5:xtic(1) w lp ls 6 t'K5-DRN'
+#, home_directory.'K5.txt' u 5:xtic(1) w lp ls 7 t'K5-DRN'
 
 #=============== Latency =======
 
@@ -142,5 +142,5 @@ set xtics offset -6.0,-0.5
 set xtics 1,1,12
 
 set output plot_directory.'bioDRN_latency.eps'
-plot  home_directory.'B.txt' u 3:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 3:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 3:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 3:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K2.txt' u 3:xtic(1) w lp ls 5 t'K2-DRN', home_directory.'K8.txt' u 3:xtic(1) w lp ls 6 t'K8-DRN'
-#, home_directory.'K8.txt' u 3:xtic(1) w lp ls 7 t'K8-DRN'
+plot  home_directory.'B.txt' u 3:xtic(1) w lp ls 1 t'Bio-DRN', home_directory.'O.txt' u 3:xtic(1) w lp ls 2 t'Orig-DRN', home_directory.'R.txt' u 3:xtic(1) w lp ls 3 t'Rand-DRN', home_directory.'S.txt' u 3:xtic(1) w lp ls 4 t'ST-DRN', home_directory.'K3.txt' u 3:xtic(1) w lp ls 5 t'K3-DRN', home_directory.'K5.txt' u 3:xtic(1) w lp ls 6 t'K5-DRN'
+#, home_directory.'K5.txt' u 3:xtic(1) w lp ls 7 t'K5-DRN'
