@@ -30,7 +30,7 @@ set bars 2
 set style data boxplot
 set ylabel "Packet Delivery Ratio"
 set xlabel "Number of PoIs"
-set xtics   ("5" 1, "5" 13, "7" 22) 
+set xtics   ("3" 4, "5" 11, "7" 18)
 #set ytics border in scale 1,0.5 nomirror norotate  autojustify
 set ytics font "Helvetica,35" 
 set xtics font "Helvetica,35"
@@ -57,9 +57,9 @@ set style line 1 lc rgb "red" lt 3 lw 2 ps 2
 set style line 2 lc rgb "black" lt 5 lw 2 ps 2
 set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
 set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 5 lc rgb "orange" lt 9 lw 2 ps 2
+set style line 6 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 7 lc rgb "yellow" lt 8 lw 2 ps 2
 
 #set border 3 front lt black linewidth 1.000 dashtype solid
 #set boxwidth 0.95 absolute
@@ -73,7 +73,7 @@ set bars 2
 set style data boxplot
 set ylabel "Perc. of Alive Nodes"
 set xlabel "Number of PoIs"
-set xtics   ("5" 1, "5" 13, "7" 22) 
+set xtics   ("3" 4, "5" 11, "7" 18)
 #set ytics border in scale 1,0.5 nomirror norotate  autojustify
 set ytics font "Helvetica,35" 
 set xtics font "Helvetica,35"
@@ -100,9 +100,9 @@ set style line 1 lc rgb "red" lt 3 lw 2 ps 2
 set style line 2 lc rgb "black" lt 5 lw 2 ps 2
 set style line 3 lc rgb "blue" lt 6 lw 2 ps 2
 set style line 4 lc rgb "green" lt 7 lw 2 ps 2
-set style line 5 lc rgb "yellow" lt 8 lw 2 ps 2
-set style line 6 lc rgb "orange" lt 9 lw 2 ps 2
-set style line 7 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 5 lc rgb "orange" lt 9 lw 2 ps 2
+set style line 6 lc rgb "violet" lt 10 lw 2 ps 2
+set style line 7 lc rgb "yellow" lt 8 lw 2 ps 2
 
 #set border 3 front lt black linewidth 1.000 dashtype solid
 #set boxwidth 0.95 absolute
@@ -116,7 +116,7 @@ set bars 2
 set style data boxplot
 set ylabel "Network latency"
 set xlabel "Number of PoIs"
-set xtics   ("5" 1, "5" 13, "7" 22)
+set xtics   ("3" 4, "5" 11, "7" 18)
 #set ytics border in scale 1,0.5 nomirror norotate  autojustify
 set ytics font "Helvetica,35"
 set xtics font "Helvetica,35"
